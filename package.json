@@ -44,5 +44,12 @@
   "validate-branch-name": {
     "pattern": "^(chore|docs|feat|fix|refactor)/R20-\\d+_[a-zA-Z0-9-]+$",
     "errorMsg": "Incorrect branch name"
+  },
+  "lint-staged": {
+    "*.{ts, tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
