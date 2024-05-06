@@ -1,0 +1,9 @@
+.centeredSection {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 200px;
+    height: 400px;
+    justify-content: center;
+}

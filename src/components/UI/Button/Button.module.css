@@ -1,0 +1,10 @@
+.boxShadow {
+    cursor: pointer;
+    background: green;
+    color: antiquewhite;
+}
+
+.redBackground {
+    color: antiquewhite;
+    background: red;
+}
