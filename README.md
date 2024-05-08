@@ -23,6 +23,7 @@ Implementation of the [RSSchool eCommerce Application task](https://github.com/r
 
 1. Clone/download [repo](https://github.com/Nikitos32/RSS-eCommerce)
 2. `npm install`
+3. Rename `.env.example` to `.env` and set environment variables for _commercetools_ API Client (`VITE_CTP_*`)
 
 ## Useful commands
 
