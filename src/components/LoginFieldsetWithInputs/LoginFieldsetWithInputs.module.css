@@ -1,0 +1,9 @@
+.loginFormFieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.passwordSection {
+  display: flex;
+}

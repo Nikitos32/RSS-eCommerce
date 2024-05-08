@@ -3,3 +3,7 @@
   height: 25px;
   border-radius: 5px;
 }
+
+.LoginBtn:hover {
+  cursor: pointer;
+}
