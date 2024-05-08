@@ -1,2 +1,6 @@
-export const TETX_TYPE_FOR_INPUT =
-  'text';
+export enum InputType {
+  TEXT = 'text',
+  EMAIL = 'email',
+  PASSWORD = 'password',
+  CHECKBOX = 'checkbox',
+}

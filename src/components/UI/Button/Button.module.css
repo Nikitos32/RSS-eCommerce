@@ -1,10 +1,5 @@
-.boxShadow {
-    cursor: pointer;
-    background: green;
-    color: antiquewhite;
-}
-
-.redBackground {
-    color: antiquewhite;
-    background: red;
+.LoginBtn {
+  width: 100px;
+  height: 25px;
+  border-radius: 5px;
 }
