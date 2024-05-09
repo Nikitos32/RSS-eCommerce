@@ -1,4 +1,4 @@
-import classes from './InputConatiner.module.css';
+import classes from './InputConatinerSignUp.module.css';
 import {
   InputSignUp,
   InputType,

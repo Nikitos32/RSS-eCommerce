@@ -1,7 +1,7 @@
 import { FormEvent } from 'react';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import { InputType } from '../UI/InputSignUp/InputSignUp';
-import { InputConatiner } from '../UI/InputContainerSignUp/InputConatiner';
+import { InputConatiner } from '../UI/InputContainerSignUp/InputConatinerSignUp';
 import classes from './signUpPage.module.css';
 
 export const SignUpPage = () => {
