@@ -1,34 +1,39 @@
-import { Customer } from '@commercetools/platform-sdk';
+import {
+  ClientResponse,
+  Customer,
+  ErrorObject,
+  ErrorResponse,
+} from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
 
-export interface ResponseCT {
+export interface CTResponse {
   ok: boolean;
   status: HttpStatusCode;
   message?: string;
-  data?: Customer;
+  data?: Customer | ErrorObject[];
 }
 /**
- * @class ResponseHandler
+ * @class CTResponseHandler
  *
- * @description class to handle all commercetools http response
+ * @description class to handle all commercetools http responses
  */
-export class ResponseHandler {
+export class CTResponseHandler {
   /**
    *
    * @description method to handle all success responses
    *
    * @param statusCode HttpStatusCode
    * @param message String
-   * @param data Customer
+   * @param data Customer | ErrorObject[]
    *
-   * @return ResponseCT
+   * @return CTResponse
    */
   static successResponse(
     statusCode: HttpStatusCode,
     message: string,
     data: Customer
-  ): ResponseCT {
-    const response: ResponseCT = {
+  ): CTResponse {
+    const response: CTResponse = {
       status: statusCode,
       ok: true,
     };
@@ -50,16 +55,16 @@ export class ResponseHandler {
    *
    * @param statusCode HttpStatusCode
    * @param message String
-   * @param data Customer
+   * @param data Customer | ErrorObject[]
    *
-   * @return ResponseCT
+   * @return CTResponse
    */
   static errorResponse(
     statusCode: HttpStatusCode,
     message: string,
-    data: Customer
-  ): ResponseCT {
-    const response: ResponseCT = {
+    data: ErrorObject[] | undefined
+  ): CTResponse {
+    const response: CTResponse = {
       status: statusCode,
       ok: false,
     };
@@ -73,5 +78,26 @@ export class ResponseHandler {
     }
 
     return response;
+  }
+
+  /**
+   *
+   * @description method to handle error in catch block
+   *
+   * @param error ClientResponse
+   *
+   * @return CTResponse
+   */
+  static handleCatch(
+    error: ClientResponse
+  ): CTResponse {
+    const result =
+      error.body as ErrorResponse;
+
+    return CTResponseHandler.errorResponse(
+      result.statusCode,
+      result.message,
+      result.errors
+    );
   }
 }
