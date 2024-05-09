@@ -2,26 +2,27 @@ import classes from './inputSignUp.module.css';
 
 export enum InputType {
   TEXT = 'text',
-  DATA = 'data',
+  DATA = 'date',
   NUMBER = 'number',
   PASSWORD = 'password',
+  EMAIL = 'email',
 }
 
 type InputProps = {
   type: InputType;
-  className: string;
+  customClass: string;
   placeholder?: string;
 };
 
-export const Input = ({
+export const InputSignUp = ({
   type,
-  className,
+  customClass,
   placeholder,
 }: InputProps) => {
   return (
     <input
       type={type}
-      className={`${classes.signUp__input} ${className}`}
+      className={`${classes.signUp__input} ${classes[customClass]}`}
       placeholder={placeholder}
     />
   );

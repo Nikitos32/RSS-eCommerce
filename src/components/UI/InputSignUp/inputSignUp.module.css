@@ -9,3 +9,10 @@
   background: antiquewhite;
   outline: none;
 }
+
+.signUp__dataBirthday {
+  width: min-content;
+  margin: auto;
+
+  font-size: 1.2rem;
+}

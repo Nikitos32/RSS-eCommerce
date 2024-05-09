@@ -7,7 +7,7 @@ type ButtonProps = {
   customFunction: () => void;
 };
 
-export const Button = ({
+export const ButtonSignUp = ({
   btnContent,
   customClass,
   customFunction,
