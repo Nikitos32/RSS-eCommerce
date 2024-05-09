@@ -4,21 +4,23 @@ import {
   CustomerDraft,
   CustomerSignInResult,
 } from '@commercetools/platform-sdk';
-import { apiRoot } from './ClientBuilder';
+import { apiRoot } from './client.builder';
 
-export class CustomerRepository {
+export class CustomerRequests {
   private apiRoot: ByProjectKeyRequestBuilder;
   constructor() {
     this.apiRoot = apiRoot;
   }
-  createCustomer(
+  async createCustomer(
     customerDraft: CustomerDraft
   ): Promise<
     ClientResponse<CustomerSignInResult>
   > {
-    return this.apiRoot
+    const result = await this.apiRoot
       .customers()
       .post({ body: customerDraft })
       .execute();
+
+    return result;
   }
 }
