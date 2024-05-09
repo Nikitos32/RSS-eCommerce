@@ -58,7 +58,13 @@ export const SignUpPage = () => {
         <section
           className={`${classes.signUp__data} ${classes.signUp__adress}`}
         >
-          <h3>Adress</h3>
+          <h3
+            className={
+              classes.signUp__adressTitle
+            }
+          >
+            Adress
+          </h3>
           <InputConatiner
             content="Street"
             type={InputType.TEXT}

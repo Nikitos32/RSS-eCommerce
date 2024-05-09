@@ -20,7 +20,7 @@
   border-radius: 1rem;
   padding: 20px;
 
-  width: 80vw;
+  width: 50vw;
   min-width: 260px;
 }
 .signUp__data {
@@ -31,4 +31,28 @@
 
   width: 100%;
   max-width: 260px;
+}
+
+@media (min-width: 768px) {
+  .signUp__form {
+    max-width: 650px;
+  }
+
+  .signUp__data {
+    width: 100%;
+    max-width: max-content;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .signUp__adressTitle {
+    width: 100%;
+    text-align: center;
+  }
+
+  .signUp__data > div {
+    width: 40%;
+  }
 }
