@@ -3,6 +3,7 @@ import {
   ClientResponse,
   CustomerDraft,
   CustomerSignInResult,
+  CustomerSignin,
 } from '@commercetools/platform-sdk';
 import {
   CTResponse,
@@ -26,6 +27,43 @@ export class CustomerService {
       if (
         answer.statusCode ===
         HttpStatusCode.CREATED_201
+      ) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          (
+            answer.body as CustomerSignInResult
+          ).customer
+        );
+      } else {
+        return CTResponseHandler.makeError(
+          answer.statusCode || 0,
+          'Unknown Problem',
+          undefined
+        );
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(
+        error as ClientResponse
+      );
+    }
+  }
+
+  async signIn(
+    email: string,
+    password: string
+  ): Promise<CTResponse> {
+    const customerSign: CustomerSignin =
+      { email, password };
+    try {
+      const answer =
+        await this.customerRequests.login(
+          customerSign
+        );
+
+      if (
+        answer.statusCode ===
+        HttpStatusCode.OK_200
       ) {
         return CTResponseHandler.makeSuccess(
           answer.statusCode,
