@@ -1,16 +1,20 @@
 import {
   ClientResponse,
-  Customer,
+  CustomerSignInResult,
   ErrorObject,
   ErrorResponse,
 } from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
 
+type Data =
+  | CustomerSignInResult
+  | ErrorObject[];
+
 export interface CTResponse {
   ok: boolean;
   status: HttpStatusCode;
   message?: string;
-  data?: Customer | ErrorObject[];
+  data?: Data;
 }
 /**
  * @class CTResponseHandler
@@ -24,14 +28,14 @@ export class CTResponseHandler {
    *
    * @param statusCode HttpStatusCode
    * @param message String
-   * @param data Customer | ErrorObject[]
+   * @param data CustomerSignInResult
    *
    * @return CTResponse
    */
   static makeSuccess(
     statusCode: HttpStatusCode,
     message: string,
-    data: Customer
+    data: Data
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,

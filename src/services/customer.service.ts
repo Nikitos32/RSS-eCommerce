@@ -31,9 +31,7 @@ export class CustomerService {
         return CTResponseHandler.makeSuccess(
           answer.statusCode,
           '',
-          (
-            answer.body as CustomerSignInResult
-          ).customer
+          answer.body as CustomerSignInResult
         );
       } else {
         return CTResponseHandler.makeError(
@@ -68,9 +66,7 @@ export class CustomerService {
         return CTResponseHandler.makeSuccess(
           answer.statusCode,
           '',
-          (
-            answer.body as CustomerSignInResult
-          ).customer
+          answer.body as CustomerSignInResult
         );
       } else {
         return CTResponseHandler.makeError(
