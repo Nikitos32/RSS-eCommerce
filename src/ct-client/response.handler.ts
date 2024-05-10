@@ -10,6 +10,15 @@ type Data =
   | CustomerSignInResult
   | ErrorObject[];
 
+/**
+ * @interface CTResponse
+ * @memberof CTResponseHandler
+ * @alias CTResponse
+ * @typedef {object} CTResponse
+ * @property {boolean} ok Result of Request Success - true, Error - false
+ * @property {string} message message from Response for Errors
+ * @property {CustomerSignInResult | ErrorObject[]} data
+ */
 export interface CTResponse {
   ok: boolean;
   status: HttpStatusCode;
