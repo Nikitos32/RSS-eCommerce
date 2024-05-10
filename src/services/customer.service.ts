@@ -15,7 +15,7 @@ import {
 export class CustomerService {
   customerRequests: CustomerRequests =
     new CustomerRequests();
-  async add(
+  async signUp(
     customerDraft: CustomerDraft
   ): Promise<CTResponse> {
     try {
