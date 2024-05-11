@@ -34,10 +34,8 @@ export class CustomerService {
           answer.body as CustomerSignInResult
         );
       } else {
-        return CTResponseHandler.makeError(
-          answer.statusCode || 0,
-          'Unknown Problem',
-          undefined
+        return CTResponseHandler.handleUnexpectedStatus(
+          answer.statusCode
         );
       }
     } catch (error) {
@@ -69,10 +67,8 @@ export class CustomerService {
           answer.body as CustomerSignInResult
         );
       } else {
-        return CTResponseHandler.makeError(
-          answer.statusCode || 0,
-          'Unknown Problem',
-          undefined
+        return CTResponseHandler.handleUnexpectedStatus(
+          answer.statusCode
         );
       }
     } catch (error) {
