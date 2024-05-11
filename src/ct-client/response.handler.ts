@@ -113,4 +113,14 @@ export class CTResponseHandler {
       result.errors
     );
   }
+
+  static handleUnexpectedStatus(
+    statusCode: number | undefined
+  ): CTResponse {
+    return CTResponseHandler.makeError(
+      statusCode || 0,
+      `Status Code ${statusCode} is not expected`,
+      undefined
+    );
+  }
 }
