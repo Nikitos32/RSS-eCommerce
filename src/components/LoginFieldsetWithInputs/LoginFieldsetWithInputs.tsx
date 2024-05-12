@@ -5,8 +5,10 @@ import {
   MIN_PASSWORD_LENGTH,
   REGEX_FOR_EMAIL_INPUT,
   REGEX_FOR_PASSWORD_INPUT,
+  STYLE_FOR_PASSWORD_INPUT,
 } from '../../constants';
 import classes from './LoginFieldsetWithInputs.module.css';
+import { useState } from 'react';
 
 interface LoginFieldsetWithInputsProps {
   email: string;
@@ -22,6 +24,17 @@ export const LoginFieldsetWithInputs =
     password,
     handleInput,
   }: LoginFieldsetWithInputsProps) => {
+    const [
+      isPasswordVisible,
+      setPasswordVisible,
+    ] = useState<boolean>(false);
+
+    const handleVisibility = () => {
+      setPasswordVisible(
+        !isPasswordVisible
+      );
+    };
+
     return (
       <fieldset
         className={
@@ -39,18 +52,37 @@ export const LoginFieldsetWithInputs =
             classes.passwordSection
           }
         >
-          <Input
-            regex={
-              REGEX_FOR_PASSWORD_INPUT
+          <div
+            className={
+              classes.wrapperPasswordInput
             }
-            minLength={
-              MIN_PASSWORD_LENGTH
-            }
-            handleInput={handleInput}
-            type={InputType.PASSWORD}
-            value={password}
-          />
-          <ShowPasswordRadio />
+          >
+            <Input
+              additionalClass={
+                STYLE_FOR_PASSWORD_INPUT
+              }
+              isPasswordVisible={
+                isPasswordVisible
+              }
+              regex={
+                REGEX_FOR_PASSWORD_INPUT
+              }
+              minLength={
+                MIN_PASSWORD_LENGTH
+              }
+              handleInput={handleInput}
+              type={InputType.PASSWORD}
+              value={password}
+            />
+            <ShowPasswordRadio
+              visible={
+                isPasswordVisible
+              }
+              handleVisibility={
+                handleVisibility
+              }
+            />
+          </div>
         </section>
       </fieldset>
     );

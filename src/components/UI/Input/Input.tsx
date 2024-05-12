@@ -1,3 +1,5 @@
+import classNames from 'classnames';
+import { InputType } from '../../../constants';
 import classes from './input.module.css';
 
 interface InputProps {
@@ -9,6 +11,8 @@ interface InputProps {
   regex?: string;
   minLength?: number;
   placeholder?: string;
+  isPasswordVisible?: boolean;
+  additionalClass?: string;
 }
 
 export const Input = ({
@@ -18,6 +22,8 @@ export const Input = ({
   regex,
   minLength,
   placeholder,
+  isPasswordVisible,
+  additionalClass,
 }: InputProps) => {
   return (
     <input
@@ -29,8 +35,16 @@ export const Input = ({
         handleInput(event);
       }}
       value={value}
-      type={type}
-      className={classes.colorRed}
+      type={
+        isPasswordVisible
+          ? InputType.TEXT
+          : type
+      }
+      className={classNames(
+        classes.colorRed,
+        additionalClass &&
+          classes[additionalClass]
+      )}
     />
   );
 };

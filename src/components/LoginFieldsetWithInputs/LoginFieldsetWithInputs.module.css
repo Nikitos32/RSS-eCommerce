@@ -7,3 +7,11 @@
 .passwordSection {
   display: flex;
 }
+
+.wrapperPasswordInput {
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 5px;
+}

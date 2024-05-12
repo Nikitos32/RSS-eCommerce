@@ -1,7 +1,21 @@
-import { InputType } from '../../../constants';
+import classes from './ShowPasswordRadio.module.css';
 
-export const ShowPasswordRadio = () => {
+interface ShowPasswordRadioProps {
+  handleVisibility: () => void;
+  visible: boolean;
+}
+
+export const ShowPasswordRadio = ({
+  handleVisibility,
+  visible,
+}: ShowPasswordRadioProps) => {
   return (
-    <input type={InputType.CHECKBOX} />
+    <div
+      className={classes.backgroundEye}
+      style={{
+        backgroundImage: `url("/public/png/${!visible ? 'close' : 'open'}Eye.png")`,
+      }}
+      onClick={() => handleVisibility()}
+    ></div>
   );
 };

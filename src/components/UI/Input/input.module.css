@@ -1,3 +1,11 @@
 .colorRed {
-    background: antiquewhite;
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.resetAllStyle {
+  outline: none;
+  background: none;
+  border: none;
 }
