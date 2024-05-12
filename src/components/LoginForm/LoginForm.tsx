@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
 import { LoginFieldsetWithInputs } from '../LoginFieldsetWithInputs/LoginFieldsetWithInputs';
 import classes from './loginForm.module.css';
-import { InputType } from '../../constants';
+import {
+  InputType,
+  REGEX_FOR_EMAIL_INPUT,
+} from '../../constants';
 
 export const LoginForm = () => {
   const [
@@ -20,6 +23,11 @@ export const LoginForm = () => {
   ) => {
     const target =
       event.target as HTMLInputElement;
+    console.log(
+      REGEX_FOR_EMAIL_INPUT.test(
+        target.value
+      )
+    );
     target.type === InputType.EMAIL
       ? setEmailInputValue(target.value)
       : setPasswordInputValue(

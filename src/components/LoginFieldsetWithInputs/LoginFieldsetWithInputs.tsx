@@ -1,6 +1,10 @@
 import { Input } from '../UI/Input/Input';
 import { ShowPasswordRadio } from '../UI/ShowPasswordRadio/ShowPasswordRadio';
-import { InputType } from '../../constants';
+import {
+  InputType,
+  MIN_PASSWORD_LENGTH,
+  REGEX_FOR_EMAIL_INPUT,
+} from '../../constants';
 import classes from './LoginFieldsetWithInputs.module.css';
 
 interface LoginFieldsetWithInputsProps {
@@ -24,6 +28,7 @@ export const LoginFieldsetWithInputs =
         }
       >
         <Input
+          regex={`${REGEX_FOR_EMAIL_INPUT}`}
           handleInput={handleInput}
           type={InputType.EMAIL}
           value={email}
@@ -34,6 +39,9 @@ export const LoginFieldsetWithInputs =
           }
         >
           <Input
+            minLength={
+              MIN_PASSWORD_LENGTH
+            }
             handleInput={handleInput}
             type={InputType.PASSWORD}
             value={password}
