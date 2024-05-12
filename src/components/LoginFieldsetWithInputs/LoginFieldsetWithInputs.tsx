@@ -39,6 +39,7 @@ export const LoginFieldsetWithInputs =
         }
       >
         <Input
+          placeholder="Email..."
           regex={REGEX_FOR_EMAIL_INPUT}
           handleInput={handleInput}
           type={InputType.EMAIL}

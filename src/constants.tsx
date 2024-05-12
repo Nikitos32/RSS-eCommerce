@@ -5,6 +5,11 @@ export enum InputType {
   CHECKBOX = 'checkbox',
 }
 
+export enum BtnType {
+  SUBMIT = 'submit',
+  BUTTON = 'button',
+}
+
 export const MIN_PASSWORD_LENGTH: number = 8;
 
 export const REGEX_FOR_EMAIL_INPUT: string =

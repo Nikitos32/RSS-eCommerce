@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import {
+  FormEvent,
+  useState,
+} from 'react';
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
 import { LoginFieldsetWithInputs } from '../LoginFieldsetWithInputs/LoginFieldsetWithInputs';
 import classes from './loginForm.module.css';
@@ -25,6 +28,13 @@ export const LoginForm = () => {
         setEmailInputValue(
           target.value
         );
+        target.validity.patternMismatch
+          ? target.setCustomValidity(
+              'Email должен быть в данном формате example@example.com'
+            )
+          : target.setCustomValidity(
+              ''
+            );
         break;
       }
 
@@ -33,19 +43,37 @@ export const LoginForm = () => {
         setPasswordInputValue(
           target.value.trim()
         );
+        target.validity.patternMismatch
+          ? target.setCustomValidity(
+              'Пароль должен содержать хотя бы одну заглавную букву, одну цифру и один специальный символ !@#$%^&*'
+            )
+          : target.setCustomValidity(
+              ''
+            );
         break;
       }
     }
   };
 
+  const handleSubmit = (
+    event: FormEvent
+  ) => {
+    event.preventDefault();
+    setPasswordInputValue('');
+    setEmailInputValue('');
+  };
+
   return (
-    <form className={classes.loginForm}>
+    <form
+      onSubmit={handleSubmit}
+      className={classes.loginForm}
+    >
       <h1
         className={
           classes.titleOfLoginPage
         }
       >
-        Log IN
+        Log In
       </h1>
       <LoginFieldsetWithInputs
         handleInput={handleValue}

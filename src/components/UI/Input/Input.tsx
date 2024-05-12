@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { InputType } from '../../../constants';
 import classes from './input.module.css';
+import React from 'react';
 
 interface InputProps {
   type: string;

@@ -35,6 +35,7 @@ export const PasswordInput = ({
         }
       >
         <Input
+          placeholder="Password..."
           additionalClass={
             STYLE_FOR_PASSWORD_INPUT
           }

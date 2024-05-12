@@ -9,7 +9,10 @@ export const LoginFieldsetEnterSection =
           classes.loginFormFieldset
         }
       >
-        <Button content="Enter" />
+        <Button
+          isSubmitBtn={true}
+          content="Enter"
+        />
         <a href="">Registration</a>
       </fieldset>
     );
