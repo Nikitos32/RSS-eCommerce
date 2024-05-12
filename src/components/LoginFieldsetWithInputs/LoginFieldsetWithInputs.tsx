@@ -4,6 +4,7 @@ import {
   InputType,
   MIN_PASSWORD_LENGTH,
   REGEX_FOR_EMAIL_INPUT,
+  REGEX_FOR_PASSWORD_INPUT,
 } from '../../constants';
 import classes from './LoginFieldsetWithInputs.module.css';
 
@@ -28,7 +29,7 @@ export const LoginFieldsetWithInputs =
         }
       >
         <Input
-          regex={`${REGEX_FOR_EMAIL_INPUT}`}
+          regex={REGEX_FOR_EMAIL_INPUT}
           handleInput={handleInput}
           type={InputType.EMAIL}
           value={email}
@@ -39,6 +40,9 @@ export const LoginFieldsetWithInputs =
           }
         >
           <Input
+            regex={
+              REGEX_FOR_PASSWORD_INPUT
+            }
             minLength={
               MIN_PASSWORD_LENGTH
             }

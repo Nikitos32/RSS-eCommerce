@@ -24,15 +24,25 @@ export const LoginForm = () => {
     const target =
       event.target as HTMLInputElement;
     console.log(
-      REGEX_FOR_EMAIL_INPUT.test(
-        target.value
-      )
+      new RegExp(
+        REGEX_FOR_EMAIL_INPUT
+      ).test(target.value)
     );
-    target.type === InputType.EMAIL
-      ? setEmailInputValue(target.value)
-      : setPasswordInputValue(
+    switch (target.type) {
+      case InputType.EMAIL: {
+        setEmailInputValue(
           target.value
         );
+        break;
+      }
+
+      case InputType.PASSWORD: {
+        setPasswordInputValue(
+          target.value
+        );
+        break;
+      }
+    }
   };
 
   return (

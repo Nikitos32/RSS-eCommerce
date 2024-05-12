@@ -7,5 +7,7 @@ export enum InputType {
 
 export const MIN_PASSWORD_LENGTH: number = 8;
 
-export const REGEX_FOR_EMAIL_INPUT: RegExp =
-  /^[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\.)+[A-Za-z]+$/;
+export const REGEX_FOR_EMAIL_INPUT: string =
+  '[a-zA-Z0-9]+@(?:[a-zA-Z0-9]+\\.)+[A-Za-z]{2,4}';
+export const REGEX_FOR_PASSWORD_INPUT: string =
+  '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$';

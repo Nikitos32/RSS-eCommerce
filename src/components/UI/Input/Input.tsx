@@ -21,12 +21,13 @@ export const Input = ({
 }: InputProps) => {
   return (
     <input
+      required
       placeholder={placeholder}
       minLength={minLength}
       pattern={regex && regex}
-      onChange={(event) =>
-        handleInput(event)
-      }
+      onChange={(event) => {
+        handleInput(event);
+      }}
       value={value}
       type={type}
       className={classes.colorRed}
