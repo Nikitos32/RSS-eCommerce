@@ -6,6 +6,7 @@ import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFie
 import { LoginFieldsetWithInputs } from '../LoginFieldsetWithInputs/LoginFieldsetWithInputs';
 import classes from './loginForm.module.css';
 import { InputType } from '../../constants';
+import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
 
 export const LoginForm = () => {
   const [
@@ -68,13 +69,7 @@ export const LoginForm = () => {
       onSubmit={handleSubmit}
       className={classes.loginForm}
     >
-      <h1
-        className={
-          classes.titleOfLoginPage
-        }
-      >
-        Log In
-      </h1>
+      <LoginFormTitle />
       <LoginFieldsetWithInputs
         handleInput={handleValue}
         email={emailInputValue}
