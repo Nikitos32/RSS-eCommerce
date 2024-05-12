@@ -37,4 +37,14 @@ export class CustomerRequests {
 
     return result;
   }
+
+  async checkCustomerExistsByQuery(queryArgs: {
+    where: string;
+  }): Promise<ClientResponse> {
+    const result = await this.apiRoot
+      .customers()
+      .head({ queryArgs })
+      .execute();
+    return result;
+  }
 }

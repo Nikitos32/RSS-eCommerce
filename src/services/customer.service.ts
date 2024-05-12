@@ -4,6 +4,7 @@ import {
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  ErrorObject,
 } from '@commercetools/platform-sdk';
 import {
   CTResponse,
@@ -34,10 +35,8 @@ export class CustomerService {
           answer.body as CustomerSignInResult
         );
       } else {
-        return CTResponseHandler.makeError(
-          answer.statusCode || 0,
-          'Unknown Problem',
-          undefined
+        return CTResponseHandler.handleUnexpectedStatus(
+          answer.statusCode
         );
       }
     } catch (error) {
@@ -52,7 +51,20 @@ export class CustomerService {
     password: string
   ): Promise<CTResponse> {
     const customerSign: CustomerSignin =
-      { email, password };
+      {
+        email: email.toLowerCase(),
+        password,
+      };
+
+    const userExists =
+      await this.checkUserExists(
+        customerSign.email
+      );
+
+    if (!userExists.ok) {
+      return userExists;
+    }
+
     try {
       const answer =
         await this.customerRequests.login(
@@ -69,19 +81,73 @@ export class CustomerService {
           answer.body as CustomerSignInResult
         );
       } else {
-        return CTResponseHandler.makeError(
-          answer.statusCode || 0,
-          'Unknown Problem',
-          undefined
+        return CTResponseHandler.handleUnexpectedStatus(
+          answer.statusCode
         );
       }
     } catch (error) {
-      return CTResponseHandler.handleCatch(
-        error as ClientResponse
-      );
+      const response =
+        CTResponseHandler.handleCatch(
+          error as ClientResponse
+        );
+
+      const errors =
+        response.data as ErrorObject[];
+
+      if (
+        response.status ===
+          HttpStatusCode.BAD_REQUEST_400 &&
+        errors &&
+        errors[0].code ===
+          'InvalidCredentials'
+      ) {
+        response.message =
+          'Wrong password';
+      }
+
+      return response;
     }
   }
 
+  private async checkUserExists(
+    lowercaseEmail: string
+  ): Promise<CTResponse> {
+    const queryArgs = {
+      where: `lowercaseEmail="${lowercaseEmail}"`,
+    };
+    try {
+      const answer =
+        await this.customerRequests.checkCustomerExistsByQuery(
+          queryArgs
+        );
+      switch (answer.statusCode) {
+        case HttpStatusCode.OK_200: {
+          return CTResponseHandler.makeSuccess(
+            answer.statusCode,
+            '',
+            undefined
+          );
+        }
+        default:
+          return CTResponseHandler.handleUnexpectedStatus(
+            answer.statusCode
+          );
+      }
+    } catch (error) {
+      const response =
+        CTResponseHandler.handleCatch(
+          error as ClientResponse
+        );
+      if (
+        response.status ===
+        HttpStatusCode.NOT_FOUND_404
+      ) {
+        response.message =
+          'The user with the specified email does not exist';
+      }
+      return response;
+    }
+  }
   createDraft(
     email: string,
     password: string,
@@ -96,7 +162,7 @@ export class CustomerService {
   ): CustomerDraft {
     const customerDraft: CustomerDraft =
       {
-        email,
+        email: email.toLowerCase(),
         password,
         firstName,
         lastName,
