@@ -44,7 +44,10 @@ export class CTResponseHandler {
   static makeSuccess(
     statusCode: HttpStatusCode,
     message: string,
-    data: Data
+    data:
+      | CustomerSignInResult
+      | ErrorObject[]
+      | undefined
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,
@@ -108,7 +111,9 @@ export class CTResponseHandler {
       error.body as ErrorResponse;
 
     return CTResponseHandler.makeError(
-      result.statusCode,
+      result.statusCode ||
+        error.statusCode ||
+        0,
       result.message,
       result.errors
     );
