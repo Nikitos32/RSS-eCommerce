@@ -1,14 +1,11 @@
 import { Input } from '../UI/Input/Input';
-import { ShowPasswordRadio } from '../UI/ShowPasswordRadio/ShowPasswordRadio';
 import {
   InputType,
-  MIN_PASSWORD_LENGTH,
   REGEX_FOR_EMAIL_INPUT,
-  REGEX_FOR_PASSWORD_INPUT,
-  STYLE_FOR_PASSWORD_INPUT,
 } from '../../constants';
 import classes from './LoginFieldsetWithInputs.module.css';
 import { useState } from 'react';
+import { PasswordInput } from '../UI/PasswordInput/PasswordInput';
 
 interface LoginFieldsetWithInputsProps {
   email: string;
@@ -47,43 +44,16 @@ export const LoginFieldsetWithInputs =
           type={InputType.EMAIL}
           value={email}
         />
-        <section
-          className={
-            classes.passwordSection
+        <PasswordInput
+          password={password}
+          handleVisibility={
+            handleVisibility
           }
-        >
-          <div
-            className={
-              classes.wrapperPasswordInput
-            }
-          >
-            <Input
-              additionalClass={
-                STYLE_FOR_PASSWORD_INPUT
-              }
-              isPasswordVisible={
-                isPasswordVisible
-              }
-              regex={
-                REGEX_FOR_PASSWORD_INPUT
-              }
-              minLength={
-                MIN_PASSWORD_LENGTH
-              }
-              handleInput={handleInput}
-              type={InputType.PASSWORD}
-              value={password}
-            />
-            <ShowPasswordRadio
-              visible={
-                isPasswordVisible
-              }
-              handleVisibility={
-                handleVisibility
-              }
-            />
-          </div>
-        </section>
+          isPasswordVisible={
+            isPasswordVisible
+          }
+          handleInput={handleInput}
+        />
       </fieldset>
     );
   };

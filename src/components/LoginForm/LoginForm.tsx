@@ -20,11 +20,6 @@ export const LoginForm = () => {
   ) => {
     const target =
       event.target as HTMLInputElement;
-    //console.log(
-    // new RegExp(
-    // REGEX_FOR_EMAIL_INPUT
-    // ).test(target.value)
-    //);
     switch (target.type) {
       case InputType.EMAIL: {
         setEmailInputValue(
@@ -33,16 +28,10 @@ export const LoginForm = () => {
         break;
       }
 
-      case InputType.PASSWORD: {
-        setPasswordInputValue(
-          target.value
-        );
-        break;
-      }
-
+      case InputType.PASSWORD:
       case InputType.TEXT: {
         setPasswordInputValue(
-          target.value
+          target.value.trim()
         );
         break;
       }
@@ -51,6 +40,13 @@ export const LoginForm = () => {
 
   return (
     <form className={classes.loginForm}>
+      <h1
+        className={
+          classes.titleOfLoginPage
+        }
+      >
+        Log IN
+      </h1>
       <LoginFieldsetWithInputs
         handleInput={handleValue}
         email={emailInputValue}

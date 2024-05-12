@@ -12,10 +12,13 @@ export const ShowPasswordRadio = ({
   return (
     <div
       className={classes.backgroundEye}
-      style={{
-        backgroundImage: `url("/public/png/${!visible ? 'close' : 'open'}Eye.png")`,
-      }}
       onClick={() => handleVisibility()}
-    ></div>
+    >
+      <img
+        className={classes.eyePng}
+        src={`/public/png/${!visible ? 'close' : 'open'}Eye.png`}
+        alt="eye"
+      />
+    </div>
   );
 };

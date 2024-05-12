@@ -10,6 +10,7 @@ export const LoginFieldsetEnterSection =
         }
       >
         <Button content="Enter" />
+        <a href="">Registration</a>
       </fieldset>
     );
   };

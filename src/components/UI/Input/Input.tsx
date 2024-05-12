@@ -41,7 +41,7 @@ export const Input = ({
           : type
       }
       className={classNames(
-        classes.colorRed,
+        classes.input,
         additionalClass &&
           classes[additionalClass]
       )}
