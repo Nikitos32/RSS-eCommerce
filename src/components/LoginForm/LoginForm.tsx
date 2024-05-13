@@ -5,7 +5,11 @@ import {
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
 import { LoginFieldsetWithInputs } from '../LoginFieldsetWithInputs/LoginFieldsetWithInputs';
 import classes from './loginForm.module.css';
-import { InputType } from '../../constants';
+import {
+  EMAIL_INVALID_INPUT_MESSAGE,
+  PASSWORD_INVALID_INPUT_MESSAGE,
+  InputType,
+} from '../../constants';
 import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
 
 export const LoginForm = () => {
@@ -31,7 +35,7 @@ export const LoginForm = () => {
         );
         target.validity.patternMismatch
           ? target.setCustomValidity(
-              'Email должен быть в данном формате example@example.com'
+              EMAIL_INVALID_INPUT_MESSAGE
             )
           : target.setCustomValidity(
               ''
@@ -46,7 +50,7 @@ export const LoginForm = () => {
         );
         target.validity.patternMismatch
           ? target.setCustomValidity(
-              'Пароль должен содержать хотя бы одну заглавную букву, одну цифру и один специальный символ !@#$%^&*'
+              PASSWORD_INVALID_INPUT_MESSAGE
             )
           : target.setCustomValidity(
               ''

@@ -19,3 +19,9 @@ export const REGEX_FOR_PASSWORD_INPUT: string =
 
 export const STYLE_FOR_PASSWORD_INPUT: string =
   'resetAllStyle';
+
+export const EMAIL_INVALID_INPUT_MESSAGE =
+  'Email должен быть в данном формате example@example.com';
+
+export const PASSWORD_INVALID_INPUT_MESSAGE =
+  'Пароль должен содержать хотя бы одну заглавную букву, одну цифру и один специальный символ !@#$%^&*';
