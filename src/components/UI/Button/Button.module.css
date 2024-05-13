@@ -1,0 +1,10 @@
+.LoginBtn {
+  width: 100px;
+  height: 25px;
+  border-radius: 5px;
+}
+
+.LoginBtn:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px black;
+}
