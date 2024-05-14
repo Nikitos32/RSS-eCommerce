@@ -24,7 +24,11 @@ export const InputConatiner = ({
   patterns,
 }: InputConatinerProps) => {
   const [inputValue, setInputValue] =
-    useState('');
+    useState(
+      type === InputType.DATA
+        ? '2000-01-01'
+        : ''
+    );
   const [textError, setTextError] =
     useState('');
   const [timeoutId, setTimeoutId] =
@@ -36,19 +40,50 @@ export const InputConatiner = ({
     value: string
   ) => {
     setInputValue(value);
-    if (!patterns) return;
-    const error = patterns
-      ?.map(
-        ({ pattern, errorMessage }) => {
-          const resultTest = new RegExp(
-            pattern
-          ).test(value);
-          return resultTest
-            ? ''
-            : `${errorMessage}\n`;
-        }
+    let error: string = '';
+
+    if (patterns) {
+      error = patterns
+        ?.map(
+          ({
+            pattern,
+            errorMessage,
+          }) => {
+            const resultTest =
+              new RegExp(pattern).test(
+                value
+              );
+            return resultTest
+              ? ''
+              : `${errorMessage}\n`;
+          }
+        )
+        .join(' ');
+    } else if (
+      type === InputType.DATA
+    ) {
+      const birthdate = new Date(value);
+      const currentDate = new Date();
+
+      let age =
+        currentDate.getFullYear() -
+        birthdate.getFullYear();
+      const birthdateThisYear =
+        new Date(
+          currentDate.getFullYear(),
+          birthdate.getMonth(),
+          birthdate.getDate()
+        );
+      if (
+        birthdateThisYear > currentDate
       )
-      .join(' ');
+        age -= 1;
+
+      if (age < 14)
+        error =
+          'Must be at least 14 years of age';
+    }
+
     setTextError(error);
 
     if (timeoutId) {

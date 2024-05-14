@@ -106,7 +106,7 @@ export const SignUpPage = () => {
             ]}
           />
           <InputConatiner
-            content="Data"
+            content="Date of birth"
             type={InputType.DATA}
             customClass={
               'signUp__dataBirthday'
