@@ -1,7 +1,10 @@
 import { FormEvent } from 'react';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import { InputType } from '../UI/InputSignUp/InputSignUp';
-import { InputConatiner } from '../UI/InputContainerSignUp/InputConatinerSignUp';
+import {
+  InputConatiner,
+  PatternSignUp,
+} from '../UI/InputContainerSignUp/InputConatinerSignUp';
 import classes from './signUpPage.module.css';
 
 export const SignUpPage = () => {
@@ -10,6 +13,24 @@ export const SignUpPage = () => {
   ) => {
     event.preventDefault();
   };
+
+  const namePattern: PatternSignUp[] = [
+    {
+      pattern: '[A-Z].*',
+      errorMessage:
+        'first letter must be capitalised',
+    },
+    {
+      pattern: '^.{1}[a-z]*$',
+      errorMessage:
+        'after first letter must be lowercase or hyphen',
+    },
+    {
+      pattern: '.{2,}.*',
+      errorMessage:
+        'minimum characters 2',
+    },
+  ];
 
   return (
     <article className={classes.signUp}>
@@ -25,6 +46,7 @@ export const SignUpPage = () => {
             content="Name"
             type={InputType.TEXT}
             customClass={'signUp__name'}
+            patterns={namePattern}
           />
           <InputConatiner
             content="Surname"
@@ -32,6 +54,7 @@ export const SignUpPage = () => {
             customClass={
               'signUp__surname'
             }
+            patterns={namePattern}
           />
           <InputConatiner
             content="Email"
@@ -39,6 +62,14 @@ export const SignUpPage = () => {
             customClass={
               'signUp__email'
             }
+            patterns={[
+              {
+                pattern:
+                  '^(([^<>()[\\].,;:\\s@\']+(\\.[^<>()[\\].,;:\\s@\']+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
+                errorMessage:
+                  'Invalid email format',
+              },
+            ]}
           />
           <InputConatiner
             content="Password"
@@ -46,6 +77,33 @@ export const SignUpPage = () => {
             customClass={
               'signUp__password'
             }
+            patterns={[
+              {
+                pattern: '.{7,}.*',
+                errorMessage:
+                  'must be longer than 8 characters',
+              },
+              {
+                pattern: '^.{0,15}$',
+                errorMessage:
+                  'must be less than 16 character',
+              },
+              {
+                pattern: '[0-9]',
+                errorMessage:
+                  'need number',
+              },
+              {
+                pattern: '[a-zA-Z]',
+                errorMessage:
+                  'need english letters',
+              },
+              {
+                pattern: '[A-Z]',
+                errorMessage:
+                  'don`t have uppercase',
+              },
+            ]}
           />
           <InputConatiner
             content="Data"
@@ -66,16 +124,18 @@ export const SignUpPage = () => {
             Adress
           </h3>
           <InputConatiner
+            content="City"
+            type={InputType.TEXT}
+            customClass={'signUp__city'}
+            patterns={namePattern}
+          />
+          <InputConatiner
             content="Street"
             type={InputType.TEXT}
             customClass={
               'signUp__street'
             }
-          />
-          <InputConatiner
-            content="City"
-            type={InputType.TEXT}
-            customClass={'signUp__city'}
+            patterns={namePattern}
           />
           <InputConatiner
             content="Postal Code"
