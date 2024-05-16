@@ -1,8 +1,8 @@
 .signUp__button {
   cursor: pointer;
 
-  background: green;
-  color: antiquewhite;
+  background: black;
+  color: white;
 
   width: min-content;
   border: 0;
@@ -14,5 +14,5 @@
 }
 
 .signUp__button_active {
-  background: darkgreen;
+  background: darkgray;
 }

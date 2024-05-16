@@ -1,10 +1,10 @@
 import { FormEvent } from 'react';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
-import { InputType } from '../UI/InputSignUp/InputSignUp';
+import { InputType } from '../../type/enums/SignUpEnums';
 import {
   InputConatiner,
   PatternSignUp,
-} from '../UI/InputContainerSignUp/InputConatinerSignUp';
+} from './InputContainerSignUp/InputConatinerSignUp';
 import classes from './signUpPage.module.css';
 
 export const SignUpPage = () => {
@@ -30,6 +30,15 @@ export const SignUpPage = () => {
       errorMessage:
         'minimum characters 2',
     },
+  ];
+
+  const country: string[] = [
+    'Austria',
+    'Bulgaria',
+    'Canada',
+    'China',
+    'Germany',
+    'United States',
   ];
 
   return (
@@ -124,6 +133,21 @@ export const SignUpPage = () => {
             Adress
           </h3>
           <InputConatiner
+            content="Country"
+            type={InputType.SELECT}
+            customClass={
+              'signUp__country'
+            }
+            options={country}
+          />
+          <InputConatiner
+            content="Postal Code"
+            type={InputType.NUMBER}
+            customClass={
+              'signUp__postalCode'
+            }
+          />
+          <InputConatiner
             content="City"
             type={InputType.TEXT}
             customClass={'signUp__city'}
@@ -136,20 +160,6 @@ export const SignUpPage = () => {
               'signUp__street'
             }
             patterns={namePattern}
-          />
-          <InputConatiner
-            content="Postal Code"
-            type={InputType.NUMBER}
-            customClass={
-              'signUp__postalCode'
-            }
-          />
-          <InputConatiner
-            content="Country"
-            type={InputType.TEXT}
-            customClass={
-              'signUp__country'
-            }
           />
         </section>
         <ButtonSignUp

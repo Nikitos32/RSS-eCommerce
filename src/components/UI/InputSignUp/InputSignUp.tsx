@@ -1,13 +1,6 @@
 import { ChangeEvent } from 'react';
 import classes from './inputSignUp.module.css';
-
-export enum InputType {
-  TEXT = 'text',
-  DATA = 'date',
-  NUMBER = 'number',
-  PASSWORD = 'password',
-  EMAIL = 'email',
-}
+import { InputType } from '../../../type/enums/SignUpEnums';
 
 type InputProps = {
   type: InputType;

@@ -1,15 +1,15 @@
 import classes from './InputConatinerSignUp.module.css';
 import { useState } from 'react';
-import {
-  InputSignUp,
-  InputType,
-} from '../InputSignUp/InputSignUp';
+import { InputType } from '../../../type/enums/SignUpEnums';
+import { InputSignUp } from '../../UI/InputSignUp/InputSignUp';
+import { SelectSignUp } from '../../UI/SelectSignUp/SelectSignUp';
 
 type InputConatinerProps = {
   content: string;
   type: InputType;
   customClass: string;
   patterns?: PatternSignUp[];
+  options?: string[];
 };
 
 export type PatternSignUp = {
@@ -22,13 +22,20 @@ export const InputConatiner = ({
   type,
   customClass,
   patterns,
+  options,
 }: InputConatinerProps) => {
   const [inputValue, setInputValue] =
-    useState(
-      type === InputType.DATA
-        ? '2000-01-01'
-        : ''
-    );
+    useState(() => {
+      switch (type) {
+        case InputType.DATA:
+          return '2000-01-01';
+        case InputType.SELECT:
+          if (!options) return '';
+          return options[0];
+        default:
+          return '';
+      }
+    });
   const [textError, setTextError] =
     useState('');
   const [timeoutId, setTimeoutId] =
@@ -112,13 +119,25 @@ export const InputConatiner = ({
       >
         {content}
       </label>
-      <InputSignUp
-        type={type}
-        customClass={customClass}
-        placeholder={`${content}...`}
-        value={inputValue}
-        valueChange={handleChange}
-      />
+      {type === InputType.SELECT &&
+      options ? (
+        <SelectSignUp
+          customClass={
+            'signUp__country'
+          }
+          options={options}
+          value={inputValue}
+          valueChange={handleChange}
+        />
+      ) : (
+        <InputSignUp
+          type={type}
+          customClass={customClass}
+          placeholder={`${content}...`}
+          value={inputValue}
+          valueChange={handleChange}
+        />
+      )}
       <div>{textError}</div>
     </div>
   );
