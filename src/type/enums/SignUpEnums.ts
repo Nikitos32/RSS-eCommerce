@@ -6,3 +6,15 @@ export enum InputType {
   EMAIL = 'email',
   SELECT = 'select',
 }
+
+export enum InputNames {
+  NAME = 'Name',
+  SURNAME = 'Surname',
+  EMAIL = 'Email',
+  PASSWORD = 'Password',
+  BIRTH = 'DateOfBirth',
+  COUNTRY = 'Country',
+  POSTCODE = 'PostalCode',
+  CITY = 'City',
+  STREET = 'Street',
+}

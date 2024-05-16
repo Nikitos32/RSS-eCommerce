@@ -1,10 +1,19 @@
-import { FormEvent } from 'react';
-import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
-import { InputType } from '../../type/enums/SignUpEnums';
 import {
-  InputConatiner,
-  PatternSignUp,
-} from './InputContainerSignUp/InputConatinerSignUp';
+  FormEvent,
+  useState,
+} from 'react';
+import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
+import {
+  InputType,
+  InputNames,
+} from '../../type/enums/SignUpEnums';
+import { InputConatiner } from './InputContainerSignUp/InputConatinerSignUp';
+import { InputDataType } from '../../type/types/signUpType';
+import { countryArray } from '../../type/value/country';
+import {
+  namePattern,
+  patternPostalCode,
+} from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
 
 export const SignUpPage = () => {
@@ -14,32 +23,33 @@ export const SignUpPage = () => {
     event.preventDefault();
   };
 
-  const namePattern: PatternSignUp[] = [
+  const initialInputData: InputDataType =
     {
-      pattern: '[A-Z].*',
-      errorMessage:
-        'first letter must be capitalised',
-    },
-    {
-      pattern: '^.{1}[a-z]*$',
-      errorMessage:
-        'after first letter must be lowercase or hyphen',
-    },
-    {
-      pattern: '.{2,}.*',
-      errorMessage:
-        'minimum characters 2',
-    },
-  ];
+      [InputNames.NAME]: '',
+      [InputNames.SURNAME]: '',
+      [InputNames.EMAIL]: '',
+      [InputNames.PASSWORD]: '',
+      [InputNames.BIRTH]: '2000-01-01',
+      [InputNames.COUNTRY]:
+        countryArray[0],
+      [InputNames.POSTCODE]: '',
+      [InputNames.CITY]: '',
+      [InputNames.STREET]: '',
+    };
 
-  const country: string[] = [
-    'Austria',
-    'Bulgaria',
-    'Canada',
-    'China',
-    'Germany',
-    'United States',
-  ];
+  const [InputData, setInputArray] =
+    useState(initialInputData);
+
+  const updateInputData = (
+    key: InputNames
+  ) => {
+    return function (newValue: string) {
+      setInputArray((prevState) => ({
+        ...prevState,
+        [key]: newValue,
+      }));
+    };
+  };
 
   return (
     <article className={classes.signUp}>
@@ -56,6 +66,9 @@ export const SignUpPage = () => {
             type={InputType.TEXT}
             customClass={'signUp__name'}
             patterns={namePattern}
+            setMapValue={updateInputData(
+              InputNames.NAME
+            )}
           />
           <InputConatiner
             content="Surname"
@@ -64,6 +77,9 @@ export const SignUpPage = () => {
               'signUp__surname'
             }
             patterns={namePattern}
+            setMapValue={updateInputData(
+              InputNames.SURNAME
+            )}
           />
           <InputConatiner
             content="Email"
@@ -79,6 +95,9 @@ export const SignUpPage = () => {
                   'Invalid email format',
               },
             ]}
+            setMapValue={updateInputData(
+              InputNames.EMAIL
+            )}
           />
           <InputConatiner
             content="Password"
@@ -113,6 +132,9 @@ export const SignUpPage = () => {
                   'don`t have uppercase',
               },
             ]}
+            setMapValue={updateInputData(
+              InputNames.PASSWORD
+            )}
           />
           <InputConatiner
             content="Date of birth"
@@ -120,6 +142,9 @@ export const SignUpPage = () => {
             customClass={
               'signUp__dataBirthday'
             }
+            setMapValue={updateInputData(
+              InputNames.BIRTH
+            )}
           />
         </section>
         <section
@@ -138,20 +163,32 @@ export const SignUpPage = () => {
             customClass={
               'signUp__country'
             }
-            options={country}
+            options={countryArray}
+            setMapValue={updateInputData(
+              InputNames.COUNTRY
+            )}
           />
           <InputConatiner
             content="Postal Code"
-            type={InputType.NUMBER}
+            type={InputType.TEXT}
             customClass={
               'signUp__postalCode'
             }
+            patterns={patternPostalCode.get(
+              InputData.Country
+            )}
+            setMapValue={updateInputData(
+              InputNames.POSTCODE
+            )}
           />
           <InputConatiner
             content="City"
             type={InputType.TEXT}
             customClass={'signUp__city'}
             patterns={namePattern}
+            setMapValue={updateInputData(
+              InputNames.CITY
+            )}
           />
           <InputConatiner
             content="Street"
@@ -160,6 +197,9 @@ export const SignUpPage = () => {
               'signUp__street'
             }
             patterns={namePattern}
+            setMapValue={updateInputData(
+              InputNames.STREET
+            )}
           />
         </section>
         <ButtonSignUp

@@ -8,6 +8,9 @@ type InputConatinerProps = {
   content: string;
   type: InputType;
   customClass: string;
+  setMapValue: (
+    newValue: string
+  ) => void;
   patterns?: PatternSignUp[];
   options?: string[];
 };
@@ -23,6 +26,7 @@ export const InputConatiner = ({
   customClass,
   patterns,
   options,
+  setMapValue,
 }: InputConatinerProps) => {
   const [inputValue, setInputValue] =
     useState(() => {
@@ -47,6 +51,7 @@ export const InputConatiner = ({
     value: string
   ) => {
     setInputValue(value);
+    setMapValue(value);
     let error: string = '';
 
     if (patterns) {
