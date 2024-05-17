@@ -18,6 +18,7 @@ Implementation of the [RSSchool eCommerce Application task](https://github.com/r
 - Vitest - testing framework powered by Vite
 - Husky
 - CommerceTools [link to project](https://mc.europe-west1.gcp.commercetools.com/r20/welcome)
+- Tailwind CSS
 
 ## Installation
 
