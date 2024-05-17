@@ -18,11 +18,13 @@ Implementation of the [RSSchool eCommerce Application task](https://github.com/r
 - Vitest - testing framework powered by Vite
 - Husky
 - CommerceTools [link to project](https://mc.europe-west1.gcp.commercetools.com/r20/welcome)
+- Tailwind CSS
 
 ## Installation
 
 1. Clone/download [repo](https://github.com/Nikitos32/RSS-eCommerce)
 2. `npm install`
+3. Rename `.env.example` to `.env` and set environment variables for _commercetools_ API Client (`VITE_CTP_*`)
 
 ## Useful commands
 
