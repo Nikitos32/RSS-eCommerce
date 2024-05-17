@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Button } from '../UI/Button/Button';
 import classes from './LoginFieldsetEnterSection.module.css';
 
@@ -13,7 +14,9 @@ export const LoginFieldsetEnterSection =
           isSubmitBtn={true}
           content="Enter"
         />
-        <a href="">Registration</a>
+        <Link to="/signup">
+          Registration
+        </Link>
       </fieldset>
     );
   };
