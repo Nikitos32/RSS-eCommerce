@@ -18,3 +18,13 @@ export enum InputNames {
   CITY = 'City',
   STREET = 'Street',
 }
+
+export enum CountryName {
+  AUSTRIA = 'Austria',
+  BULGARIA = 'Bulgaria',
+  CANADA = 'Canada',
+  CHINA = 'China',
+  GERMANY = 'Germany',
+  UNITED_KINDOM = 'United Kingdom',
+  UNITED_STATES = 'United States',
+}

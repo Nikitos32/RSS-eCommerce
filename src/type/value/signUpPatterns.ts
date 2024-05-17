@@ -53,6 +53,17 @@ patternPostalCode.set('Germany', [
     errorMessage: 'must be 4 digits',
   },
 ]);
+patternPostalCode.set(
+  'United Kingdom',
+  [
+    {
+      pattern:
+        '^((([A-PR-UWYZ][0-9][0-9]?)|([A-PR-UWYZ][A-HK-Y][0-9][0-9]?)|([A-PR-UWYZ][0-9][A-HJKS-UW])|([A-PR-UWYZ][A-HK-Y][0-9][ABEHMNPRVWXY]))\\s[0-9][ABD-HJLNP-UW-Z]{2})$',
+      errorMessage:
+        'must be AN, ANN, AAN, AANN, ANA, AANA, AAA, NAA',
+    },
+  ]
+);
 patternPostalCode.set('United States', [
   {
     pattern: '^\\d{5}(-\\d{4})?$',
