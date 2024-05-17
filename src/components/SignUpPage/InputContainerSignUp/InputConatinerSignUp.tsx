@@ -3,13 +3,16 @@ import { useState } from 'react';
 import { InputType } from '../../../type/enums/SignUpEnums';
 import { InputSignUp } from '../../UI/InputSignUp/InputSignUp';
 import { SelectSignUp } from '../../UI/SelectSignUp/SelectSignUp';
+import { InputDataValueType } from '../../../type/types/signUpType';
 
 type InputConatinerProps = {
   content: string;
   type: InputType;
   customClass: string;
-  setMapValue: (
-    newValue: string
+  inputDataValue: InputDataValueType;
+  setInputDataValue: (
+    newValue: string,
+    newCorrect: boolean
   ) => void;
   patterns?: PatternSignUp[];
   options?: string[];
@@ -24,22 +27,13 @@ export const InputConatiner = ({
   content,
   type,
   customClass,
+  inputDataValue,
+  setInputDataValue,
   patterns,
   options,
-  setMapValue,
 }: InputConatinerProps) => {
   const [inputValue, setInputValue] =
-    useState(() => {
-      switch (type) {
-        case InputType.DATA:
-          return '2000-01-01';
-        case InputType.SELECT:
-          if (!options) return '';
-          return options[0];
-        default:
-          return '';
-      }
-    });
+    useState(inputDataValue.value);
   const [textError, setTextError] =
     useState('');
   const [timeoutId, setTimeoutId] =
@@ -51,8 +45,8 @@ export const InputConatiner = ({
     value: string
   ) => {
     setInputValue(value);
-    setMapValue(value);
     let error: string = '';
+    let newCorrect: boolean = true;
 
     if (patterns) {
       error = patterns
@@ -61,11 +55,10 @@ export const InputConatiner = ({
             pattern,
             errorMessage,
           }) => {
-            const resultTest =
-              new RegExp(pattern).test(
-                value
-              );
-            return resultTest
+            newCorrect = new RegExp(
+              pattern
+            ).test(value);
+            return newCorrect
               ? ''
               : `${errorMessage}\n`;
           }
@@ -96,6 +89,10 @@ export const InputConatiner = ({
           'Must be at least 14 years of age';
     }
 
+    setInputDataValue(
+      value,
+      newCorrect
+    );
     setTextError(error);
 
     if (timeoutId) {

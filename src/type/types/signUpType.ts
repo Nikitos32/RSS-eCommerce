@@ -1,11 +1,16 @@
+export type InputDataValueType = {
+  value: string;
+  correct: boolean;
+};
+
 export type InputDataType = {
-  Name: string;
-  Surname: string;
-  Email: string;
-  Password: string;
-  DateOfBirth: string;
-  Country: string;
-  PostalCode: string;
-  City: string;
-  Street: string;
+  Name: InputDataValueType;
+  Surname: InputDataValueType;
+  Email: InputDataValueType;
+  Password: InputDataValueType;
+  DateOfBirth: InputDataValueType;
+  Country: InputDataValueType;
+  PostalCode: InputDataValueType;
+  City: InputDataValueType;
+  Street: InputDataValueType;
 };
