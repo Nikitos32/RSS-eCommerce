@@ -8,14 +8,14 @@ export default {
     extend: {
       fontFamily: {
         Garamond: [
-          'EB Garamond',
+          '"EB Garamond"',
           'serif',
         ],
         Inter: ['Inter', 'sans-serif'],
       },
       colors: {
         moonNeutral: {
-          100: colors.white,
+          100: '#ffffff',
           200: '#f8faff',
           300: '#edeff5',
           400: '#d7dbe7',
