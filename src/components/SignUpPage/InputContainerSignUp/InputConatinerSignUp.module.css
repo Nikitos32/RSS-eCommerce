@@ -1,0 +1,12 @@
+.signUp__inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+
+  width: 100%;
+
+  text-align: center;
+}
+.signUp__label {
+  font-size: 1rem;
+}

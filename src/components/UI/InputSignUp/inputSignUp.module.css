@@ -1,0 +1,18 @@
+.signUp__input {
+  border: 1px solid black;
+  padding: 3px 0.5rem;
+  border-radius: 1rem;
+}
+
+.signUp__input:focus {
+  border: 1px solid black;
+  background: antiquewhite;
+  outline: none;
+}
+
+.signUp__dataBirthday {
+  width: min-content;
+  margin: auto;
+
+  font-size: 1.2rem;
+}

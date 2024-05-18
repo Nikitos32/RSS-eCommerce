@@ -1,0 +1,80 @@
+.signUp {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0;
+}
+
+.signUp__form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+
+  border: 1px solid darkgreen;
+  border-radius: 1rem;
+  padding: 20px;
+
+  width: 260px;
+}
+
+.signUp__data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+
+  width: 100%;
+  max-width: 260px;
+}
+
+.sugnUp__buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.3rem;
+
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .signUp__form {
+    width: 50vw;
+    max-width: 500px;
+  }
+
+  .signUp__data {
+    width: 100%;
+    max-width: max-content;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .signUp__adressTitle {
+    width: 100%;
+    text-align: center;
+  }
+
+  .signUp__data > div {
+    width: 45%;
+  }
+
+  .signUp__birth {
+    flex-direction: column;
+  }
+  .signUp__birth > div {
+    width: 100%;
+  }
+
+  .sugnUp__buttonContainer {
+    flex-direction: row;
+    gap: 0;
+  }
+}
