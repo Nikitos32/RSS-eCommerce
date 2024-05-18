@@ -7,6 +7,7 @@ import {
 import './App.css';
 import { Header } from './components/Header/Header';
 import { LoginPage } from './components/LoginPage/LoginPage';
+import { SignUpPage } from './components/SignUpPage/SignUpPage';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
@@ -28,7 +29,7 @@ function App() {
         />
         <Route
           path="/signup"
-          element={<h2>Signup Page</h2>}
+          element={<SignUpPage />}
         />
         <Route
           path="*"

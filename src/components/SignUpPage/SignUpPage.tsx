@@ -2,6 +2,7 @@ import {
   FormEvent,
   useState,
 } from 'react';
+import { Link } from 'react-router-dom';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import {
   InputType,
@@ -107,12 +108,16 @@ export const SignUpPage = () => {
   };
 
   return (
-    <article className={classes.signUp}>
+    <article
+      className={`${classes.signUp} font-Inter`}
+    >
       <form
         className={classes.signUp__form}
         onSubmit={handleSubmit}
       >
-        <h1>SignUp</h1>
+        <h1 className="text-2xl font-medium font-Inter">
+          SignUp
+        </h1>
         <section
           className={`${classes.signUp__data} ${classes.signUp__UserData}`}
         >
@@ -293,11 +298,19 @@ export const SignUpPage = () => {
             classes.sugnUp__buttonContainer
           }
         >
-          <ButtonSignUp
-            btnContent="< to Login"
-            customClass="signUp__buttonToLogin"
-            customFunction={() => {}}
-          />
+          <Link
+            to="/signin"
+            className={`${classes.signUp__toLink}`}
+          >
+            <span
+              className={
+                classes.signUp__linkArow
+              }
+            >
+              {'< '}
+            </span>
+            {'to Login'}
+          </Link>
           <ButtonSignUp
             btnContent="SignUp"
             customClass="signUp__buttonSend"
