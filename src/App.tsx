@@ -9,6 +9,7 @@ import { LoginPage } from './components/LoginPage/LoginPage';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
+import { SignUpPage } from './components/SignUpPage/SignUpPage';
 
 function App() {
   const router = createBrowserRouter(
@@ -27,7 +28,7 @@ function App() {
         />
         <Route
           path="/signup"
-          element={<h2>Signup Page</h2>}
+          element={<SignUpPage />}
         />
         <Route
           path="*"
