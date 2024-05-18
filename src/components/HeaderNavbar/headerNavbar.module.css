@@ -1,6 +1,6 @@
-.centeredSection {
+.navbarWrapper {
   display: flex;
-  flex-direction: column;
+  gap: 50px;
   justify-content: center;
   align-items: center;
   flex: 1 0 auto;

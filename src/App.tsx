@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import './App.css';
+import { Header } from './components/Header/Header';
 import { LoginPage } from './components/LoginPage/LoginPage';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
