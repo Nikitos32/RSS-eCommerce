@@ -18,6 +18,8 @@ export const ButtonSignUp = ({
       className={` 
         ${classes.signUp__button}
         ${classes[customClass]}
+        bg-moonBlack
+        text-lg
       `}
       onClick={() => {
         customFunction();

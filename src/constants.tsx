@@ -10,6 +10,14 @@ export enum BtnType {
   BUTTON = 'button',
 }
 
+export enum Links {
+  HOME = 'Home',
+  ABOUT = 'About',
+  SHOP = 'Shop',
+  ACCOUNT = 'Account',
+  CART = 'Cart',
+}
+
 export const MIN_PASSWORD_LENGTH: number = 8;
 
 export const REGEX_FOR_EMAIL_INPUT: string =

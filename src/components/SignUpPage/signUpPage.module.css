@@ -1,9 +1,8 @@
 .signUp {
-  height: 100vh;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
   padding: 0;
@@ -20,7 +19,9 @@
   border-radius: 1rem;
   padding: 20px;
 
-  width: 260px;
+  width: 70%;
+  min-width: 300px;
+  max-width: 400px;
 }
 
 .signUp__data {
@@ -30,7 +31,6 @@
   gap: 0.3rem;
 
   width: 100%;
-  max-width: 260px;
 }
 
 .sugnUp__buttonContainer {
@@ -42,10 +42,23 @@
   width: 100%;
 }
 
+.signUp__toLink {
+  width: 100%;
+  padding: 0.5rem;
+
+  text-align: center;
+  white-space: nowrap;
+
+  font-size: 1rem;
+  font-weight: 600;
+}
+.signUp__linkArow {
+  transition: padding-right 0.4s;
+}
+
 @media (min-width: 768px) {
   .signUp__form {
-    width: 50vw;
-    max-width: 500px;
+    min-width: 600px;
   }
 
   .signUp__data {
@@ -76,5 +89,18 @@
   .sugnUp__buttonContainer {
     flex-direction: row;
     gap: 0;
+  }
+  .signUp__toLink {
+    width: min-content;
+  }
+}
+
+@media (hover: hover) {
+  .signUp__toLink:hover {
+    text-decoration: none;
+  }
+  .signUp__toLink:hover
+    > .signUp__linkArow {
+    padding-right: 10px;
   }
 }

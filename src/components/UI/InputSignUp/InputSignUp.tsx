@@ -22,7 +22,7 @@ export const InputSignUp = ({
   return (
     <input
       type={type}
-      className={`${classes.signUp__input} ${classes[customClass]}`}
+      className={`${classes.input} ${classes[customClass]}`}
       placeholder={placeholder}
       value={value}
       onChange={(
