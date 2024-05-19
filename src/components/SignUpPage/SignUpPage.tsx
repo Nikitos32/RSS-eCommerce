@@ -2,6 +2,7 @@ import {
   FormEvent,
   useState,
 } from 'react';
+import { Link } from 'react-router-dom';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import {
   InputType,
@@ -9,10 +10,15 @@ import {
 } from '../../type/enums/SignUpEnums';
 import { InputConatiner } from './InputContainerSignUp/InputConatinerSignUp';
 import { InputDataType } from '../../type/types/signUpType';
-import { countryArray } from '../../type/value/country';
+import {
+  countryArray,
+  countryCode,
+} from '../../type/value/country';
 import {
   namePattern,
   patternPostalCode,
+  patternPassword,
+  patternStreet,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
 
@@ -52,6 +58,7 @@ export const SignUpPage = () => {
       [InputNames.POSTCODE]: {
         value: '',
         correct: false,
+        setError: function () {},
       },
       [InputNames.CITY]: {
         value: '',
@@ -63,7 +70,7 @@ export const SignUpPage = () => {
       },
     };
 
-  const [inputData, setInputArray] =
+  const [inputData, setInputData] =
     useState(initialInputData);
   const [
     ButtonDisabled,
@@ -73,11 +80,11 @@ export const SignUpPage = () => {
   const updateInputData = (
     key: InputNames
   ) => {
-    return async function (
+    return function (
       newValue: string,
       newCorrect: boolean
     ) {
-      setInputArray((prevState) => {
+      setInputData((prevState) => {
         const newInputData = {
           ...prevState,
           [key]: {
@@ -86,20 +93,32 @@ export const SignUpPage = () => {
           },
         };
 
-        let resultCheck =
-          key === InputNames.COUNTRY
-            ? true
-            : false;
-        Object.keys(
-          newInputData
-        ).forEach((key) => {
-          const { correct } =
-            newInputData[
-              key as InputNames
-            ];
-          if (!correct)
-            resultCheck = true;
-        });
+        let resultCheck = false;
+        if (
+          key === InputNames.COUNTRY &&
+          inputData.PostalCode.setError
+        ) {
+          resultCheck = true;
+          newInputData.PostalCode.value =
+            '';
+          newInputData.PostalCode.correct =
+            false;
+          inputData.PostalCode.setError(
+            ''
+          );
+        } else {
+          Object.keys(
+            newInputData
+          ).forEach((key) => {
+            const { correct } =
+              newInputData[
+                key as InputNames
+              ];
+            if (!correct)
+              resultCheck = true;
+          });
+        }
+
         setButtonDisabled(resultCheck);
         return newInputData;
       });
@@ -107,12 +126,16 @@ export const SignUpPage = () => {
   };
 
   return (
-    <article className={classes.signUp}>
+    <article
+      className={`${classes.signUp} font-Inter text-moonBlack`}
+    >
       <form
         className={classes.signUp__form}
         onSubmit={handleSubmit}
       >
-        <h1>SignUp</h1>
+        <h1 className="text-2xl font-medium">
+          SignUp
+        </h1>
         <section
           className={`${classes.signUp__data} ${classes.signUp__UserData}`}
         >
@@ -122,7 +145,7 @@ export const SignUpPage = () => {
             customClass={'signUp__name'}
             patterns={namePattern}
             inputDataValue={
-              initialInputData.Name
+              inputData.Name
             }
             setInputDataValue={updateInputData(
               InputNames.NAME
@@ -136,7 +159,7 @@ export const SignUpPage = () => {
             }
             patterns={namePattern}
             inputDataValue={
-              initialInputData.Surname
+              inputData.Surname
             }
             setInputDataValue={updateInputData(
               InputNames.SURNAME
@@ -153,11 +176,11 @@ export const SignUpPage = () => {
                 pattern:
                   '^(([^<>()[\\].,;:\\s@\']+(\\.[^<>()[\\].,;:\\s@\']+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
                 errorMessage:
-                  'Invalid email format',
+                  'Incorrect email format',
               },
             ]}
             inputDataValue={
-              initialInputData.Email
+              inputData.Email
             }
             setInputDataValue={updateInputData(
               InputNames.EMAIL
@@ -169,35 +192,9 @@ export const SignUpPage = () => {
             customClass={
               'signUp__password'
             }
-            patterns={[
-              {
-                pattern: '.{7,}.*',
-                errorMessage:
-                  'must be longer than 8 characters',
-              },
-              {
-                pattern: '^.{0,15}$',
-                errorMessage:
-                  'must be less than 16 character',
-              },
-              {
-                pattern: '[0-9]',
-                errorMessage:
-                  'need number',
-              },
-              {
-                pattern: '[a-zA-Z]',
-                errorMessage:
-                  'need english letters',
-              },
-              {
-                pattern: '[A-Z]',
-                errorMessage:
-                  'don`t have uppercase',
-              },
-            ]}
+            patterns={patternPassword}
             inputDataValue={
-              initialInputData.Password
+              inputData.Password
             }
             setInputDataValue={updateInputData(
               InputNames.PASSWORD
@@ -214,7 +211,7 @@ export const SignUpPage = () => {
               'signUp__dataBirthday'
             }
             inputDataValue={
-              initialInputData.DateOfBirth
+              inputData.DateOfBirth
             }
             setInputDataValue={updateInputData(
               InputNames.BIRTH
@@ -225,9 +222,10 @@ export const SignUpPage = () => {
           className={`${classes.signUp__data} ${classes.signUp__adress}`}
         >
           <h3
-            className={
-              classes.signUp__adressTitle
-            }
+            className={`
+              ${classes.signUp__adressTitle}
+              text-xl font-medium
+              `}
           >
             Adress
           </h3>
@@ -239,7 +237,7 @@ export const SignUpPage = () => {
             }
             options={countryArray}
             inputDataValue={
-              initialInputData.Country
+              inputData.Country
             }
             setInputDataValue={updateInputData(
               InputNames.COUNTRY
@@ -255,7 +253,7 @@ export const SignUpPage = () => {
               inputData.Country.value
             )}
             inputDataValue={
-              initialInputData.PostalCode
+              inputData.PostalCode
             }
             setInputDataValue={updateInputData(
               InputNames.POSTCODE
@@ -267,7 +265,7 @@ export const SignUpPage = () => {
             customClass={'signUp__city'}
             patterns={namePattern}
             inputDataValue={
-              initialInputData.City
+              inputData.City
             }
             setInputDataValue={updateInputData(
               InputNames.CITY
@@ -279,9 +277,9 @@ export const SignUpPage = () => {
             customClass={
               'signUp__street'
             }
-            patterns={namePattern}
+            patterns={patternStreet}
             inputDataValue={
-              initialInputData.Street
+              inputData.Street
             }
             setInputDataValue={updateInputData(
               InputNames.STREET
@@ -293,15 +291,54 @@ export const SignUpPage = () => {
             classes.sugnUp__buttonContainer
           }
         >
-          <ButtonSignUp
-            btnContent="< to Login"
-            customClass="signUp__buttonToLogin"
-            customFunction={() => {}}
-          />
+          <Link
+            to="/signin"
+            className={`${classes.signUp__toLink} text-lg`}
+          >
+            <span
+              className={
+                classes.signUp__linkArow
+              }
+            >
+              {'< '}
+            </span>
+            {'to Login'}
+          </Link>
           <ButtonSignUp
             btnContent="SignUp"
             customClass="signUp__buttonSend"
-            customFunction={() => {}}
+            customFunction={() => {
+              const sendSignUp = {
+                name: inputData.Name
+                  .value,
+                surname:
+                  inputData.Surname
+                    .value,
+                email:
+                  inputData.Email.value,
+                password:
+                  inputData.Password
+                    .value,
+                dateOfBirth:
+                  inputData.DateOfBirth
+                    .value,
+                country:
+                  countryCode.get(
+                    inputData.Country
+                      .value
+                  ),
+                postalCode:
+                  inputData.PostalCode
+                    .value,
+                city: inputData.City
+                  .value,
+                street:
+                  inputData.Street
+                    .value,
+              };
+
+              console.log(sendSignUp);
+            }}
             disabled={ButtonDisabled}
           />
         </section>

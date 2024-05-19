@@ -32,38 +32,35 @@ export const InputConatiner = ({
   patterns,
   options,
 }: InputConatinerProps) => {
-  const [inputValue, setInputValue] =
-    useState(inputDataValue.value);
   const [textError, setTextError] =
     useState('');
-  const [timeoutId, setTimeoutId] =
-    useState<NodeJS.Timeout | null>(
-      null
-    );
+
+  if (content == 'Postal Code') {
+    inputDataValue.setError = (
+      newError: string
+    ) => {
+      setTextError(newError);
+    };
+  }
 
   const handleChange = (
     value: string
   ) => {
-    setInputValue(value);
     let error: string = '';
     let newCorrect: boolean = true;
 
     if (patterns) {
-      error = patterns
-        ?.map(
-          ({
-            pattern,
-            errorMessage,
-          }) => {
-            newCorrect = new RegExp(
-              pattern
-            ).test(value);
-            return newCorrect
-              ? ''
-              : `${errorMessage}\n`;
-          }
-        )
-        .join(' ');
+      const checkResult =
+        patterns?.find(
+          ({ pattern }) =>
+            !new RegExp(pattern).test(
+              value
+            )
+        );
+      error = checkResult
+        ? `*${checkResult.errorMessage}`
+        : '';
+      newCorrect = !error;
     } else if (
       type === InputType.DATA
     ) {
@@ -84,9 +81,11 @@ export const InputConatiner = ({
       )
         age -= 1;
 
-      if (age < 14)
+      if (age < 14) {
         error =
-          'Must be at least 14 years of age';
+          '*Must be at least 14 years of age';
+        newCorrect = false;
+      }
     }
 
     setInputDataValue(
@@ -94,25 +93,14 @@ export const InputConatiner = ({
       newCorrect
     );
     setTextError(error);
-
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-
-    const newTimeoutId = setTimeout(
-      () => {
-        setTextError('');
-      },
-      error === '' ? 0 : 2000
-    );
-    setTimeoutId(newTimeoutId);
   };
 
   return (
     <div
-      className={
-        classes.signUp__inputContainer
-      }
+      className={`
+        ${classes.signUp__inputContainer}
+        ${classes[customClass]}
+        `}
     >
       <label
         className={
@@ -128,19 +116,21 @@ export const InputConatiner = ({
             'signUp__country'
           }
           options={options}
-          value={inputValue}
+          value={inputDataValue.value}
           valueChange={handleChange}
         />
       ) : (
         <InputSignUp
           type={type}
-          customClass={customClass}
+          customClass={'signUp__input'}
           placeholder={`${content}...`}
-          value={inputValue}
+          value={inputDataValue.value}
           valueChange={handleChange}
         />
       )}
-      <div>{textError}</div>
+      <div className="text-red-500 text-xs h-3">
+        {textError}
+      </div>
     </div>
   );
 };

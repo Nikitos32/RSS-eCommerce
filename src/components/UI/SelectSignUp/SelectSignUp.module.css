@@ -6,11 +6,10 @@
 .select__field {
   border: 1px solid black;
   padding: 3px 0.5rem;
-  border-radius: 1rem;
 }
 
 .select__field_active {
-  background: antiquewhite;
+  box-shadow: 0 0 0.5px 0.5px black;
 }
 
 .select__options {
@@ -23,7 +22,7 @@
   list-style-type: none;
 
   width: 90%;
-  height: 120px;
+  height: 111px;
   margin: -1px 0 0 0;
   padding: 0;
 
@@ -39,17 +38,18 @@
 }
 .select__options::-webkit-scrollbar-track {
   border-radius: 1rem;
-  background-color: black;
+  @apply bg-moonBlack;
 }
 .select__options::-webkit-scrollbar-thumb {
   border-radius: 1rem;
-  background-color: gray;
+  background-color: darkgray;
 }
 
 .select__option {
   padding: 6px 0;
   padding-left: 6px;
   border-bottom: 1px solid #000;
+  height: 37px;
 
   cursor: pointer;
 }
@@ -60,7 +60,8 @@
 
 @media (hover: hover) {
   .select__option:hover {
-    background-color: black;
+    @apply bg-moonBlack;
+    /* background-color: black; */
     color: white;
   }
 }

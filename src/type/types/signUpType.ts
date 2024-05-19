@@ -1,6 +1,7 @@
 export type InputDataValueType = {
   value: string;
   correct: boolean;
+  setError?: (newError: string) => void;
 };
 
 export type InputDataType = {
