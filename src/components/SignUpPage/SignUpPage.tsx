@@ -64,7 +64,7 @@ export const SignUpPage = () => {
       },
     };
 
-  const [inputData, setInputArray] =
+  const [inputData, setInputData] =
     useState(initialInputData);
   const [
     ButtonDisabled,
@@ -78,7 +78,7 @@ export const SignUpPage = () => {
       newValue: string,
       newCorrect: boolean
     ) {
-      setInputArray((prevState) => {
+      setInputData((prevState) => {
         const newInputData = {
           ...prevState,
           [key]: {
@@ -109,13 +109,13 @@ export const SignUpPage = () => {
 
   return (
     <article
-      className={`${classes.signUp} font-Inter`}
+      className={`${classes.signUp} font-Inter text-moonBlack`}
     >
       <form
         className={classes.signUp__form}
         onSubmit={handleSubmit}
       >
-        <h1 className="text-2xl font-medium font-Inter">
+        <h1 className="text-2xl font-medium">
           SignUp
         </h1>
         <section
@@ -230,9 +230,10 @@ export const SignUpPage = () => {
           className={`${classes.signUp__data} ${classes.signUp__adress}`}
         >
           <h3
-            className={
-              classes.signUp__adressTitle
-            }
+            className={`
+              ${classes.signUp__adressTitle}
+              text-xl font-medium
+              `}
           >
             Adress
           </h3>
@@ -300,7 +301,7 @@ export const SignUpPage = () => {
         >
           <Link
             to="/signin"
-            className={`${classes.signUp__toLink}`}
+            className={`${classes.signUp__toLink} text-lg`}
           >
             <span
               className={

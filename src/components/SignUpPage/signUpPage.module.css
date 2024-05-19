@@ -19,7 +19,9 @@
   border-radius: 1rem;
   padding: 20px;
 
-  width: 300px;
+  width: 70%;
+  min-width: 300px;
+  max-width: 400px;
 }
 
 .signUp__data {
@@ -29,7 +31,6 @@
   gap: 0.3rem;
 
   width: 100%;
-  max-width: 260px;
 }
 
 .sugnUp__buttonContainer {
@@ -57,7 +58,7 @@
 
 @media (min-width: 768px) {
   .signUp__form {
-    width: 540px;
+    min-width: 600px;
   }
 
   .signUp__data {

@@ -1,12 +1,11 @@
 .signUp__input {
   border: 1px solid black;
   padding: 3px 0.5rem;
-  border-radius: 1rem;
 }
 
 .signUp__input:focus {
   border: 1px solid black;
-  background: antiquewhite;
+  box-shadow: 0 0 0.5px 0.5px black;
   outline: none;
 }
 
