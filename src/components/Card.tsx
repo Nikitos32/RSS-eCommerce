@@ -4,7 +4,7 @@ type CardProps = {
 };
 function Card({
   children,
-  bg = 'bg-gray-100',
+  bg = 'bg-moonNeutral-200',
 }: CardProps) {
   return (
     <div
