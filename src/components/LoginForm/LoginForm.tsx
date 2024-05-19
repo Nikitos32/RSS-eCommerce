@@ -78,6 +78,8 @@ export const LoginForm = () => {
       );
     //'test2@example.com', 'test2'
     if (response.ok) {
+      setPasswordInputValue('');
+      setEmailInputValue('');
       if (
         typeof setIsLogined !==
         'boolean'
@@ -91,10 +93,7 @@ export const LoginForm = () => {
     event: FormEvent
   ) => {
     event.preventDefault();
-    LogIn().then(() => {
-      setPasswordInputValue('');
-      setEmailInputValue('');
-    });
+    LogIn();
   };
 
   return isLogined ? (

@@ -64,7 +64,7 @@ function Links() {
       )}
       {isLogined && (
         <Link
-          to="/signout"
+          to="/signin"
           title="Logout"
           onClick={() =>
             handleSignOut()
