@@ -10,13 +10,36 @@ import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
 import { SignUpPage } from './components/SignUpPage/SignUpPage';
+import {
+  createContext,
+  useState,
+} from 'react';
+
+export const IsLoginedContext =
+  createContext([false, () => {}]);
 
 function App() {
+  const [isLogined, setIsLogined] =
+    useState<boolean>(false);
+
+  const handleIsLogined = () => {
+    setIsLogined(!isLogined);
+  };
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
         path="/"
-        element={<MainLayout />}
+        element={
+          <IsLoginedContext.Provider
+            value={[
+              isLogined,
+              handleIsLogined,
+            ]}
+          >
+            <MainLayout />
+          </IsLoginedContext.Provider>
+        }
       >
         <Route
           index
@@ -24,7 +47,16 @@ function App() {
         />
         <Route
           path="/signin"
-          element={<LoginPage />}
+          element={
+            <IsLoginedContext.Provider
+              value={[
+                isLogined,
+                handleIsLogined,
+              ]}
+            >
+              <LoginPage />
+            </IsLoginedContext.Provider>
+          }
         />
         <Route
           path="/signup"

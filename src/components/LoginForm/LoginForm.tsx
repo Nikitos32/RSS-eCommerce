@@ -1,5 +1,6 @@
 import {
   FormEvent,
+  useContext,
   useState,
 } from 'react';
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
@@ -13,8 +14,13 @@ import {
 import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
+import { Navigate } from 'react-router-dom';
+import { IsLoginedContext } from '../../App';
 
 export const LoginForm = () => {
+  const [isLogined, setIsLogined] =
+    useContext(IsLoginedContext);
+
   const [
     emailInputValue,
     setEmailInputValue,
@@ -70,7 +76,15 @@ export const LoginForm = () => {
         'test2@example.com',
         'test2'
       );
-    console.log(response);
+    //'test2@example.com', 'test2'
+    if (response.ok) {
+      if (
+        typeof setIsLogined !==
+        'boolean'
+      ) {
+        setIsLogined();
+      }
+    }
   }
 
   const handleSubmit = (
@@ -82,7 +96,9 @@ export const LoginForm = () => {
     setEmailInputValue('');
   };
 
-  return (
+  return isLogined ? (
+    <Navigate to="/" />
+  ) : (
     <form
       onSubmit={handleSubmit}
       className={classes.loginForm}
