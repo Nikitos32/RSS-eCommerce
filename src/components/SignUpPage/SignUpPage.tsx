@@ -10,7 +10,10 @@ import {
 } from '../../type/enums/SignUpEnums';
 import { InputConatiner } from './InputContainerSignUp/InputConatinerSignUp';
 import { InputDataType } from '../../type/types/signUpType';
-import { countryArray } from '../../type/value/country';
+import {
+  countryArray,
+  countryCode,
+} from '../../type/value/country';
 import {
   namePattern,
   patternPostalCode,
@@ -173,7 +176,7 @@ export const SignUpPage = () => {
                 pattern:
                   '^(([^<>()[\\].,;:\\s@\']+(\\.[^<>()[\\].,;:\\s@\']+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
                 errorMessage:
-                  'Invalid email format',
+                  'Incorrect email format',
               },
             ]}
             inputDataValue={
@@ -304,7 +307,38 @@ export const SignUpPage = () => {
           <ButtonSignUp
             btnContent="SignUp"
             customClass="signUp__buttonSend"
-            customFunction={() => {}}
+            customFunction={() => {
+              const sendSignUp = {
+                name: inputData.Name
+                  .value,
+                surname:
+                  inputData.Surname
+                    .value,
+                email:
+                  inputData.Email.value,
+                password:
+                  inputData.Password
+                    .value,
+                dateOfBirth:
+                  inputData.DateOfBirth
+                    .value,
+                country:
+                  countryCode.get(
+                    inputData.Country
+                      .value
+                  ),
+                postalCode:
+                  inputData.PostalCode
+                    .value,
+                city: inputData.City
+                  .value,
+                street:
+                  inputData.Street
+                    .value,
+              };
+
+              console.log(sendSignUp);
+            }}
             disabled={ButtonDisabled}
           />
         </section>

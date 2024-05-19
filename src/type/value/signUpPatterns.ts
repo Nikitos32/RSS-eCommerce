@@ -10,7 +10,7 @@ export const namePattern: PatternSignUp[] =
     {
       pattern: '^.{1}[a-z]*$',
       errorMessage:
-        'after first letter must be lowercase',
+        'after first letter must be English lowercase',
     },
     {
       pattern: '.{2,}.*',
