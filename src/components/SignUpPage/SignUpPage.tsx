@@ -55,6 +55,7 @@ export const SignUpPage = () => {
       [InputNames.POSTCODE]: {
         value: '',
         correct: false,
+        setError: function () {},
       },
       [InputNames.CITY]: {
         value: '',
@@ -76,7 +77,7 @@ export const SignUpPage = () => {
   const updateInputData = (
     key: InputNames
   ) => {
-    return async function (
+    return function (
       newValue: string,
       newCorrect: boolean
     ) {
@@ -89,20 +90,32 @@ export const SignUpPage = () => {
           },
         };
 
-        let resultCheck =
-          key === InputNames.COUNTRY
-            ? true
-            : false;
-        Object.keys(
-          newInputData
-        ).forEach((key) => {
-          const { correct } =
-            newInputData[
-              key as InputNames
-            ];
-          if (!correct)
-            resultCheck = true;
-        });
+        let resultCheck = false;
+        if (
+          key === InputNames.COUNTRY &&
+          inputData.PostalCode.setError
+        ) {
+          resultCheck = true;
+          newInputData.PostalCode.value =
+            '';
+          newInputData.PostalCode.correct =
+            false;
+          inputData.PostalCode.setError(
+            ''
+          );
+        } else {
+          Object.keys(
+            newInputData
+          ).forEach((key) => {
+            const { correct } =
+              newInputData[
+                key as InputNames
+              ];
+            if (!correct)
+              resultCheck = true;
+          });
+        }
+
         setButtonDisabled(resultCheck);
         return newInputData;
       });
@@ -129,7 +142,7 @@ export const SignUpPage = () => {
             customClass={'signUp__name'}
             patterns={namePattern}
             inputDataValue={
-              initialInputData.Name
+              inputData.Name
             }
             setInputDataValue={updateInputData(
               InputNames.NAME
@@ -143,7 +156,7 @@ export const SignUpPage = () => {
             }
             patterns={namePattern}
             inputDataValue={
-              initialInputData.Surname
+              inputData.Surname
             }
             setInputDataValue={updateInputData(
               InputNames.SURNAME
@@ -164,7 +177,7 @@ export const SignUpPage = () => {
               },
             ]}
             inputDataValue={
-              initialInputData.Email
+              inputData.Email
             }
             setInputDataValue={updateInputData(
               InputNames.EMAIL
@@ -178,7 +191,7 @@ export const SignUpPage = () => {
             }
             patterns={patternPassword}
             inputDataValue={
-              initialInputData.Password
+              inputData.Password
             }
             setInputDataValue={updateInputData(
               InputNames.PASSWORD
@@ -195,7 +208,7 @@ export const SignUpPage = () => {
               'signUp__dataBirthday'
             }
             inputDataValue={
-              initialInputData.DateOfBirth
+              inputData.DateOfBirth
             }
             setInputDataValue={updateInputData(
               InputNames.BIRTH
@@ -221,7 +234,7 @@ export const SignUpPage = () => {
             }
             options={countryArray}
             inputDataValue={
-              initialInputData.Country
+              inputData.Country
             }
             setInputDataValue={updateInputData(
               InputNames.COUNTRY
@@ -237,7 +250,7 @@ export const SignUpPage = () => {
               inputData.Country.value
             )}
             inputDataValue={
-              initialInputData.PostalCode
+              inputData.PostalCode
             }
             setInputDataValue={updateInputData(
               InputNames.POSTCODE
@@ -249,7 +262,7 @@ export const SignUpPage = () => {
             customClass={'signUp__city'}
             patterns={namePattern}
             inputDataValue={
-              initialInputData.City
+              inputData.City
             }
             setInputDataValue={updateInputData(
               InputNames.CITY
@@ -263,7 +276,7 @@ export const SignUpPage = () => {
             }
             patterns={patternStreet}
             inputDataValue={
-              initialInputData.Street
+              inputData.Street
             }
             setInputDataValue={updateInputData(
               InputNames.STREET

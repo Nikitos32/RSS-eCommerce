@@ -32,15 +32,20 @@ export const InputConatiner = ({
   patterns,
   options,
 }: InputConatinerProps) => {
-  const [inputValue, setInputValue] =
-    useState(inputDataValue.value);
   const [textError, setTextError] =
     useState('');
+
+  if (content == 'Postal Code') {
+    inputDataValue.setError = (
+      newError: string
+    ) => {
+      setTextError(newError);
+    };
+  }
 
   const handleChange = (
     value: string
   ) => {
-    setInputValue(value);
     let error: string = '';
     let newCorrect: boolean = true;
 
@@ -111,7 +116,7 @@ export const InputConatiner = ({
             'signUp__country'
           }
           options={options}
-          value={inputValue}
+          value={inputDataValue.value}
           valueChange={handleChange}
         />
       ) : (
@@ -119,7 +124,7 @@ export const InputConatiner = ({
           type={type}
           customClass={'signUp__input'}
           placeholder={`${content}...`}
-          value={inputValue}
+          value={inputDataValue.value}
           valueChange={handleChange}
         />
       )}
