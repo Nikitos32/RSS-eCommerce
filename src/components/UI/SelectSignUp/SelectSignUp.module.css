@@ -1,6 +1,7 @@
 .select {
   position: relative;
   cursor: pointer;
+  text-align: center;
 }
 
 .select__field {

@@ -23,14 +23,14 @@ export const patternPostalCode =
   new Map<string, PatternSignUp[]>();
 patternPostalCode.set('Austria', [
   {
-    pattern: '\\d{4}',
+    pattern: '^\\d{4}$',
     errorMessage:
       'comply with standard NNNN',
   },
 ]);
 patternPostalCode.set('Bulgaria', [
   {
-    pattern: '\\d{4}$',
+    pattern: '^\\d{4}$',
     errorMessage:
       'comply with standard NNNN',
   },
@@ -55,14 +55,14 @@ patternPostalCode.set('Canada', [
 ]);
 patternPostalCode.set('China', [
   {
-    pattern: '\\d{6}$',
+    pattern: '^\\d{6}$',
     errorMessage:
       'comply with standard NNNNNN',
   },
 ]);
 patternPostalCode.set('Germany', [
   {
-    pattern: '\\d{4}$',
+    pattern: '^\\d{4}$',
     errorMessage:
       'comply with standard NNNN',
   },
