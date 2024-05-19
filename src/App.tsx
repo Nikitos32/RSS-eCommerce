@@ -16,14 +16,21 @@ import {
 } from 'react';
 
 export const IsLoginedContext =
-  createContext([false, () => {}]);
+  createContext([
+    false,
+    (logined: boolean) => {
+      console.log(logined);
+    },
+  ]);
 
 function App() {
   const [isLogined, setIsLogined] =
     useState<boolean>(false);
 
-  const handleIsLogined = () => {
-    setIsLogined(true);
+  const handleIsLogined = (
+    logined: boolean
+  ) => {
+    setIsLogined(logined);
   };
 
   const router = createBrowserRouter(

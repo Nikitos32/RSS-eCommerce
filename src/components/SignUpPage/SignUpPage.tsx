@@ -3,7 +3,10 @@ import {
   useContext,
   useState,
 } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  Navigate,
+} from 'react-router-dom';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import {
   InputType,
@@ -64,7 +67,7 @@ export const SignUpPage = () => {
         typeof setIsLogined !==
         'boolean'
       ) {
-        setIsLogined();
+        setIsLogined(true);
       }
     }
   }
@@ -173,7 +176,9 @@ export const SignUpPage = () => {
     };
   };
 
-  return (
+  return isLogined ? (
+    <Navigate to="/" />
+  ) : (
     <article
       className={`${classes.signUp} font-Inter text-moonBlack`}
     >

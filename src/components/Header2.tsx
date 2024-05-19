@@ -16,6 +16,14 @@ function Links() {
   const [isLogined, setIsLogined] =
     useContext(IsLoginedContext);
 
+  const handleSignOut = () => {
+    if (
+      typeof setIsLogined !== 'boolean'
+    ) {
+      setIsLogined(false);
+    }
+  };
+
   return (
     <>
       <Link
@@ -36,13 +44,15 @@ function Links() {
       >
         Contact
       </Link>
-      <Link
-        to="/signup"
-        title="Registration"
-      >
-        {' '}
-        <HiOutlineUserAdd />{' '}
-      </Link>
+      {!isLogined && (
+        <Link
+          to="/signup"
+          title="Registration"
+        >
+          {' '}
+          <HiOutlineUserAdd />{' '}
+        </Link>
+      )}
       {!isLogined && (
         <Link
           to="/signin"
@@ -56,6 +66,9 @@ function Links() {
         <Link
           to="/signout"
           title="Logout"
+          onClick={() =>
+            handleSignOut()
+          }
         >
           {' '}
           <IoIosLogOut />{' '}

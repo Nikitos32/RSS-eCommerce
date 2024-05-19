@@ -82,7 +82,7 @@ export const LoginForm = () => {
         typeof setIsLogined !==
         'boolean'
       ) {
-        setIsLogined();
+        setIsLogined(true);
       }
     }
   }
