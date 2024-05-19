@@ -10,12 +10,12 @@ import {
 } from '@commercetools/sdk-client-v2';
 
 const {
-  VITE_CTP_PROJECT_KEY = 'no key',
-  VITE_CTP_CLIENT_SECRET = 'no secret',
-  VITE_CTP_CLIENT_ID = 'no ID',
-  VITE_CTP_AUTH_URL = 'no auth',
-  VITE_CTP_API_URL = 'no API',
-  VITE_CTP_SCOPES = 'no scopes',
+  VITE_CTP_PROJECT_KEY = 'r20',
+  VITE_CTP_CLIENT_SECRET = 're5q7FF5iTAAjW1FRit789wji3LMxAuZ',
+  VITE_CTP_CLIENT_ID = 'd9egYx69K1gyqJmpdubFU5SY',
+  VITE_CTP_AUTH_URL = 'https://auth.europe-west1.gcp.commercetools.com',
+  VITE_CTP_API_URL = 'https://api.europe-west1.gcp.commercetools.com',
+  VITE_CTP_SCOPES = 'manage_project:r20',
 } = import.meta.env;
 
 const authMiddlewareOptions: AuthMiddlewareOptions =

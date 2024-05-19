@@ -11,6 +11,8 @@ import {
   InputType,
 } from '../../constants';
 import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
+import { CustomerService } from '../../services/customer.service';
+import { CTResponse } from '../../ct-client';
 
 export const LoginForm = () => {
   const [
@@ -60,10 +62,22 @@ export const LoginForm = () => {
     }
   };
 
+  async function LogIn() {
+    const customerService =
+      new CustomerService();
+    const response: CTResponse =
+      await customerService.signIn(
+        'test2@example.com',
+        'test2'
+      );
+    console.log(response);
+  }
+
   const handleSubmit = (
     event: FormEvent
   ) => {
     event.preventDefault();
+    LogIn();
     setPasswordInputValue('');
     setEmailInputValue('');
   };
