@@ -21,12 +21,14 @@ import {
   patternStreet,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
+import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 
 export const SignUpPage = () => {
   const handleSubmit = (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    console.log(inputData);
   };
 
   const initialInputData: InputDataType =
@@ -72,6 +74,7 @@ export const SignUpPage = () => {
 
   const [inputData, setInputData] =
     useState(initialInputData);
+
   const [
     ButtonDisabled,
     setButtonDisabled,
@@ -174,7 +177,7 @@ export const SignUpPage = () => {
             patterns={[
               {
                 pattern:
-                  '^(([^<>()[\\].,;:\\s@\']+(\\.[^<>()[\\].,;:\\s@\']+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
+                  REGEX_FOR_EMAIL_INPUT,
                 errorMessage:
                   'Incorrect email format',
               },

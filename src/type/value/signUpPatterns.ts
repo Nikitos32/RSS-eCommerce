@@ -124,6 +124,11 @@ export const patternPassword = [
     errorMessage:
       'must be longer than 8 characters',
   },
+  {
+    pattern: '(?=.*[!@#$%^&*])',
+    errorMessage:
+      'special character is needed',
+  },
 ];
 
 export const patternStreet = [
