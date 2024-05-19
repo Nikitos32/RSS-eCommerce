@@ -10,7 +10,7 @@ export const namePattern: PatternSignUp[] =
     {
       pattern: '^.{1}[a-z]*$',
       errorMessage:
-        'after first letter must be lowercase or hyphen',
+        'after first letter must be lowercase',
     },
     {
       pattern: '.{2,}.*',
@@ -71,3 +71,61 @@ patternPostalCode.set('United States', [
       'must be NNNNN, NNNNN-NNNN',
   },
 ]);
+
+export const patternPassword = [
+  {
+    pattern: '^\\S*$',
+    errorMessage: 'no spaces',
+  },
+  {
+    pattern: '^[^\\u0400-\\u04FF]*$',
+    errorMessage: 'only english letter',
+  },
+  {
+    pattern: '^.{0,15}$',
+    errorMessage:
+      'must be less than 16 character',
+  },
+  {
+    pattern: '[0-9]',
+    errorMessage: 'need number',
+  },
+  {
+    pattern: '[a-z]',
+    errorMessage:
+      'need english lowercase letter',
+  },
+  {
+    pattern: '[A-Z]',
+    errorMessage:
+      'don`t have uppercase letter',
+  },
+  {
+    pattern: '.{7,}.*',
+    errorMessage:
+      'must be longer than 8 characters',
+  },
+];
+
+export const patternStreet = [
+  {
+    pattern: '[A-Z].*',
+    errorMessage:
+      'first english letter must be capitalised',
+  },
+  {
+    pattern: '[^\\s]$',
+    errorMessage:
+      'must not end in space',
+  },
+  {
+    pattern: '^.{1}[a-zA-Z0-9 ]*$',
+    errorMessage:
+      'after first letter must be lowercase, number or spase',
+  },
+  {
+    pattern: '.{2,}.*',
+    errorMessage:
+      'minimum characters 2',
+  },
+];

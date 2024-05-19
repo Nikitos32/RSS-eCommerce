@@ -14,6 +14,8 @@ import { countryArray } from '../../type/value/country';
 import {
   namePattern,
   patternPostalCode,
+  patternPassword,
+  patternStreet,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
 
@@ -174,33 +176,7 @@ export const SignUpPage = () => {
             customClass={
               'signUp__password'
             }
-            patterns={[
-              {
-                pattern: '.{7,}.*',
-                errorMessage:
-                  'must be longer than 8 characters',
-              },
-              {
-                pattern: '^.{0,15}$',
-                errorMessage:
-                  'must be less than 16 character',
-              },
-              {
-                pattern: '[0-9]',
-                errorMessage:
-                  'need number',
-              },
-              {
-                pattern: '[a-zA-Z]',
-                errorMessage:
-                  'need english letters',
-              },
-              {
-                pattern: '[A-Z]',
-                errorMessage:
-                  'don`t have uppercase',
-              },
-            ]}
+            patterns={patternPassword}
             inputDataValue={
               initialInputData.Password
             }
@@ -285,7 +261,7 @@ export const SignUpPage = () => {
             customClass={
               'signUp__street'
             }
-            patterns={namePattern}
+            patterns={patternStreet}
             inputDataValue={
               initialInputData.Street
             }
