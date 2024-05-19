@@ -73,8 +73,8 @@ export const LoginForm = () => {
       new CustomerService();
     const response: CTResponse =
       await customerService.signIn(
-        'test2@example.com',
-        'test2'
+        emailInputValue,
+        passwordInputValue
       );
     //'test2@example.com', 'test2'
     if (response.ok) {
@@ -91,9 +91,10 @@ export const LoginForm = () => {
     event: FormEvent
   ) => {
     event.preventDefault();
-    LogIn();
-    setPasswordInputValue('');
-    setEmailInputValue('');
+    LogIn().then(() => {
+      setPasswordInputValue('');
+      setEmailInputValue('');
+    });
   };
 
   return isLogined ? (

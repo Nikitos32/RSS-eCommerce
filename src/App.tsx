@@ -23,7 +23,7 @@ function App() {
     useState<boolean>(false);
 
   const handleIsLogined = () => {
-    setIsLogined(!isLogined);
+    setIsLogined(true);
   };
 
   const router = createBrowserRouter(

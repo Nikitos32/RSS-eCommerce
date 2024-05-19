@@ -1,5 +1,6 @@
 import {
   FormEvent,
+  useContext,
   useState,
 } from 'react';
 import { Link } from 'react-router-dom';
@@ -22,13 +23,57 @@ import {
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
 import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
+import { CustomerService } from '../../services/customer.service';
+import { CTResponse } from '../../ct-client';
+import { IsLoginedContext } from '../../App';
 
 export const SignUpPage = () => {
+  const [isLogined, setIsLogined] =
+    useContext(IsLoginedContext);
+
+  async function SignUp() {
+    const CustomerDraft = {
+      email: inputData.Email.value,
+      password:
+        inputData.Password.value,
+      firstName: inputData.Name.value,
+      lastName: inputData.Surname.value,
+      dateOfBirth:
+        inputData.DateOfBirth.value,
+      streetName:
+        inputData.Street.value,
+      city: inputData.City.value,
+      postalCode:
+        inputData.PostalCode.value,
+      country: inputData.Country.value,
+      isDefaultAddress: true,
+    };
+    const customerService =
+      new CustomerService();
+    const response: CTResponse =
+      await customerService
+        .signUp(CustomerDraft)
+        .then(() => {
+          return customerService.signIn(
+            inputData.Email.value,
+            inputData.Password.value
+          );
+        });
+    if (response.ok) {
+      if (
+        typeof setIsLogined !==
+        'boolean'
+      ) {
+        setIsLogined();
+      }
+    }
+  }
+
   const handleSubmit = (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    console.log(inputData);
+    SignUp();
   };
 
   const initialInputData: InputDataType =
