@@ -18,6 +18,7 @@ import { ToastContainer } from 'react-toastify';
 import { NotifyType } from './type/enums/NotifyTypes';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { TailSpin } from 'react-loader-spinner';
 
 export const IsLoginedContext =
   createContext([
@@ -27,7 +28,18 @@ export const IsLoginedContext =
     },
   ]);
 
+export const IsLoadindContext =
+  createContext([
+    false,
+    (loading: boolean) => {
+      console.log(loading);
+    },
+  ]);
+
 function App() {
+  const [isLoading, setIsLoading] =
+    useState<boolean>(true);
+
   const [isLogined, setIsLogined] =
     useState<boolean>(false);
 
@@ -35,6 +47,12 @@ function App() {
     logined: boolean
   ) => {
     setIsLogined(logined);
+  };
+
+  const handleLoading = (
+    loading: boolean
+  ) => {
+    setIsLoading(loading);
   };
 
   const router = createBrowserRouter(
@@ -48,7 +66,14 @@ function App() {
               handleIsLogined,
             ]}
           >
-            <MainLayout />
+            <IsLoadindContext.Provider
+              value={[
+                isLoading,
+                handleLoading,
+              ]}
+            >
+              <MainLayout />
+            </IsLoadindContext.Provider>
           </IsLoginedContext.Provider>
         }
       >
@@ -85,6 +110,16 @@ function App() {
         draggable
         pauseOnHover
         theme="light"
+      />
+      <TailSpin
+        visible={isLoading}
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
       />
     </>
   );
