@@ -1,5 +1,6 @@
 import {
   FormEvent,
+  useContext,
   useState,
 } from 'react';
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
@@ -11,8 +12,15 @@ import {
   InputType,
 } from '../../constants';
 import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
+import { CustomerService } from '../../services/customer.service';
+import { CTResponse } from '../../ct-client';
+import { Navigate } from 'react-router-dom';
+import { IsLoginedContext } from '../../App';
 
 export const LoginForm = () => {
+  const [isLogined, setIsLogined] =
+    useContext(IsLoginedContext);
+
   const [
     emailInputValue,
     setEmailInputValue,
@@ -60,15 +68,38 @@ export const LoginForm = () => {
     }
   };
 
+  async function LogIn() {
+    const customerService =
+      new CustomerService();
+
+    const response: CTResponse =
+      await customerService.signIn(
+        emailInputValue,
+        passwordInputValue
+      );
+    //'nikita2024@tut.by', 'nikita2024@'
+    if (response.ok) {
+      setPasswordInputValue('');
+      setEmailInputValue('');
+      if (
+        typeof setIsLogined !==
+        'boolean'
+      ) {
+        setIsLogined(true);
+      }
+    }
+  }
+
   const handleSubmit = (
     event: FormEvent
   ) => {
     event.preventDefault();
-    setPasswordInputValue('');
-    setEmailInputValue('');
+    LogIn();
   };
 
-  return (
+  return isLogined ? (
+    <Navigate to="/" />
+  ) : (
     <form
       onSubmit={handleSubmit}
       className={classes.loginForm}

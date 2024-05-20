@@ -1,5 +1,3 @@
-import classes from './ShowPasswordRadio.module.css';
-
 interface ShowPasswordRadioProps {
   handleVisibility: () => void;
   visible: boolean;
@@ -11,11 +9,11 @@ export const ShowPasswordRadio = ({
 }: ShowPasswordRadioProps) => {
   return (
     <div
-      className={classes.backgroundEye}
+      className={`w-10`}
       onClick={() => handleVisibility()}
     >
       <img
-        className={classes.eyePng}
+        className={`w-6 h-6`}
         src={`/public/png/${!visible ? 'close' : 'open'}Eye.png`}
         alt="eye"
       />

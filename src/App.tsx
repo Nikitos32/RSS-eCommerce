@@ -5,20 +5,48 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import './App.css';
-import { Header } from './components/Header/Header';
 import { LoginPage } from './components/LoginPage/LoginPage';
-import { SignUpPage } from './components/SignUpPage/SignUpPage';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
 import { SignUpPage } from './components/SignUpPage/SignUpPage';
+import {
+  createContext,
+  useState,
+} from 'react';
+
+export const IsLoginedContext =
+  createContext([
+    false,
+    (logined: boolean) => {
+      console.log(logined);
+    },
+  ]);
 
 function App() {
+  const [isLogined, setIsLogined] =
+    useState<boolean>(false);
+
+  const handleIsLogined = (
+    logined: boolean
+  ) => {
+    setIsLogined(logined);
+  };
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
         path="/"
-        element={<MainLayout />}
+        element={
+          <IsLoginedContext.Provider
+            value={[
+              isLogined,
+              handleIsLogined,
+            ]}
+          >
+            <MainLayout />
+          </IsLoginedContext.Provider>
+        }
       >
         <Route
           index
