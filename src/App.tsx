@@ -18,7 +18,8 @@ import { ToastContainer } from 'react-toastify';
 import { NotifyType } from './type/enums/NotifyTypes';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-import { TailSpin } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
+import './App.css';
 
 export const IsLoginedContext =
   createContext([
@@ -30,7 +31,6 @@ export const IsLoginedContext =
 
 export const IsLoadindContext =
   createContext([
-    false,
     (loading: boolean) => {
       console.log(loading);
     },
@@ -38,7 +38,7 @@ export const IsLoadindContext =
 
 function App() {
   const [isLoading, setIsLoading] =
-    useState<boolean>(true);
+    useState<boolean>(false);
 
   const [isLogined, setIsLogined] =
     useState<boolean>(false);
@@ -67,10 +67,7 @@ function App() {
             ]}
           >
             <IsLoadindContext.Provider
-              value={[
-                isLoading,
-                handleLoading,
-              ]}
+              value={[handleLoading]}
             >
               <MainLayout />
             </IsLoadindContext.Provider>
@@ -111,16 +108,17 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      <TailSpin
-        visible={isLoading}
-        height="80"
-        width="80"
-        color="#4fa94d"
-        ariaLabel="tail-spin-loading"
-        radius="1"
-        wrapperStyle={{}}
-        wrapperClass=""
-      />
+      <div className="loader-container">
+        <Oval
+          visible={isLoading}
+          height="40"
+          width="40"
+          color="black"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
     </>
   );
 }
