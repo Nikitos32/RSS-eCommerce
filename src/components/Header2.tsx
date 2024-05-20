@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import {
+  useContext,
+  useState,
+} from 'react';
 import { GrClose } from 'react-icons/gr';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
@@ -7,8 +10,20 @@ import {
   IoIosLogIn,
   IoIosLogOut,
 } from 'react-icons/io';
+import { IsLoginedContext } from '../App';
 
 function Links() {
+  const [isLogined, setIsLogined] =
+    useContext(IsLoginedContext);
+
+  const handleSignOut = () => {
+    if (
+      typeof setIsLogined !== 'boolean'
+    ) {
+      setIsLogined(false);
+    }
+  };
+
   return (
     <>
       <Link
@@ -29,24 +44,36 @@ function Links() {
       >
         Contact
       </Link>
-      <Link
-        to="/signup"
-        title="Registration"
-      >
-        {' '}
-        <HiOutlineUserAdd />{' '}
-      </Link>
-      <Link to="/signin" title="Login">
-        {' '}
-        <IoIosLogIn />{' '}
-      </Link>
-      <Link
-        to="/signout"
-        title="Logout"
-      >
-        {' '}
-        <IoIosLogOut />{' '}
-      </Link>
+      {!isLogined && (
+        <Link
+          to="/signup"
+          title="Registration"
+        >
+          {' '}
+          <HiOutlineUserAdd />{' '}
+        </Link>
+      )}
+      {!isLogined && (
+        <Link
+          to="/signin"
+          title="Login"
+        >
+          {' '}
+          <IoIosLogIn />{' '}
+        </Link>
+      )}
+      {isLogined && (
+        <Link
+          to="/signin"
+          title="Logout"
+          onClick={() =>
+            handleSignOut()
+          }
+        >
+          {' '}
+          <IoIosLogOut />{' '}
+        </Link>
+      )}
     </>
   );
 }

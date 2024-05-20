@@ -1,8 +1,12 @@
 import {
   FormEvent,
+  useContext,
   useState,
 } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  Navigate,
+} from 'react-router-dom';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import {
   InputType,
@@ -22,12 +26,58 @@ import {
   patternStreet,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
+import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
+import { CustomerService } from '../../services/customer.service';
+import { CTResponse } from '../../ct-client';
+import { IsLoginedContext } from '../../App';
 
 export const SignUpPage = () => {
+  const [isLogined, setIsLogined] =
+    useContext(IsLoginedContext);
+
+  async function SignUp() {
+    const CustomerDraft = {
+      email: inputData.Email.value,
+      password:
+        inputData.Password.value,
+      firstName: inputData.Name.value,
+      lastName: inputData.Surname.value,
+      dateOfBirth:
+        inputData.DateOfBirth.value,
+      streetName:
+        inputData.Street.value,
+      city: inputData.City.value,
+      postalCode:
+        inputData.PostalCode.value,
+      country: inputData.Country.value,
+      isDefaultAddress: true,
+    };
+    const customerService =
+      new CustomerService();
+    const response: CTResponse =
+      await customerService
+        .signUp(CustomerDraft)
+        .then(() => {
+          return customerService.signIn(
+            inputData.Email.value,
+            inputData.Password.value
+          );
+        });
+    if (response.ok) {
+      if (
+        typeof setIsLogined !==
+        'boolean'
+      ) {
+        setIsLogined(true);
+      }
+    }
+  }
+
   const handleSubmit = (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    SignUp();
   };
 
   const initialInputData: InputDataType =
@@ -92,6 +142,7 @@ export const SignUpPage = () => {
 
   const [inputData, setInputData] =
     useState(initialInputData);
+
   const [
     ButtonDisabled,
     setButtonDisabled,
@@ -185,7 +236,9 @@ export const SignUpPage = () => {
     };
   };
 
-  return (
+  return isLogined ? (
+    <Navigate to="/" />
+  ) : (
     <article
       className={`${classes.signUp} font-Inter text-moonBlack`}
     >
@@ -234,7 +287,7 @@ export const SignUpPage = () => {
             patterns={[
               {
                 pattern:
-                  '^(([^<>()[\\].,;:\\s@\']+(\\.[^<>()[\\].,;:\\s@\']+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$',
+                  REGEX_FOR_EMAIL_INPUT,
                 errorMessage:
                   'Incorrect email format',
               },
