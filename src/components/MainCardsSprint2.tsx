@@ -1,7 +1,20 @@
 import { Link } from 'react-router-dom';
 import Card from './Card';
+import { IsLoginedContext } from '../App';
+import { useContext } from 'react';
+
+function LogoutFirst() {
+  return (
+    <p className="mt-2 mb-4 text-2xl">
+      Logout First
+    </p>
+  );
+}
 
 function MainCardsSprint2() {
+  const [isLogined] = useContext(
+    IsLoginedContext
+  );
   return (
     <section className="py-4">
       <div className="container-xl lg:container m-auto">
@@ -18,7 +31,9 @@ function MainCardsSprint2() {
                 to="/signup"
                 className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
               >
-                Browse Signup
+                {isLogined
+                  ? 'Logout First'
+                  : 'Browse Signup'}
               </Link>
             </>
           </Card>
@@ -34,7 +49,9 @@ function MainCardsSprint2() {
                 to="/signin"
                 className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
               >
-                Signin Form
+                {isLogined
+                  ? 'Logout First'
+                  : 'Signin Form'}
               </Link>
             </>
           </Card>

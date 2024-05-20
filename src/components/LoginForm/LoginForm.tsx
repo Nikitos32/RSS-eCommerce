@@ -15,7 +15,11 @@ import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 import { Navigate } from 'react-router-dom';
-import { IsLoginedContext } from '../../App';
+import {
+  IsLoginedContext,
+  notifyError,
+  notifySuccess,
+} from '../../App';
 
 export const LoginForm = () => {
   const [isLogined, setIsLogined] =
@@ -77,8 +81,11 @@ export const LoginForm = () => {
         emailInputValue,
         passwordInputValue
       );
-    //'nikita2024@tut.by', 'nikita2024@'
+    //'nikita2024@tut.by', 'Nikita2024@'
     if (response.ok) {
+      notifySuccess(
+        'Success Authorization!'
+      );
       setPasswordInputValue('');
       setEmailInputValue('');
       if (
@@ -86,6 +93,10 @@ export const LoginForm = () => {
         'boolean'
       ) {
         setIsLogined(true);
+      }
+    } else {
+      if (response.message) {
+        notifyError(response.message);
       }
     }
   }
@@ -100,17 +111,19 @@ export const LoginForm = () => {
   return isLogined ? (
     <Navigate to="/" />
   ) : (
-    <form
-      onSubmit={handleSubmit}
-      className={classes.loginForm}
-    >
-      <LoginFormTitle />
-      <LoginFieldsetWithInputs
-        handleInput={handleValue}
-        email={emailInputValue}
-        password={passwordInputValue}
-      />
-      <LoginFieldsetEnterSection />
-    </form>
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className={classes.loginForm}
+      >
+        <LoginFormTitle />
+        <LoginFieldsetWithInputs
+          handleInput={handleValue}
+          email={emailInputValue}
+          password={passwordInputValue}
+        />
+        <LoginFieldsetEnterSection />
+      </form>
+    </>
   );
 };

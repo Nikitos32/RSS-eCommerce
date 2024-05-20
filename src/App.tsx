@@ -15,6 +15,11 @@ import {
   useState,
 } from 'react';
 
+import { ToastContainer } from 'react-toastify';
+import { NotifyType } from './type/enums/NotifyTypes';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+
 export const IsLoginedContext =
   createContext([
     false,
@@ -68,8 +73,67 @@ function App() {
     )
   );
   return (
-    <RouterProvider router={router} />
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 }
 
 export default App;
+
+export const createNotify = (
+  message?: string,
+  type?: NotifyType
+) => {
+  switch (type) {
+    case NotifyType.INFO: {
+      toast.info(message);
+      break;
+    }
+    case NotifyType.SUCCESS: {
+      toast.success(message);
+      break;
+    }
+    case NotifyType.WARNING: {
+      toast.warning(message);
+      break;
+    }
+    case NotifyType.ERROR: {
+      toast.error(message);
+      break;
+    }
+    default: {
+      toast(message);
+    }
+  }
+};
+
+export const notifyError = (
+  message: string
+) => {
+  createNotify(
+    message,
+    NotifyType.ERROR
+  );
+};
+
+export const notifySuccess = (
+  message: string
+) => {
+  createNotify(
+    message,
+    NotifyType.SUCCESS
+  );
+};
