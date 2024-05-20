@@ -27,7 +27,6 @@ import {
   patternEmail,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
-import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 import {
@@ -46,50 +45,61 @@ export const SignUpPage = () => {
     useContext(IsLoginedContext);
 
   async function SignUp() {
-    let ShippingDate = {};
-    if (!checkboxAddress) {
-      ShippingDate = {
-        shippingCountry:
-          countryCode.get(
-            inputData.ShippingCountry
-              .value
-          ),
-        shippingPostalCode:
-          inputData.ShippingPostalCode
-            .value,
-        shippingCity:
-          inputData.ShippingCity.value,
-        shippingStreet:
-          inputData.ShippingStreet
-            .value,
-      };
-    }
-    const CustomerDraft = {
-      email: inputData.Email.value,
-      password:
-        inputData.Password.value,
-      firstName: inputData.Name.value,
-      lastName: inputData.Surname.value,
-      dateOfBirth:
-        inputData.DateOfBirth.value,
-      streetName:
-        inputData.BillingCountry.value,
-      city: inputData.BillingCity.value,
-      postalCode:
-        inputData.BillingPostalCode
-          .value,
-      country: countryCode.get(
-        inputData.BillingCountry.value
-      ),
-      isDefaultAddress: true,
-      ...ShippingDate,
-    };
     const customerService =
       new CustomerService();
+
+    const address1Country =
+      countryCode.get(
+        inputData.BillingCountry.value
+      ) as string;
+    const address2Country =
+      countryCode.get(
+        inputData.ShippingCountry.value
+      ) as string;
+
+    const newCustomerDraft =
+      checkboxAddress
+        ? customerService.createDraftFromRegForm(
+            inputData.Email.value,
+            inputData.Password.value,
+            inputData.Name.value,
+            inputData.Surname.value,
+            inputData.DateOfBirth.value,
+            inputData.BillingStreet
+              .value,
+            inputData.BillingCity.value,
+            inputData.BillingPostalCode
+              .value,
+            address1Country,
+            true
+          )
+        : customerService.createDraftFromRegFormExtended(
+            inputData.Email.value,
+            inputData.Password.value,
+            inputData.Name.value,
+            inputData.Surname.value,
+            inputData.DateOfBirth.value,
+            inputData.BillingStreet
+              .value,
+            inputData.BillingCity.value,
+            inputData.BillingPostalCode
+              .value,
+            address1Country,
+            true,
+            inputData.ShippingStreet
+              .value,
+            inputData.ShippingCity
+              .value,
+            inputData.ShippingPostalCode
+              .value,
+            address2Country,
+            true
+          );
+
     handleLoading(true);
     const response: CTResponse =
       await customerService
-        .signUp(CustomerDraft)
+        .signUp(newCustomerDraft)
         .then(() => {
           return customerService.signIn(
             inputData.Email.value,
