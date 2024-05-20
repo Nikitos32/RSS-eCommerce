@@ -51,20 +51,39 @@ export const SignUpPage = () => {
         value: '2000-01-01',
         correct: true,
       },
-      [InputNames.COUNTRY]: {
+      [InputNames.BILLING_COUNTRY]: {
         value: countryArray[0],
         correct: true,
       },
-      [InputNames.POSTCODE]: {
+      [InputNames.BILLING_POSTAL_CODE]:
+        {
+          value: '',
+          correct: false,
+          setError: function () {},
+        },
+      [InputNames.BILLING_CITY]: {
         value: '',
         correct: false,
-        setError: function () {},
       },
-      [InputNames.CITY]: {
+      [InputNames.BILLING_STREET]: {
         value: '',
         correct: false,
       },
-      [InputNames.STREET]: {
+      [InputNames.SHIPPING_COUNTRY]: {
+        value: countryArray[0],
+        correct: true,
+      },
+      [InputNames.SHIPPING_POSTAL_CODE]:
+        {
+          value: '',
+          correct: false,
+          setError: function () {},
+        },
+      [InputNames.SHIPPING_CITY]: {
+        value: '',
+        correct: false,
+      },
+      [InputNames.SHIPPING_STREET]: {
         value: '',
         correct: false,
       },
@@ -77,8 +96,24 @@ export const SignUpPage = () => {
     setButtonDisabled,
   ] = useState(true);
 
+  const clearPostalCode = (
+    address: string,
+    newInputData: InputDataType
+  ) => {
+    const inputDataValue =
+      newInputData[
+        address as keyof InputDataType
+      ];
+    inputDataValue.value = '';
+    inputDataValue.correct = false;
+
+    if (!inputDataValue.setError)
+      return;
+    inputDataValue.setError('');
+  };
+
   const updateInputData = (
-    key: InputNames
+    key: string
   ) => {
     return function (
       newValue: string,
@@ -94,17 +129,19 @@ export const SignUpPage = () => {
         };
 
         let resultCheck = false;
+
         if (
-          key === InputNames.COUNTRY &&
-          inputData.PostalCode.setError
+          key ===
+            InputNames.BILLING_COUNTRY ||
+          key ===
+            InputNames.SHIPPING_COUNTRY
         ) {
           resultCheck = true;
-          newInputData.PostalCode.value =
-            '';
-          newInputData.PostalCode.correct =
-            false;
-          inputData.PostalCode.setError(
-            ''
+          const typeAdress =
+            key.replace('Country', '');
+          clearPostalCode(
+            `${typeAdress}${InputNames.POSTAL_CODE}`,
+            newInputData
           );
         } else {
           Object.keys(
@@ -112,7 +149,7 @@ export const SignUpPage = () => {
           ).forEach((key) => {
             const { correct } =
               newInputData[
-                key as InputNames
+                key as keyof InputDataType
               ];
             if (!correct)
               resultCheck = true;
@@ -227,7 +264,7 @@ export const SignUpPage = () => {
               text-xl font-medium
               `}
           >
-            Adress
+            Billing Address
           </h3>
           <InputConatiner
             content="Country"
@@ -237,10 +274,10 @@ export const SignUpPage = () => {
             }
             options={countryArray}
             inputDataValue={
-              inputData.Country
+              inputData.BillingCountry
             }
             setInputDataValue={updateInputData(
-              InputNames.COUNTRY
+              InputNames.BILLING_COUNTRY
             )}
           />
           <InputConatiner
@@ -250,13 +287,14 @@ export const SignUpPage = () => {
               'signUp__postalCode'
             }
             patterns={patternPostalCode.get(
-              inputData.Country.value
+              inputData.BillingCountry
+                .value
             )}
             inputDataValue={
-              inputData.PostalCode
+              inputData.BillingPostalCode
             }
             setInputDataValue={updateInputData(
-              InputNames.POSTCODE
+              InputNames.BILLING_POSTAL_CODE
             )}
           />
           <InputConatiner
@@ -265,10 +303,10 @@ export const SignUpPage = () => {
             customClass={'signUp__city'}
             patterns={namePattern}
             inputDataValue={
-              inputData.City
+              inputData.BillingCity
             }
             setInputDataValue={updateInputData(
-              InputNames.CITY
+              InputNames.BILLING_CITY
             )}
           />
           <InputConatiner
@@ -279,10 +317,79 @@ export const SignUpPage = () => {
             }
             patterns={patternStreet}
             inputDataValue={
-              inputData.Street
+              inputData.BillingStreet
             }
             setInputDataValue={updateInputData(
-              InputNames.STREET
+              InputNames.BILLING_STREET
+            )}
+          />
+        </section>
+        <section
+          className={`${classes.signUp__data} ${classes.signUp__adress}`}
+        >
+          <h3
+            className={`
+              ${classes.signUp__adressTitle}
+              text-xl font-medium
+              `}
+          >
+            Shipping Adress
+          </h3>
+          <InputConatiner
+            content="Country"
+            type={InputType.SELECT}
+            customClass={
+              'signUp__country'
+            }
+            options={countryArray}
+            inputDataValue={
+              inputData.ShippingCountry
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_COUNTRY
+            )}
+          />
+          <InputConatiner
+            content="Postal Code"
+            type={InputType.TEXT}
+            customClass={
+              'signUp__postalCode'
+            }
+            patterns={patternPostalCode.get(
+              inputData.ShippingCountry
+                .value
+            )}
+            inputDataValue={
+              inputData.ShippingPostalCode
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_POSTAL_CODE
+            )}
+          />
+          <InputConatiner
+            content="City"
+            type={InputType.TEXT}
+            customClass={'signUp__city'}
+            patterns={namePattern}
+            inputDataValue={
+              inputData.ShippingCity
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_CITY
+            )}
+          />
+          <InputConatiner
+            content="Street"
+            type={InputType.TEXT}
+            customClass={
+              'signUp__street'
+            }
+            patterns={patternStreet}
+            inputDataValue={
+              inputData.ShippingStreet
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_STREET
             )}
           />
         </section>
@@ -322,18 +429,39 @@ export const SignUpPage = () => {
                 dateOfBirth:
                   inputData.DateOfBirth
                     .value,
-                country:
+                billingCountry:
                   countryCode.get(
-                    inputData.Country
+                    inputData
+                      .BillingCountry
                       .value
                   ),
-                postalCode:
-                  inputData.PostalCode
+                billingPostalCode:
+                  inputData
+                    .BillingPostalCode
                     .value,
-                city: inputData.City
-                  .value,
-                street:
-                  inputData.Street
+                billingCity:
+                  inputData.BillingCity
+                    .value,
+                billingStreet:
+                  inputData
+                    .BillingStreet
+                    .value,
+                shippingCountry:
+                  countryCode.get(
+                    inputData
+                      .ShippingCountry
+                      .value
+                  ),
+                shippingPostalCode:
+                  inputData
+                    .ShippingPostalCode
+                    .value,
+                shippingCity:
+                  inputData.ShippingCity
+                    .value,
+                shippingStreet:
+                  inputData
+                    .ShippingStreet
                     .value,
               };
 

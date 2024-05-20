@@ -14,9 +14,17 @@ export enum InputNames {
   PASSWORD = 'Password',
   BIRTH = 'DateOfBirth',
   COUNTRY = 'Country',
-  POSTCODE = 'PostalCode',
+  POSTAL_CODE = 'PostalCode',
   CITY = 'City',
   STREET = 'Street',
+  BILLING_COUNTRY = 'BillingCountry',
+  BILLING_POSTAL_CODE = 'BillingPostalCode',
+  BILLING_CITY = 'BillingCity',
+  BILLING_STREET = 'BillingStreet',
+  SHIPPING_COUNTRY = 'ShippingCountry',
+  SHIPPING_POSTAL_CODE = 'ShippingPostalCode',
+  SHIPPING_CITY = 'ShippingCity',
+  SHIPPING_STREET = 'ShippingStreet',
 }
 
 export enum CountryName {

@@ -62,7 +62,6 @@
 @media (hover: hover) {
   .select__option:hover {
     @apply bg-moonBlack;
-    /* background-color: black; */
     color: white;
   }
 }
