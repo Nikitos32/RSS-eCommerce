@@ -288,7 +288,7 @@ export const SignUpPage = () => {
   };
 
   return isLogined ? (
-    <Navigate to="/" />
+    <Navigate to="/RSS-eCommerce" />
   ) : (
     <article
       className={`${classes.signUp} font-Inter text-moonBlack`}
@@ -539,7 +539,7 @@ export const SignUpPage = () => {
           }
         >
           <Link
-            to="/signin"
+            to="../signin"
             className={`${classes.signUp__toLink} text-lg`}
           >
             <span

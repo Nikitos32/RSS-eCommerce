@@ -4,11 +4,14 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
-import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/',
+  define: {
+    global: {},
+  },
+  base: '/RSS-eCommerce',
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
@@ -32,7 +35,7 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      plugins: [rollupNodePolyFill()],
+      plugins: [nodePolyfills()],
     },
   },
 });

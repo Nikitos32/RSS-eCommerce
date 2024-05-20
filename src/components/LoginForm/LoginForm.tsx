@@ -119,7 +119,7 @@ export const LoginForm = () => {
   };
 
   return isLogined ? (
-    <Navigate to="/" />
+    <Navigate to="/RSS-eCommerce" />
   ) : (
     <>
       <form
