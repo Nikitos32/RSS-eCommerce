@@ -54,16 +54,7 @@ function App() {
         />
         <Route
           path="/signin"
-          element={
-            <IsLoginedContext.Provider
-              value={[
-                isLogined,
-                handleIsLogined,
-              ]}
-            >
-              <LoginPage />
-            </IsLoginedContext.Provider>
-          }
+          element={<LoginPage />}
         />
         <Route
           path="/signup"
