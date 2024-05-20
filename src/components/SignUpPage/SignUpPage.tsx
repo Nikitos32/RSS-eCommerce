@@ -24,9 +24,9 @@ import {
   patternPostalCode,
   patternPassword,
   patternStreet,
+  patternEmail,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
-import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 import { IsLoginedContext } from '../../App';
@@ -36,6 +36,25 @@ export const SignUpPage = () => {
     useContext(IsLoginedContext);
 
   async function SignUp() {
+    let ShippingDate = {};
+    if (!checkboxAddress) {
+      ShippingDate = {
+        shippingCountry:
+          countryCode.get(
+            inputData.ShippingCountry
+              .value
+          ),
+        shippingPostalCode:
+          inputData.ShippingPostalCode
+            .value,
+        shippingCity:
+          inputData.ShippingCity.value,
+        shippingStreet:
+          inputData.ShippingStreet
+            .value,
+      };
+    }
+
     const CustomerDraft = {
       email: inputData.Email.value,
       password:
@@ -45,12 +64,16 @@ export const SignUpPage = () => {
       dateOfBirth:
         inputData.DateOfBirth.value,
       streetName:
-        inputData.Street.value,
-      city: inputData.City.value,
+        inputData.BillingCountry.value,
+      city: inputData.BillingCity.value,
       postalCode:
-        inputData.PostalCode.value,
-      country: inputData.Country.value,
+        inputData.BillingPostalCode
+          .value,
+      country: countryCode.get(
+        inputData.BillingCountry.value
+      ),
       isDefaultAddress: true,
+      ...ShippingDate,
     };
     const customerService =
       new CustomerService();
@@ -181,7 +204,6 @@ export const SignUpPage = () => {
     Object.keys(newInputData).forEach(
       (key) => {
         if (oneAddress) {
-          console.log(checkboxAddress);
           const c = key.includes(
             InputNames.SHIPPING
           );
@@ -284,14 +306,7 @@ export const SignUpPage = () => {
             customClass={
               'signUp__email'
             }
-            patterns={[
-              {
-                pattern:
-                  REGEX_FOR_EMAIL_INPUT,
-                errorMessage:
-                  'Incorrect email format',
-              },
-            ]}
+            patterns={patternEmail}
             inputDataValue={
               inputData.Email
             }
@@ -510,59 +525,6 @@ export const SignUpPage = () => {
           <ButtonSignUp
             btnContent="SignUp"
             customClass="signUp__buttonSend"
-            customFunction={() => {
-              const sendSignUp = {
-                name: inputData.Name
-                  .value,
-                surname:
-                  inputData.Surname
-                    .value,
-                email:
-                  inputData.Email.value,
-                password:
-                  inputData.Password
-                    .value,
-                dateOfBirth:
-                  inputData.DateOfBirth
-                    .value,
-                billingCountry:
-                  countryCode.get(
-                    inputData
-                      .BillingCountry
-                      .value
-                  ),
-                billingPostalCode:
-                  inputData
-                    .BillingPostalCode
-                    .value,
-                billingCity:
-                  inputData.BillingCity
-                    .value,
-                billingStreet:
-                  inputData
-                    .BillingStreet
-                    .value,
-                shippingCountry:
-                  countryCode.get(
-                    inputData
-                      .ShippingCountry
-                      .value
-                  ),
-                shippingPostalCode:
-                  inputData
-                    .ShippingPostalCode
-                    .value,
-                shippingCity:
-                  inputData.ShippingCity
-                    .value,
-                shippingStreet:
-                  inputData
-                    .ShippingStreet
-                    .value,
-              };
-
-              console.log(sendSignUp);
-            }}
             disabled={ButtonDisabled}
           />
         </section>

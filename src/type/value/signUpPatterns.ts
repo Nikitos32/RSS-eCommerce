@@ -1,4 +1,5 @@
 import { PatternSignUp } from '../../components/SignUpPage/InputContainerSignUp/InputConatinerSignUp';
+import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 
 export const namePattern: PatternSignUp[] =
   [
@@ -120,14 +121,14 @@ export const patternPassword = [
       'don`t have uppercase letter',
   },
   {
-    pattern: '.{7,}.*',
-    errorMessage:
-      'must be longer than 8 characters',
-  },
-  {
     pattern: '(?=.*[!@#$%^&*])',
     errorMessage:
       'special character is needed',
+  },
+  {
+    pattern: '.{7,}.*',
+    errorMessage:
+      'must be longer than 8 characters',
   },
 ];
 
@@ -151,5 +152,17 @@ export const patternStreet = [
     pattern: '.{2,}.*',
     errorMessage:
       'minimum characters 2',
+  },
+];
+
+export const patternEmail = [
+  {
+    pattern: '^\\S*$',
+    errorMessage: 'no spaces',
+  },
+  {
+    pattern: REGEX_FOR_EMAIL_INPUT,
+    errorMessage:
+      'Incorrect email format',
   },
 ];
