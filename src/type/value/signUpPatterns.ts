@@ -22,20 +22,6 @@ export const namePattern: PatternSignUp[] =
 
 export const patternPostalCode =
   new Map<string, PatternSignUp[]>();
-patternPostalCode.set('Austria', [
-  {
-    pattern: '^\\d{4}$',
-    errorMessage:
-      'comply with standard NNNN',
-  },
-]);
-patternPostalCode.set('Bulgaria', [
-  {
-    pattern: '^\\d{4}$',
-    errorMessage:
-      'comply with standard NNNN',
-  },
-]);
 patternPostalCode.set('Canada', [
   {
     pattern: '^[^a-z]*$',
@@ -52,13 +38,6 @@ patternPostalCode.set('Canada', [
       '^[A-CEGHJ-NPR-TV-Z][0-9][A-CEGHJ-NPR-TV-Z] [0-9][A-CEGHJ-NPR-TV-Z][0-9]$',
     errorMessage:
       'comply with standard ANA NAN',
-  },
-]);
-patternPostalCode.set('China', [
-  {
-    pattern: '^\\d{6}$',
-    errorMessage:
-      'comply with standard NNNNNN',
   },
 ]);
 patternPostalCode.set('Germany', [
