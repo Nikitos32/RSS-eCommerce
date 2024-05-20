@@ -10,12 +10,12 @@ import {
 } from '@commercetools/sdk-client-v2';
 
 const {
-  VITE_CTP_PROJECT_KEY = '-',
-  VITE_CTP_CLIENT_SECRET = '-',
-  VITE_CTP_CLIENT_ID = '-',
-  VITE_CTP_AUTH_URL = '-',
-  VITE_CTP_API_URL = '-',
-  VITE_CTP_SCOPES = '-',
+  VITE_CTP_PROJECT_KEY = 'no key',
+  VITE_CTP_CLIENT_SECRET = 'no secret',
+  VITE_CTP_CLIENT_ID = 'no ID',
+  VITE_CTP_AUTH_URL = 'no auth',
+  VITE_CTP_API_URL = 'no API',
+  VITE_CTP_SCOPES = 'no scopes',
 } = import.meta.env;
 
 const authMiddlewareOptions: AuthMiddlewareOptions =
