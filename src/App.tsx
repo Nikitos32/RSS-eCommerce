@@ -19,6 +19,8 @@ import { ToastContainer } from 'react-toastify';
 import { NotifyType } from './type/enums/NotifyTypes';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { Oval } from 'react-loader-spinner';
+import './App.css';
 
 export const IsLoginedContext =
   createContext([
@@ -28,7 +30,17 @@ export const IsLoginedContext =
     },
   ]);
 
+export const IsLoadindContext =
+  createContext([
+    (loading: boolean) => {
+      console.log(loading);
+    },
+  ]);
+
 function App() {
+  const [isLoading, setIsLoading] =
+    useState<boolean>(false);
+
   const [isLogined, setIsLogined] =
     useState<boolean>(false);
 
@@ -36,6 +48,12 @@ function App() {
     logined: boolean
   ) => {
     setIsLogined(logined);
+  };
+
+  const handleLoading = (
+    loading: boolean
+  ) => {
+    setIsLoading(loading);
   };
 
   const router = createBrowserRouter(
@@ -49,7 +67,11 @@ function App() {
               handleIsLogined,
             ]}
           >
-            <MainLayout />
+            <IsLoadindContext.Provider
+              value={[handleLoading]}
+            >
+              <MainLayout />
+            </IsLoadindContext.Provider>
           </IsLoginedContext.Provider>
         }
       >
@@ -87,6 +109,17 @@ function App() {
         pauseOnHover
         theme="light"
       />
+      <div className="loader-container">
+        <Oval
+          visible={isLoading}
+          height="40"
+          width="40"
+          color="black"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
+      </div>
     </>
   );
 }
