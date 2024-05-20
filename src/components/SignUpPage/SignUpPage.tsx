@@ -10,6 +10,7 @@ import {
 } from '../../type/enums/SignUpEnums';
 import { InputConatiner } from './InputContainerSignUp/InputConatinerSignUp';
 import { InputDataType } from '../../type/types/signUpType';
+import { CheckboxSignUp } from '../UI/CheckboxSignUp/CheckboxSignUp';
 import {
   countryArray,
   countryCode,
@@ -95,6 +96,10 @@ export const SignUpPage = () => {
     ButtonDisabled,
     setButtonDisabled,
   ] = useState(true);
+  const [
+    checkboxAddress,
+    setcheckboxAddress,
+  ] = useState(false);
 
   const clearPostalCode = (
     address: string,
@@ -110,6 +115,37 @@ export const SignUpPage = () => {
     if (!inputDataValue.setError)
       return;
     inputDataValue.setError('');
+  };
+
+  interface CheckFormParams {
+    newInputData?: InputDataType;
+    oneAddress?: boolean;
+  }
+
+  const checkForm = ({
+    newInputData = inputData,
+    oneAddress = checkboxAddress,
+  }: CheckFormParams) => {
+    let resultCheck = false;
+    Object.keys(newInputData).forEach(
+      (key) => {
+        if (oneAddress) {
+          console.log(checkboxAddress);
+          const c = key.includes(
+            InputNames.SHIPPING
+          );
+          if (c) return;
+        }
+        const { correct } =
+          newInputData[
+            key as keyof InputDataType
+          ];
+        if (!correct)
+          resultCheck = true;
+      }
+    );
+
+    setButtonDisabled(resultCheck);
   };
 
   const updateInputData = (
@@ -128,35 +164,22 @@ export const SignUpPage = () => {
           },
         };
 
-        let resultCheck = false;
-
         if (
           key ===
             InputNames.BILLING_COUNTRY ||
           key ===
             InputNames.SHIPPING_COUNTRY
         ) {
-          resultCheck = true;
           const typeAdress =
             key.replace('Country', '');
           clearPostalCode(
             `${typeAdress}${InputNames.POSTAL_CODE}`,
             newInputData
           );
+          setButtonDisabled(true);
         } else {
-          Object.keys(
-            newInputData
-          ).forEach((key) => {
-            const { correct } =
-              newInputData[
-                key as keyof InputDataType
-              ];
-            if (!correct)
-              resultCheck = true;
-          });
+          checkForm({ newInputData });
         }
-
-        setButtonDisabled(resultCheck);
         return newInputData;
       });
     };
@@ -264,8 +287,24 @@ export const SignUpPage = () => {
               text-xl font-medium
               `}
           >
-            Billing Address
+            {checkboxAddress
+              ? 'Address'
+              : 'Billing Address'}
           </h3>
+          <CheckboxSignUp
+            label="use one adress"
+            checked={checkboxAddress}
+            className="w-full place-content-center"
+            onChange={() => {
+              checkForm({
+                oneAddress:
+                  !checkboxAddress,
+              });
+              setcheckboxAddress(
+                !checkboxAddress
+              );
+            }}
+          />
           <InputConatiner
             content="Country"
             type={InputType.SELECT}
@@ -325,7 +364,11 @@ export const SignUpPage = () => {
           />
         </section>
         <section
-          className={`${classes.signUp__data} ${classes.signUp__adress}`}
+          className={`
+          ${classes.signUp__data} 
+          ${classes.signUp__adress}
+          ${checkboxAddress ? 'hidden' : ''}
+        `}
         >
           <h3
             className={`
@@ -333,7 +376,7 @@ export const SignUpPage = () => {
               text-xl font-medium
               `}
           >
-            Shipping Adress
+            Shipping Address
           </h3>
           <InputConatiner
             content="Country"
