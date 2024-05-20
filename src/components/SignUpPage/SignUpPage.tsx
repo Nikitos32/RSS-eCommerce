@@ -28,7 +28,11 @@ import classes from './signUpPage.module.css';
 import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
-import { IsLoginedContext } from '../../App';
+import {
+  IsLoginedContext,
+  notifyError,
+  notifySuccess,
+} from '../../App';
 
 export const SignUpPage = () => {
   const [isLogined, setIsLogined] =
@@ -63,11 +67,18 @@ export const SignUpPage = () => {
           );
         });
     if (response.ok) {
+      notifySuccess(
+        'Success Registration!'
+      );
       if (
         typeof setIsLogined !==
         'boolean'
       ) {
         setIsLogined(true);
+      }
+    } else {
+      if (response.message) {
+        notifyError(response.message);
       }
     }
   }
