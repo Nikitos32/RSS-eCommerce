@@ -50,13 +50,12 @@ export const InputConatiner = ({
     let newCorrect: boolean = true;
 
     if (patterns) {
-      const checkResult =
-        patterns?.find(
-          ({ pattern }) =>
-            !new RegExp(pattern).test(
-              value
-            )
-        );
+      const checkResult = patterns.find(
+        ({ pattern }) =>
+          !new RegExp(pattern).test(
+            value
+          )
+      );
       error = checkResult
         ? `*${checkResult.errorMessage}`
         : '';

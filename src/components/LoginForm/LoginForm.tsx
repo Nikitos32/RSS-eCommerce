@@ -16,12 +16,17 @@ import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 import { Navigate } from 'react-router-dom';
 import {
+  IsLoadindContext,
   IsLoginedContext,
   notifyError,
   notifySuccess,
 } from '../../App';
 
 export const LoginForm = () => {
+  const [handleLoading] = useContext(
+    IsLoadindContext
+  );
+
   const [isLogined, setIsLogined] =
     useContext(IsLoginedContext);
 
@@ -76,6 +81,8 @@ export const LoginForm = () => {
     const customerService =
       new CustomerService();
 
+    handleLoading(true);
+
     const response: CTResponse =
       await customerService.signIn(
         emailInputValue,
@@ -83,9 +90,11 @@ export const LoginForm = () => {
       );
     //'nikita2024@tut.by', 'Nikita2024@'
     if (response.ok) {
+      handleLoading(false);
       notifySuccess(
         'Success Authorization!'
       );
+
       setPasswordInputValue('');
       setEmailInputValue('');
       if (
@@ -95,6 +104,7 @@ export const LoginForm = () => {
         setIsLogined(true);
       }
     } else {
+      handleLoading(false);
       if (response.message) {
         notifyError(response.message);
       }

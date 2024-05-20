@@ -10,8 +10,12 @@ export type InputDataType = {
   Email: InputDataValueType;
   Password: InputDataValueType;
   DateOfBirth: InputDataValueType;
-  Country: InputDataValueType;
-  PostalCode: InputDataValueType;
-  City: InputDataValueType;
-  Street: InputDataValueType;
+  BillingCountry: InputDataValueType;
+  BillingPostalCode: InputDataValueType;
+  BillingCity: InputDataValueType;
+  BillingStreet: InputDataValueType;
+  ShippingCountry: InputDataValueType;
+  ShippingPostalCode: InputDataValueType;
+  ShippingCity: InputDataValueType;
+  ShippingStreet: InputDataValueType;
 };
