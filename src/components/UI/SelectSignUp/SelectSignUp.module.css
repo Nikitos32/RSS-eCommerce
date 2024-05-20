@@ -1,6 +1,7 @@
 .select {
   position: relative;
   cursor: pointer;
+  text-align: center;
 }
 
 .select__field {
@@ -61,7 +62,6 @@
 @media (hover: hover) {
   .select__option:hover {
     @apply bg-moonBlack;
-    /* background-color: black; */
     color: white;
   }
 }

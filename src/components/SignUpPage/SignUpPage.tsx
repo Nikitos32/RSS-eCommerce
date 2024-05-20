@@ -14,6 +14,7 @@ import {
 } from '../../type/enums/SignUpEnums';
 import { InputConatiner } from './InputContainerSignUp/InputConatinerSignUp';
 import { InputDataType } from '../../type/types/signUpType';
+import { CheckboxSignUp } from '../UI/CheckboxSignUp/CheckboxSignUp';
 import {
   countryArray,
   countryCode,
@@ -23,6 +24,7 @@ import {
   patternPostalCode,
   patternPassword,
   patternStreet,
+  patternEmail,
 } from '../../type/value/signUpPatterns';
 import classes from './signUpPage.module.css';
 import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
@@ -39,6 +41,24 @@ export const SignUpPage = () => {
     useContext(IsLoginedContext);
 
   async function SignUp() {
+    let ShippingDate = {};
+    if (!checkboxAddress) {
+      ShippingDate = {
+        shippingCountry:
+          countryCode.get(
+            inputData.ShippingCountry
+              .value
+          ),
+        shippingPostalCode:
+          inputData.ShippingPostalCode
+            .value,
+        shippingCity:
+          inputData.ShippingCity.value,
+        shippingStreet:
+          inputData.ShippingStreet
+            .value,
+      };
+    }
     const CustomerDraft = {
       email: inputData.Email.value,
       password:
@@ -48,12 +68,16 @@ export const SignUpPage = () => {
       dateOfBirth:
         inputData.DateOfBirth.value,
       streetName:
-        inputData.Street.value,
-      city: inputData.City.value,
+        inputData.BillingCountry.value,
+      city: inputData.BillingCity.value,
       postalCode:
-        inputData.PostalCode.value,
-      country: inputData.Country.value,
+        inputData.BillingPostalCode
+          .value,
+      country: countryCode.get(
+        inputData.BillingCountry.value
+      ),
       isDefaultAddress: true,
+      ...ShippingDate,
     };
     const customerService =
       new CustomerService();
@@ -112,20 +136,39 @@ export const SignUpPage = () => {
         value: '2000-01-01',
         correct: true,
       },
-      [InputNames.COUNTRY]: {
+      [InputNames.BILLING_COUNTRY]: {
         value: countryArray[0],
         correct: true,
       },
-      [InputNames.POSTCODE]: {
+      [InputNames.BILLING_POSTAL_CODE]:
+        {
+          value: '',
+          correct: false,
+          setError: function () {},
+        },
+      [InputNames.BILLING_CITY]: {
         value: '',
         correct: false,
-        setError: function () {},
       },
-      [InputNames.CITY]: {
+      [InputNames.BILLING_STREET]: {
         value: '',
         correct: false,
       },
-      [InputNames.STREET]: {
+      [InputNames.SHIPPING_COUNTRY]: {
+        value: countryArray[0],
+        correct: true,
+      },
+      [InputNames.SHIPPING_POSTAL_CODE]:
+        {
+          value: '',
+          correct: false,
+          setError: function () {},
+        },
+      [InputNames.SHIPPING_CITY]: {
+        value: '',
+        correct: false,
+      },
+      [InputNames.SHIPPING_STREET]: {
         value: '',
         correct: false,
       },
@@ -138,9 +181,59 @@ export const SignUpPage = () => {
     ButtonDisabled,
     setButtonDisabled,
   ] = useState(true);
+  const [
+    checkboxAddress,
+    setcheckboxAddress,
+  ] = useState(false);
+
+  const clearPostalCode = (
+    address: string,
+    newInputData: InputDataType
+  ) => {
+    const inputDataValue =
+      newInputData[
+        address as keyof InputDataType
+      ];
+    inputDataValue.value = '';
+    inputDataValue.correct = false;
+
+    if (!inputDataValue.setError)
+      return;
+    inputDataValue.setError('');
+  };
+
+  interface CheckFormParams {
+    newInputData?: InputDataType;
+    oneAddress?: boolean;
+  }
+
+  const checkForm = ({
+    newInputData = inputData,
+    oneAddress = checkboxAddress,
+  }: CheckFormParams) => {
+    let resultCheck = false;
+    Object.keys(newInputData).forEach(
+      (key) => {
+        if (oneAddress) {
+          const c = key.includes(
+            InputNames.SHIPPING
+          );
+          if (c) return;
+        }
+        const { correct } =
+          newInputData[
+            key as keyof InputDataType
+          ];
+        if (!correct)
+          resultCheck = true;
+      }
+    );
+
+    setButtonDisabled(resultCheck);
+  };
 
   const updateInputData = (
-    key: InputNames
+    key: string
   ) => {
     return function (
       newValue: string,
@@ -155,33 +248,22 @@ export const SignUpPage = () => {
           },
         };
 
-        let resultCheck = false;
         if (
-          key === InputNames.COUNTRY &&
-          inputData.PostalCode.setError
+          key ===
+            InputNames.BILLING_COUNTRY ||
+          key ===
+            InputNames.SHIPPING_COUNTRY
         ) {
-          resultCheck = true;
-          newInputData.PostalCode.value =
-            '';
-          newInputData.PostalCode.correct =
-            false;
-          inputData.PostalCode.setError(
-            ''
-          );
-        } else {
-          Object.keys(
+          const typeAdress =
+            key.replace('Country', '');
+          clearPostalCode(
+            `${typeAdress}${InputNames.POSTAL_CODE}`,
             newInputData
-          ).forEach((key) => {
-            const { correct } =
-              newInputData[
-                key as InputNames
-              ];
-            if (!correct)
-              resultCheck = true;
-          });
+          );
+          setButtonDisabled(true);
+        } else {
+          checkForm({ newInputData });
         }
-
-        setButtonDisabled(resultCheck);
         return newInputData;
       });
     };
@@ -235,14 +317,7 @@ export const SignUpPage = () => {
             customClass={
               'signUp__email'
             }
-            patterns={[
-              {
-                pattern:
-                  REGEX_FOR_EMAIL_INPUT,
-                errorMessage:
-                  'Incorrect email format',
-              },
-            ]}
+            patterns={patternEmail}
             inputDataValue={
               inputData.Email
             }
@@ -291,8 +366,24 @@ export const SignUpPage = () => {
               text-xl font-medium
               `}
           >
-            Adress
+            {checkboxAddress
+              ? 'Address'
+              : 'Billing Address'}
           </h3>
+          <CheckboxSignUp
+            label="use one adress"
+            checked={checkboxAddress}
+            className="w-full place-content-center"
+            onChange={() => {
+              checkForm({
+                oneAddress:
+                  !checkboxAddress,
+              });
+              setcheckboxAddress(
+                !checkboxAddress
+              );
+            }}
+          />
           <InputConatiner
             content="Country"
             type={InputType.SELECT}
@@ -301,10 +392,10 @@ export const SignUpPage = () => {
             }
             options={countryArray}
             inputDataValue={
-              inputData.Country
+              inputData.BillingCountry
             }
             setInputDataValue={updateInputData(
-              InputNames.COUNTRY
+              InputNames.BILLING_COUNTRY
             )}
           />
           <InputConatiner
@@ -314,13 +405,14 @@ export const SignUpPage = () => {
               'signUp__postalCode'
             }
             patterns={patternPostalCode.get(
-              inputData.Country.value
+              inputData.BillingCountry
+                .value
             )}
             inputDataValue={
-              inputData.PostalCode
+              inputData.BillingPostalCode
             }
             setInputDataValue={updateInputData(
-              InputNames.POSTCODE
+              InputNames.BILLING_POSTAL_CODE
             )}
           />
           <InputConatiner
@@ -329,10 +421,10 @@ export const SignUpPage = () => {
             customClass={'signUp__city'}
             patterns={namePattern}
             inputDataValue={
-              inputData.City
+              inputData.BillingCity
             }
             setInputDataValue={updateInputData(
-              InputNames.CITY
+              InputNames.BILLING_CITY
             )}
           />
           <InputConatiner
@@ -343,10 +435,83 @@ export const SignUpPage = () => {
             }
             patterns={patternStreet}
             inputDataValue={
-              inputData.Street
+              inputData.BillingStreet
             }
             setInputDataValue={updateInputData(
-              InputNames.STREET
+              InputNames.BILLING_STREET
+            )}
+          />
+        </section>
+        <section
+          className={`
+          ${classes.signUp__data} 
+          ${classes.signUp__adress}
+          ${checkboxAddress ? 'hidden' : ''}
+        `}
+        >
+          <h3
+            className={`
+              ${classes.signUp__adressTitle}
+              text-xl font-medium
+              `}
+          >
+            Shipping Address
+          </h3>
+          <InputConatiner
+            content="Country"
+            type={InputType.SELECT}
+            customClass={
+              'signUp__country'
+            }
+            options={countryArray}
+            inputDataValue={
+              inputData.ShippingCountry
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_COUNTRY
+            )}
+          />
+          <InputConatiner
+            content="Postal Code"
+            type={InputType.TEXT}
+            customClass={
+              'signUp__postalCode'
+            }
+            patterns={patternPostalCode.get(
+              inputData.ShippingCountry
+                .value
+            )}
+            inputDataValue={
+              inputData.ShippingPostalCode
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_POSTAL_CODE
+            )}
+          />
+          <InputConatiner
+            content="City"
+            type={InputType.TEXT}
+            customClass={'signUp__city'}
+            patterns={namePattern}
+            inputDataValue={
+              inputData.ShippingCity
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_CITY
+            )}
+          />
+          <InputConatiner
+            content="Street"
+            type={InputType.TEXT}
+            customClass={
+              'signUp__street'
+            }
+            patterns={patternStreet}
+            inputDataValue={
+              inputData.ShippingStreet
+            }
+            setInputDataValue={updateInputData(
+              InputNames.SHIPPING_STREET
             )}
           />
         </section>
@@ -371,38 +536,6 @@ export const SignUpPage = () => {
           <ButtonSignUp
             btnContent="SignUp"
             customClass="signUp__buttonSend"
-            customFunction={() => {
-              const sendSignUp = {
-                name: inputData.Name
-                  .value,
-                surname:
-                  inputData.Surname
-                    .value,
-                email:
-                  inputData.Email.value,
-                password:
-                  inputData.Password
-                    .value,
-                dateOfBirth:
-                  inputData.DateOfBirth
-                    .value,
-                country:
-                  countryCode.get(
-                    inputData.Country
-                      .value
-                  ),
-                postalCode:
-                  inputData.PostalCode
-                    .value,
-                city: inputData.City
-                  .value,
-                street:
-                  inputData.Street
-                    .value,
-              };
-
-              console.log(sendSignUp);
-            }}
             disabled={ButtonDisabled}
           />
         </section>

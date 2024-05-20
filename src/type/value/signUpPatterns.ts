@@ -1,4 +1,5 @@
 import { PatternSignUp } from '../../components/SignUpPage/InputContainerSignUp/InputConatinerSignUp';
+import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 
 export const namePattern: PatternSignUp[] =
   [
@@ -21,20 +22,6 @@ export const namePattern: PatternSignUp[] =
 
 export const patternPostalCode =
   new Map<string, PatternSignUp[]>();
-patternPostalCode.set('Austria', [
-  {
-    pattern: '\\d{4}',
-    errorMessage:
-      'comply with standard NNNN',
-  },
-]);
-patternPostalCode.set('Bulgaria', [
-  {
-    pattern: '\\d{4}$',
-    errorMessage:
-      'comply with standard NNNN',
-  },
-]);
 patternPostalCode.set('Canada', [
   {
     pattern: '^[^a-z]*$',
@@ -53,16 +40,9 @@ patternPostalCode.set('Canada', [
       'comply with standard ANA NAN',
   },
 ]);
-patternPostalCode.set('China', [
-  {
-    pattern: '\\d{6}$',
-    errorMessage:
-      'comply with standard NNNNNN',
-  },
-]);
 patternPostalCode.set('Germany', [
   {
-    pattern: '\\d{4}$',
+    pattern: '^\\d{4}$',
     errorMessage:
       'comply with standard NNNN',
   },
@@ -120,6 +100,11 @@ export const patternPassword = [
       'don`t have uppercase letter',
   },
   {
+    pattern: '(?=.*[!@#$%^&*])',
+    errorMessage:
+      'special character is needed',
+  },
+  {
     pattern: '.{7,}.*',
     errorMessage:
       'must be longer than 8 characters',
@@ -151,5 +136,17 @@ export const patternStreet = [
     pattern: '.{2,}.*',
     errorMessage:
       'minimum characters 2',
+  },
+];
+
+export const patternEmail = [
+  {
+    pattern: '^\\S*$',
+    errorMessage: 'no spaces',
+  },
+  {
+    pattern: REGEX_FOR_EMAIL_INPUT,
+    errorMessage:
+      'Incorrect email format',
   },
 ];

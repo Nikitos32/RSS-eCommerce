@@ -5,6 +5,7 @@ export enum InputType {
   PASSWORD = 'password',
   EMAIL = 'email',
   SELECT = 'select',
+  CHECKBOX = 'checkbox',
 }
 
 export enum InputNames {
@@ -13,10 +14,20 @@ export enum InputNames {
   EMAIL = 'Email',
   PASSWORD = 'Password',
   BIRTH = 'DateOfBirth',
+  BILLING_COUNTRY = 'BillingCountry',
+  BILLING_POSTAL_CODE = 'BillingPostalCode',
+  BILLING_CITY = 'BillingCity',
+  BILLING_STREET = 'BillingStreet',
+  SHIPPING_COUNTRY = 'ShippingCountry',
+  SHIPPING_POSTAL_CODE = 'ShippingPostalCode',
+  SHIPPING_CITY = 'ShippingCity',
+  SHIPPING_STREET = 'ShippingStreet',
   COUNTRY = 'Country',
-  POSTCODE = 'PostalCode',
+  POSTAL_CODE = 'PostalCode',
   CITY = 'City',
   STREET = 'Street',
+  BILLING = 'Billing',
+  SHIPPING = 'Shipping',
 }
 
 export enum CountryName {
