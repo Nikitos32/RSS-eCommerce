@@ -4,14 +4,14 @@ type ButtonProps = {
   btnContent: string;
   customClass: string;
   disabled?: boolean;
-  customFunction: () => void;
+  customFunction?: () => void;
 };
 
 export const ButtonSignUp = ({
   btnContent,
   customClass,
   disabled = false,
-  customFunction,
+  customFunction = () => {},
 }: ButtonProps) => {
   return (
     <button
@@ -21,9 +21,7 @@ export const ButtonSignUp = ({
         bg-moonBlack
         text-lg
       `}
-      onClick={() => {
-        customFunction();
-      }}
+      onClick={customFunction}
       disabled={disabled}
     >
       {btnContent}
