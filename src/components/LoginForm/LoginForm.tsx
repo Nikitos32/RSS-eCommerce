@@ -20,10 +20,13 @@ import {
   notifyError,
   notifySuccess,
 } from '../../App';
+import Spinner from '../Spinner';
 
 export const LoginForm = () => {
   const [isLogined, setIsLogined] =
     useContext(IsLoginedContext);
+  const [loading, setLoading] =
+    useState(false);
 
   const [
     emailInputValue,
@@ -73,6 +76,7 @@ export const LoginForm = () => {
   };
 
   async function LogIn() {
+    setLoading(true);
     const customerService =
       new CustomerService();
 
@@ -99,6 +103,7 @@ export const LoginForm = () => {
         notifyError(response.message);
       }
     }
+    setLoading(false);
   }
 
   const handleSubmit = (
@@ -124,6 +129,9 @@ export const LoginForm = () => {
         />
         <LoginFieldsetEnterSection />
       </form>
+      {loading && (
+        <Spinner isLoading={loading} />
+      )}
     </>
   );
 };
