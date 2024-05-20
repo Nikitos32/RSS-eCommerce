@@ -71,12 +71,13 @@ export const LoginForm = () => {
   async function LogIn() {
     const customerService =
       new CustomerService();
+
     const response: CTResponse =
       await customerService.signIn(
         emailInputValue,
         passwordInputValue
       );
-    //'test2@example.com', 'test2'
+    //'nikita2024@tut.by', 'nikita2024@'
     if (response.ok) {
       setPasswordInputValue('');
       setEmailInputValue('');
