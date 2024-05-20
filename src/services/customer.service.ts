@@ -242,4 +242,71 @@ export class CustomerService {
       defaultBillingAddress
     );
   }
+
+  createDraftFromRegFormExtended(
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    dateOfBirth: string,
+    shippingStreetName: string,
+    shippingCity: string,
+    shippingPostalCode: string,
+    shippingCountry: string,
+    shippingIsDefaultAddress: boolean,
+    billingStreetName: string,
+    billingCity: string,
+    billingPostalCode: string,
+    billingCountry: string,
+    billingIsDefaultAddress: boolean
+  ): CustomerDraft {
+    const shippingAddress =
+      this.createAddress(
+        shippingCountry,
+        lastName,
+        firstName,
+        shippingStreetName,
+        shippingCity,
+        shippingPostalCode
+      );
+
+    const billingAddress =
+      this.createAddress(
+        billingCountry,
+        lastName,
+        firstName,
+        billingStreetName,
+        billingCity,
+        billingPostalCode
+      );
+
+    const addresses = [
+      shippingAddress,
+      billingAddress,
+    ];
+
+    const shippingAddresses = [0];
+    const defaultShippingAddress =
+      shippingIsDefaultAddress
+        ? 0
+        : undefined;
+    const billingAddresses = [1];
+    const defaultBillingAddress =
+      billingIsDefaultAddress
+        ? 1
+        : undefined;
+
+    return this.createDraft(
+      email,
+      password,
+      firstName,
+      lastName,
+      dateOfBirth,
+      addresses,
+      shippingAddresses,
+      defaultShippingAddress,
+      billingAddresses,
+      defaultBillingAddress
+    );
+  }
 }
