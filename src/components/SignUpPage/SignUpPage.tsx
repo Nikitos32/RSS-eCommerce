@@ -29,12 +29,17 @@ import { REGEX_FOR_EMAIL_INPUT } from '../../constants';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 import {
+  IsLoadindContext,
   IsLoginedContext,
   notifyError,
   notifySuccess,
 } from '../../App';
 
 export const SignUpPage = () => {
+  const [handleLoading] = useContext(
+    IsLoadindContext
+  );
+
   const [isLogined, setIsLogined] =
     useContext(IsLoginedContext);
 
@@ -57,6 +62,7 @@ export const SignUpPage = () => {
     };
     const customerService =
       new CustomerService();
+    handleLoading(true);
     const response: CTResponse =
       await customerService
         .signUp(CustomerDraft)
@@ -67,6 +73,7 @@ export const SignUpPage = () => {
           );
         });
     if (response.ok) {
+      handleLoading(false);
       notifySuccess(
         'Success Registration!'
       );
@@ -77,6 +84,7 @@ export const SignUpPage = () => {
         setIsLogined(true);
       }
     } else {
+      handleLoading(false);
       if (response.message) {
         notifyError(response.message);
       }

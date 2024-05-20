@@ -80,11 +80,8 @@ export const LoginForm = () => {
   async function LogIn() {
     const customerService =
       new CustomerService();
-    if (
-      typeof handleLoading !== 'boolean'
-    ) {
-      handleLoading(true);
-    }
+
+    handleLoading(true);
 
     const response: CTResponse =
       await customerService.signIn(
@@ -93,12 +90,7 @@ export const LoginForm = () => {
       );
     //'nikita2024@tut.by', 'Nikita2024@'
     if (response.ok) {
-      if (
-        typeof handleLoading !==
-        'boolean'
-      ) {
-        handleLoading(false);
-      }
+      handleLoading(false);
       notifySuccess(
         'Success Authorization!'
       );
@@ -112,12 +104,7 @@ export const LoginForm = () => {
         setIsLogined(true);
       }
     } else {
-      if (
-        typeof handleLoading !==
-        'boolean'
-      ) {
-        handleLoading(false);
-      }
+      handleLoading(false);
       if (response.message) {
         notifyError(response.message);
       }
