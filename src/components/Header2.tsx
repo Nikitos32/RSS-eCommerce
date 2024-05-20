@@ -67,7 +67,7 @@ function Links() {
       )}
       {isLogined && (
         <Link
-          to="./signin"
+          to="/RSS-eCommerce/signin"
           title="Logout"
           onClick={() => {
             handleSignOut();
