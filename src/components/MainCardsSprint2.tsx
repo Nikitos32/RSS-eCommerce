@@ -27,16 +27,14 @@ function MainCardsSprint2() {
               <p className="mt-2 mb-4">
                 Browse our SignUp form
               </p>
-              {isLogined ? (
-                <LogoutFirst />
-              ) : (
-                <Link
-                  to="/signup"
-                  className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
-                >
-                  Browse Signup
-                </Link>
-              )}
+              <Link
+                to="/signup"
+                className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
+              >
+                {isLogined
+                  ? 'Logout First'
+                  : 'Browse Signup'}
+              </Link>
             </>
           </Card>
           <Card bg="bg-moonNeutral-400">
@@ -47,16 +45,14 @@ function MainCardsSprint2() {
               <p className="mt-2 mb-4">
                 Try to SignIn
               </p>
-              {isLogined ? (
-                <LogoutFirst />
-              ) : (
-                <Link
-                  to="/signin"
-                  className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
-                >
-                  Signin Forms
-                </Link>
-              )}
+              <Link
+                to="/signin"
+                className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
+              >
+                {isLogined
+                  ? 'Logout First'
+                  : 'Signin Form'}
+              </Link>
             </>
           </Card>
           <Card bg="bg-moonNeutral-500">
