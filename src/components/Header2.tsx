@@ -10,7 +10,10 @@ import {
   IoIosLogIn,
   IoIosLogOut,
 } from 'react-icons/io';
-import { IsLoginedContext } from '../App';
+import {
+  IsLoginedContext,
+  notifySuccess,
+} from '../App';
 
 function Links() {
   const [isLogined, setIsLogined] =
@@ -66,9 +69,12 @@ function Links() {
         <Link
           to="/signin"
           title="Logout"
-          onClick={() =>
-            handleSignOut()
-          }
+          onClick={() => {
+            handleSignOut();
+            notifySuccess(
+              'Success Logout!'
+            );
+          }}
         >
           {' '}
           <IoIosLogOut />{' '}
