@@ -1,7 +1,20 @@
 import { Link } from 'react-router-dom';
 import Card from './Card';
+import { IsLoginedContext } from '../App';
+import { useContext } from 'react';
+
+function LogoutFirst() {
+  return (
+    <p className="mt-2 mb-4 text-2xl">
+      Logout First
+    </p>
+  );
+}
 
 function MainCardsSprint2() {
+  const [isLogined] = useContext(
+    IsLoginedContext
+  );
   return (
     <section className="py-4">
       <div className="container-xl lg:container m-auto">
@@ -14,12 +27,16 @@ function MainCardsSprint2() {
               <p className="mt-2 mb-4">
                 Browse our SignUp form
               </p>
-              <Link
-                to="/signup"
-                className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
-              >
-                Browse Signup
-              </Link>
+              {isLogined ? (
+                <LogoutFirst />
+              ) : (
+                <Link
+                  to="/signup"
+                  className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
+                >
+                  Browse Signup
+                </Link>
+              )}
             </>
           </Card>
           <Card bg="bg-moonNeutral-400">
@@ -30,12 +47,16 @@ function MainCardsSprint2() {
               <p className="mt-2 mb-4">
                 Try to SignIn
               </p>
-              <Link
-                to="/signin"
-                className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
-              >
-                Signin Form
-              </Link>
+              {isLogined ? (
+                <LogoutFirst />
+              ) : (
+                <Link
+                  to="/signin"
+                  className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
+                >
+                  Signin Forms
+                </Link>
+              )}
             </>
           </Card>
           <Card bg="bg-moonNeutral-500">
