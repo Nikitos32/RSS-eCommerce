@@ -30,26 +30,26 @@ function Links() {
   return (
     <>
       <Link
-        to="/"
+        to="../RSS-eCommerce"
         className="hover:text-gray-500"
       >
         Home
       </Link>
       <Link
-        to="/about"
+        to="./about"
         className="hover:text-gray-500"
       >
         About
       </Link>
       <Link
-        to="/contact"
+        to="./contact"
         className="hover:text-gray-500"
       >
         Contact
       </Link>
       {!isLogined && (
         <Link
-          to="/signup"
+          to="./signup"
           title="Registration"
         >
           {' '}
@@ -58,7 +58,7 @@ function Links() {
       )}
       {!isLogined && (
         <Link
-          to="/signin"
+          to="./signin"
           title="Login"
         >
           {' '}
@@ -67,7 +67,7 @@ function Links() {
       )}
       {isLogined && (
         <Link
-          to="/signin"
+          to="./signin"
           title="Logout"
           onClick={() => {
             handleSignOut();
@@ -87,12 +87,12 @@ function Links() {
 function Logo() {
   return (
     <Link
-      to="/"
+      to="/RSS-eCommerce"
       className="flex items-center h-10 px-10 font-bold uppercase italic text-white hover:opacity-90"
     >
       <img
         className="h-8 w-auto"
-        src="/png/Random20Logo.png"
+        src="../RSS-eCommerce/png/Random20Logo.png"
         alt="Random Twenty Logo"
       />
     </Link>

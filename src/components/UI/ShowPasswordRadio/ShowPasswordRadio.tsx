@@ -14,7 +14,7 @@ export const ShowPasswordRadio = ({
     >
       <img
         className={`w-6 h-6`}
-        src={`/public/png/${!visible ? 'close' : 'open'}Eye.png`}
+        src={`../RSS-eCommerce/png/${!visible ? 'close' : 'open'}Eye.png`}
         alt="eye"
       />
     </div>

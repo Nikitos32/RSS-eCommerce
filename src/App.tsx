@@ -59,7 +59,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/"
+        path="/RSS-eCommerce"
         element={
           <IsLoginedContext.Provider
             value={[
@@ -80,11 +80,11 @@ function App() {
           element={<MainPage />}
         />
         <Route
-          path="/signin"
+          path="/RSS-eCommerce/signin"
           element={<LoginPage />}
         />
         <Route
-          path="/signup"
+          path="/RSS-eCommerce/signup"
           element={<SignUpPage />}
         />
         <Route

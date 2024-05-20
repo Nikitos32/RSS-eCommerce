@@ -3,13 +3,13 @@ import Card from './Card';
 import { IsLoginedContext } from '../App';
 import { useContext } from 'react';
 
-function LogoutFirst() {
-  return (
-    <p className="mt-2 mb-4 text-2xl">
-      Logout First
-    </p>
-  );
-}
+//function LogoutFirst() {
+//return (
+// <p className="mt-2 mb-4 text-2xl">
+//  Logout First
+//</p>
+// );
+//}
 
 function MainCardsSprint2() {
   const [isLogined] = useContext(
@@ -28,7 +28,7 @@ function MainCardsSprint2() {
                 Browse our SignUp form
               </p>
               <Link
-                to="/signup"
+                to="./signup"
                 className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
               >
                 {isLogined
@@ -46,7 +46,7 @@ function MainCardsSprint2() {
                 Try to SignIn
               </p>
               <Link
-                to="/signin"
+                to="./signin"
                 className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
               >
                 {isLogined
@@ -64,7 +64,7 @@ function MainCardsSprint2() {
                 Visit our Not Found page
               </p>
               <Link
-                to="/404"
+                to="./404"
                 className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
               >
                 Go To Nowhere

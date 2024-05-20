@@ -14,7 +14,7 @@ export const LoginFieldsetEnterSection =
           isSubmitBtn={true}
           content="Enter"
         />
-        <Link to="/signup">
+        <Link to="/RSS-eCommerce/signup">
           Registration
         </Link>
       </fieldset>
