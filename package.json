@@ -65,10 +65,9 @@
     "errorMsg": "Incorrect branch name"
   },
   "lint-staged": {
-    "*.{ts, tsx}": [
+    "**/*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
-    ],
-    "**/*": "prettier --write --ignore-unknown"
+    ]
   }
 }
