@@ -14,112 +14,73 @@ import {
 } from '../ct-client';
 
 export class CustomerService {
-  customerRequests: CustomerRequests =
-    new CustomerRequests();
-  async signUp(
-    customerDraft: CustomerDraft
-  ): Promise<CTResponse> {
+  customerRequests: CustomerRequests = new CustomerRequests();
+  async signUp(customerDraft: CustomerDraft): Promise<CTResponse> {
     try {
-      const answer =
-        await this.customerRequests.createCustomer(
-          customerDraft
-        );
+      const answer = await this.customerRequests.createCustomer(customerDraft);
 
-      if (
-        answer.statusCode ===
-        HttpStatusCode.CREATED_201
-      ) {
+      if (answer.statusCode === HttpStatusCode.CREATED_201) {
         return CTResponseHandler.makeSuccess(
           answer.statusCode,
           '',
           answer.body as CustomerSignInResult
         );
       } else {
-        return CTResponseHandler.handleUnexpectedStatus(
-          answer.statusCode
-        );
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
       }
     } catch (error) {
-      return CTResponseHandler.handleCatch(
-        error as ClientResponse
-      );
+      return CTResponseHandler.handleCatch(error as ClientResponse);
     }
   }
 
-  async signIn(
-    email: string,
-    password: string
-  ): Promise<CTResponse> {
-    const customerSign: CustomerSignin =
-      {
-        email: email.toLowerCase(),
-        password,
-      };
+  async signIn(email: string, password: string): Promise<CTResponse> {
+    const customerSign: CustomerSignin = {
+      email: email.toLowerCase(),
+      password,
+    };
 
-    const userExists =
-      await this.checkUserExists(
-        customerSign.email
-      );
+    const userExists = await this.checkUserExists(customerSign.email);
 
     if (!userExists.ok) {
       return userExists;
     }
 
     try {
-      const answer =
-        await this.customerRequests.login(
-          customerSign
-        );
+      const answer = await this.customerRequests.login(customerSign);
 
-      if (
-        answer.statusCode ===
-        HttpStatusCode.OK_200
-      ) {
+      if (answer.statusCode === HttpStatusCode.OK_200) {
         return CTResponseHandler.makeSuccess(
           answer.statusCode,
           '',
           answer.body as CustomerSignInResult
         );
       } else {
-        return CTResponseHandler.handleUnexpectedStatus(
-          answer.statusCode
-        );
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
       }
     } catch (error) {
-      const response =
-        CTResponseHandler.handleCatch(
-          error as ClientResponse
-        );
+      const response = CTResponseHandler.handleCatch(error as ClientResponse);
 
-      const errors =
-        response.data as ErrorObject[];
+      const errors = response.data as ErrorObject[];
 
       if (
-        response.status ===
-          HttpStatusCode.BAD_REQUEST_400 &&
+        response.status === HttpStatusCode.BAD_REQUEST_400 &&
         errors &&
-        errors[0].code ===
-          'InvalidCredentials'
+        errors[0].code === 'InvalidCredentials'
       ) {
-        response.message =
-          'Wrong password';
+        response.message = 'Wrong password';
       }
 
       return response;
     }
   }
 
-  private async checkUserExists(
-    lowercaseEmail: string
-  ): Promise<CTResponse> {
+  private async checkUserExists(lowercaseEmail: string): Promise<CTResponse> {
     const queryArgs = {
       where: `lowercaseEmail="${lowercaseEmail}"`,
     };
     try {
       const answer =
-        await this.customerRequests.checkCustomerExistsByQuery(
-          queryArgs
-        );
+        await this.customerRequests.checkCustomerExistsByQuery(queryArgs);
       switch (answer.statusCode) {
         case HttpStatusCode.OK_200: {
           return CTResponseHandler.makeSuccess(
@@ -129,21 +90,12 @@ export class CustomerService {
           );
         }
         default:
-          return CTResponseHandler.handleUnexpectedStatus(
-            answer.statusCode
-          );
+          return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
       }
     } catch (error) {
-      const response =
-        CTResponseHandler.handleCatch(
-          error as ClientResponse
-        );
-      if (
-        response.status ===
-        HttpStatusCode.NOT_FOUND_404
-      ) {
-        response.message =
-          'The user with the specified email does not exist';
+      const response = CTResponseHandler.handleCatch(error as ClientResponse);
+      if (response.status === HttpStatusCode.NOT_FOUND_404) {
+        response.message = 'The user with the specified email does not exist';
       }
       return response;
     }
@@ -160,19 +112,18 @@ export class CustomerService {
     billingAddresses?: number[],
     defaultBillingAddress?: number
   ): CustomerDraft {
-    const customerDraft: CustomerDraft =
-      {
-        email: email.toLowerCase(),
-        password,
-        firstName,
-        lastName,
-        dateOfBirth,
-        addresses,
-        defaultShippingAddress,
-        shippingAddresses,
-        defaultBillingAddress,
-        billingAddresses,
-      };
+    const customerDraft: CustomerDraft = {
+      email: email.toLowerCase(),
+      password,
+      firstName,
+      lastName,
+      dateOfBirth,
+      addresses,
+      defaultShippingAddress,
+      shippingAddresses,
+      defaultBillingAddress,
+      billingAddresses,
+    };
     return customerDraft;
   }
 
@@ -216,18 +167,10 @@ export class CustomerService {
       postalCode
     );
 
-    const shippingAddresses =
-      isDefaultAddress
-        ? [0]
-        : undefined;
-    const defaultShippingAddress =
-      isDefaultAddress ? 0 : undefined;
-    const billingAddresses =
-      isDefaultAddress
-        ? [0]
-        : undefined;
-    const defaultBillingAddress =
-      isDefaultAddress ? 0 : undefined;
+    const shippingAddresses = isDefaultAddress ? [0] : undefined;
+    const defaultShippingAddress = isDefaultAddress ? 0 : undefined;
+    const billingAddresses = isDefaultAddress ? [0] : undefined;
+    const defaultBillingAddress = isDefaultAddress ? 0 : undefined;
 
     return this.createDraft(
       email,
@@ -260,41 +203,30 @@ export class CustomerService {
     billingCountry: string,
     billingIsDefaultAddress: boolean
   ): CustomerDraft {
-    const shippingAddress =
-      this.createAddress(
-        shippingCountry,
-        lastName,
-        firstName,
-        shippingStreetName,
-        shippingCity,
-        shippingPostalCode
-      );
+    const shippingAddress = this.createAddress(
+      shippingCountry,
+      lastName,
+      firstName,
+      shippingStreetName,
+      shippingCity,
+      shippingPostalCode
+    );
 
-    const billingAddress =
-      this.createAddress(
-        billingCountry,
-        lastName,
-        firstName,
-        billingStreetName,
-        billingCity,
-        billingPostalCode
-      );
+    const billingAddress = this.createAddress(
+      billingCountry,
+      lastName,
+      firstName,
+      billingStreetName,
+      billingCity,
+      billingPostalCode
+    );
 
-    const addresses = [
-      shippingAddress,
-      billingAddress,
-    ];
+    const addresses = [shippingAddress, billingAddress];
 
     const shippingAddresses = [0];
-    const defaultShippingAddress =
-      shippingIsDefaultAddress
-        ? 0
-        : undefined;
+    const defaultShippingAddress = shippingIsDefaultAddress ? 0 : undefined;
     const billingAddresses = [1];
-    const defaultBillingAddress =
-      billingIsDefaultAddress
-        ? 1
-        : undefined;
+    const defaultBillingAddress = billingIsDefaultAddress ? 1 : undefined;
 
     return this.createDraft(
       email,

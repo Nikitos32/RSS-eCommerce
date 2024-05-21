@@ -1,8 +1,4 @@
-import {
-  FormEvent,
-  useContext,
-  useState,
-} from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
 import { LoginFieldsetWithInputs } from '../LoginFieldsetWithInputs/LoginFieldsetWithInputs';
 import classes from './loginForm.module.css';
@@ -23,84 +19,53 @@ import {
 } from '../../App';
 
 export const LoginForm = () => {
-  const [handleLoading] = useContext(
-    IsLoadindContext
-  );
+  const [handleLoading] = useContext(IsLoadindContext);
 
-  const [isLogined, setIsLogined] =
-    useContext(IsLoginedContext);
+  const [isLogined, setIsLogined] = useContext(IsLoginedContext);
 
-  const [
-    emailInputValue,
-    setEmailInputValue,
-  ] = useState<string>('');
+  const [emailInputValue, setEmailInputValue] = useState<string>('');
 
-  const [
-    passwordInputValue,
-    setPasswordInputValue,
-  ] = useState<string>('');
+  const [passwordInputValue, setPasswordInputValue] = useState<string>('');
 
-  const handleValue = (
-    event: React.ChangeEvent
-  ) => {
-    const target =
-      event.target as HTMLInputElement;
+  const handleValue = (event: React.ChangeEvent) => {
+    const target = event.target as HTMLInputElement;
     switch (target.type) {
       case InputType.EMAIL: {
-        setEmailInputValue(
-          target.value
-        );
+        setEmailInputValue(target.value);
         target.validity.patternMismatch
-          ? target.setCustomValidity(
-              EMAIL_INVALID_INPUT_MESSAGE
-            )
-          : target.setCustomValidity(
-              ''
-            );
+          ? target.setCustomValidity(EMAIL_INVALID_INPUT_MESSAGE)
+          : target.setCustomValidity('');
         break;
       }
 
       case InputType.PASSWORD:
       case InputType.TEXT: {
-        setPasswordInputValue(
-          target.value.trim()
-        );
+        setPasswordInputValue(target.value.trim());
         target.validity.patternMismatch
-          ? target.setCustomValidity(
-              PASSWORD_INVALID_INPUT_MESSAGE
-            )
-          : target.setCustomValidity(
-              ''
-            );
+          ? target.setCustomValidity(PASSWORD_INVALID_INPUT_MESSAGE)
+          : target.setCustomValidity('');
         break;
       }
     }
   };
 
   async function LogIn() {
-    const customerService =
-      new CustomerService();
+    const customerService = new CustomerService();
 
     handleLoading(true);
 
-    const response: CTResponse =
-      await customerService.signIn(
-        emailInputValue,
-        passwordInputValue
-      );
+    const response: CTResponse = await customerService.signIn(
+      emailInputValue,
+      passwordInputValue
+    );
     //'nikita2024@tut.by', 'Nikita2024@'
     if (response.ok) {
       handleLoading(false);
-      notifySuccess(
-        'Success Authorization!'
-      );
+      notifySuccess('Success Authorization!');
 
       setPasswordInputValue('');
       setEmailInputValue('');
-      if (
-        typeof setIsLogined !==
-        'boolean'
-      ) {
+      if (typeof setIsLogined !== 'boolean') {
         setIsLogined(true);
       }
     } else {
@@ -111,9 +76,7 @@ export const LoginForm = () => {
     }
   }
 
-  const handleSubmit = (
-    event: FormEvent
-  ) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     LogIn();
   };
@@ -122,10 +85,7 @@ export const LoginForm = () => {
     <Navigate to="/RSS-eCommerce" />
   ) : (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className={classes.loginForm}
-      >
+      <form onSubmit={handleSubmit} className={classes.loginForm}>
         <LoginFormTitle />
         <LoginFieldsetWithInputs
           handleInput={handleValue}

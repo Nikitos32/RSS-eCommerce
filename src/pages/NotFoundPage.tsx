@@ -1,23 +1,13 @@
-import {
-  FaArrowLeft,
-  FaExclamationTriangle,
-} from 'react-icons/fa';
-import {
-  Link,
-  useNavigate,
-} from 'react-router-dom';
+import { FaArrowLeft, FaExclamationTriangle } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 
 function NotFoundPage() {
   const navigate = useNavigate();
   return (
     <section className="text-center flex flex-col justify-center items-center h-96">
       <FaExclamationTriangle className="text-moonBlack text-6xl mb-4" />
-      <h1 className="text-6xl font-bold mb-4">
-        404 Not Found
-      </h1>
-      <p className="text-xl mb-5">
-        This page does not exist
-      </p>
+      <h1 className="text-6xl font-bold mb-4">404 Not Found</h1>
+      <p className="text-xl mb-5">This page does not exist</p>
       <div className="mt-10 flex items-center justify-center gap-x-6">
         <Link
           to={'..'}
@@ -27,8 +17,7 @@ function NotFoundPage() {
           }}
           className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
         >
-          <FaArrowLeft className="inline-block" />{' '}
-          Go Back
+          <FaArrowLeft className="inline-block" /> Go Back
         </Link>
         <Link
           to="/RSS-eCommerce"

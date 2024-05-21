@@ -6,17 +6,10 @@ interface ButtonProps {
   isSubmitBtn: boolean;
 }
 
-export const Button = ({
-  content,
-  isSubmitBtn,
-}: ButtonProps) => {
+export const Button = ({ content, isSubmitBtn }: ButtonProps) => {
   return (
     <button
-      type={
-        isSubmitBtn
-          ? BtnType.SUBMIT
-          : BtnType.BUTTON
-      }
+      type={isSubmitBtn ? BtnType.SUBMIT : BtnType.BUTTON}
       className={classes.LoginBtn}
     >
       {content}

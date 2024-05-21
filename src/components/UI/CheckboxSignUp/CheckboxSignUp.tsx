@@ -14,18 +14,14 @@ export const CheckboxSignUp = ({
   className,
 }: CheckboxProps) => {
   return (
-    <label
-      className={`inline-flex items-center ${className}`}
-    >
+    <label className={`inline-flex items-center ${className}`}>
       <input
         type={InputType.CHECKBOX}
         className="form-checkbox h-5 w-5 text-blue-600"
         checked={checked}
         onChange={onChange}
       />
-      <span className="ml-2">
-        {label}
-      </span>
+      <span className="ml-2">{label}</span>
     </label>
   );
 };
