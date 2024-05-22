@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FaInfoCircle } from 'react-icons/fa';
 import { makeIdFromLabel } from '../utils';
+import { BsInfoCircle } from 'react-icons/bs';
 
 type UserInputStringProps = {
   type: 'text' | 'password';
@@ -17,6 +17,11 @@ type UserInputStringProps = {
   clues?: JSX.Element;
 };
 
+/**
+ * @description standard input component for user string fields
+ * @param props
+ * @returns
+ */
 function UserInputString(props: UserInputStringProps) {
   const id = makeIdFromLabel(props.label || 'no label');
   const cluesId = `clues-${id}`;
@@ -53,19 +58,19 @@ function UserInputString(props: UserInputStringProps) {
         }
         ref={props.elementUseRef}
       />
-      <p
+      <div
         id={cluesId}
-        className={
+        className={`mt-1 flex flex-row rounded-md bg-moonNeutral-200 md:max-w-2xl md:mx-auto justify-start items-center gap-2 text-sm ${
           props.clues &&
           props.isFocusUseState &&
-          (!props.valueUseState || ![props.isValidValueUseState])
+          (!props.valueUseState || !props.isValidValueUseState)
             ? ' '
             : ' hidden'
-        }
+        }`}
       >
-        <FaInfoCircle className="inline mr-1" />
+        <BsInfoCircle className="ml-2 text-xl" />
         {props.clues}
-      </p>
+      </div>
     </>
   );
 }
