@@ -6,16 +6,19 @@ type UserInputStringProps = {
   label?: string;
   placeHolder?: string;
   isRequired?: boolean;
+  autocomplete: 'on' | 'off';
   valueUseState: string;
   setValueUseState: Dispatch<SetStateAction<string>>;
   isValidValueUseState: boolean;
   isFocusUseState: boolean;
   setFocusUseState: Dispatch<SetStateAction<boolean>>;
+  elementUseRef?: React.RefObject<HTMLInputElement>;
   clues?: JSX.Element;
 };
 
 const makeIdFromLabel = (label: string): string => {
   const partsForId = label
+    .trim()
     .replace(/[^a-zA-Z0-9 ]/g, '')
     .split(' ')
     .map((item) => item.toLowerCase());
@@ -43,16 +46,23 @@ function UserInputString(props: UserInputStringProps) {
             ? ''
             : ' border-red-500'
         }`}
-        id="first-name"
-        type="text"
+        id={id}
+        type={props.type}
         autoComplete="off"
         onChange={(e) => props.setValueUseState(e.target.value)}
         required={props.isRequired}
         placeholder={props.placeHolder}
         aria-invalid={props.isValidValueUseState ? 'false' : 'true'}
         aria-describedby={cluesId}
-        onFocus={() => props.setFocusUseState(true)}
-        onBlur={() => props.setFocusUseState(false)}
+        onFocus={
+          props.setFocusUseState ? () => props.setFocusUseState(true) : () => {}
+        }
+        onBlur={
+          props.setFocusUseState
+            ? () => props.setFocusUseState(false)
+            : () => {}
+        }
+        ref={props.elementUseRef}
       />
       <p
         id={cluesId}
