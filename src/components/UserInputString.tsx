@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
+import { makeIdFromLabel } from '../utils';
 
 type UserInputStringProps = {
   type: 'text' | 'password';
@@ -14,18 +15,6 @@ type UserInputStringProps = {
   setFocusUseState: Dispatch<SetStateAction<boolean>>;
   elementUseRef?: React.RefObject<HTMLInputElement>;
   clues?: JSX.Element;
-};
-
-const makeIdFromLabel = (label: string): string => {
-  const partsForId = label
-    .trim()
-    .replace(/[^a-zA-Z0-9 ]/g, '')
-    .split(' ')
-    .map((item) => item.toLowerCase());
-
-  const randomPart = Math.random().toString(16).split('.')[1];
-
-  return ['id', ...partsForId, randomPart].join('-');
 };
 
 function UserInputString(props: UserInputStringProps) {
