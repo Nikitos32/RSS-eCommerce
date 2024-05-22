@@ -12,9 +12,7 @@ interface PasswordInputProps {
   isPasswordVisible: boolean;
   handleVisibility: () => void;
   password: string;
-  handleInput: (
-    event: React.ChangeEvent
-  ) => void;
+  handleInput: (event: React.ChangeEvent) => void;
 }
 
 export const PasswordInput = ({
@@ -24,39 +22,21 @@ export const PasswordInput = ({
   handleInput,
 }: PasswordInputProps) => {
   return (
-    <section
-      className={
-        classes.passwordSection
-      }
-    >
-      <div
-        className={
-          classes.wrapperPasswordInput
-        }
-      >
+    <section className={classes.passwordSection}>
+      <div className={classes.wrapperPasswordInput}>
         <Input
           placeholder="Password..."
-          additionalClass={
-            STYLE_FOR_PASSWORD_INPUT
-          }
-          isPasswordVisible={
-            isPasswordVisible
-          }
-          regex={
-            REGEX_FOR_PASSWORD_INPUT
-          }
-          minLength={
-            MIN_PASSWORD_LENGTH
-          }
+          additionalClass={STYLE_FOR_PASSWORD_INPUT}
+          isPasswordVisible={isPasswordVisible}
+          regex={REGEX_FOR_PASSWORD_INPUT}
+          minLength={MIN_PASSWORD_LENGTH}
           handleInput={handleInput}
           type={InputType.PASSWORD}
           value={password}
         />
         <ShowPasswordRadio
           visible={isPasswordVisible}
-          handleVisibility={
-            handleVisibility
-          }
+          handleVisibility={handleVisibility}
         />
       </div>
     </section>

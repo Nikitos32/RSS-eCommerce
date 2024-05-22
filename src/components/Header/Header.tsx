@@ -5,9 +5,7 @@ import classes from './header.module.css';
 
 export const Header = () => {
   return (
-    <div
-      className={classes.headerWrapper}
-    >
+    <div className={classes.headerWrapper}>
       <HeaderLogo />
       <HeaderNavbar />
       <HeaderNavbarWithPngPictures />

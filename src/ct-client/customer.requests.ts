@@ -14,9 +14,7 @@ export class CustomerRequests {
   }
   async createCustomer(
     customerDraft: CustomerDraft
-  ): Promise<
-    ClientResponse<CustomerSignInResult>
-  > {
+  ): Promise<ClientResponse<CustomerSignInResult>> {
     const result = await this.apiRoot
       .customers()
       .post({ body: customerDraft })
@@ -27,9 +25,7 @@ export class CustomerRequests {
 
   async login(
     customerSignin: CustomerSignin
-  ): Promise<
-    ClientResponse<CustomerSignInResult>
-  > {
+  ): Promise<ClientResponse<CustomerSignInResult>> {
     const result = await this.apiRoot
       .login()
       .post({ body: customerSignin })
@@ -41,10 +37,7 @@ export class CustomerRequests {
   async checkCustomerExistsByQuery(queryArgs: {
     where: string;
   }): Promise<ClientResponse> {
-    const result = await this.apiRoot
-      .customers()
-      .head({ queryArgs })
-      .execute();
+    const result = await this.apiRoot.customers().head({ queryArgs }).execute();
     return result;
   }
 }

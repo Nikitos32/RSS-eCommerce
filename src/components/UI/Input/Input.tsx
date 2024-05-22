@@ -6,9 +6,7 @@ import React from 'react';
 interface InputProps {
   type: string;
   value?: string;
-  handleInput: (
-    event: React.ChangeEvent
-  ) => void;
+  handleInput: (event: React.ChangeEvent) => void;
   regex?: string;
   minLength?: number;
   placeholder?: string;
@@ -36,15 +34,10 @@ export const Input = ({
         handleInput(event);
       }}
       value={value}
-      type={
-        isPasswordVisible
-          ? InputType.TEXT
-          : type
-      }
+      type={isPasswordVisible ? InputType.TEXT : type}
       className={classNames(
         classes.input,
-        additionalClass &&
-          classes[additionalClass]
+        additionalClass && classes[additionalClass]
       )}
     />
   );

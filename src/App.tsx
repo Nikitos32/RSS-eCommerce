@@ -10,10 +10,7 @@ import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
 import { SignUpPage } from './components/SignUpPage/SignUpPage';
-import {
-  createContext,
-  useState,
-} from 'react';
+import { createContext, useState } from 'react';
 
 import { ToastContainer } from 'react-toastify';
 import { NotifyType } from './type/enums/NotifyTypes';
@@ -22,37 +19,29 @@ import { toast } from 'react-toastify';
 import { Oval } from 'react-loader-spinner';
 import './App.css';
 
-export const IsLoginedContext =
-  createContext([
-    false,
-    (logined: boolean) => {
-      console.log(logined);
-    },
-  ]);
+export const IsLoginedContext = createContext([
+  false,
+  (logined: boolean) => {
+    console.log(logined);
+  },
+]);
 
-export const IsLoadindContext =
-  createContext([
-    (loading: boolean) => {
-      console.log(loading);
-    },
-  ]);
+export const IsLoadindContext = createContext([
+  (loading: boolean) => {
+    console.log(loading);
+  },
+]);
 
 function App() {
-  const [isLoading, setIsLoading] =
-    useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isLogined, setIsLogined] =
-    useState<boolean>(false);
+  const [isLogined, setIsLogined] = useState<boolean>(false);
 
-  const handleIsLogined = (
-    logined: boolean
-  ) => {
+  const handleIsLogined = (logined: boolean) => {
     setIsLogined(logined);
   };
 
-  const handleLoading = (
-    loading: boolean
-  ) => {
+  const handleLoading = (loading: boolean) => {
     setIsLoading(loading);
   };
 
@@ -61,36 +50,17 @@ function App() {
       <Route
         path="/RSS-eCommerce"
         element={
-          <IsLoginedContext.Provider
-            value={[
-              isLogined,
-              handleIsLogined,
-            ]}
-          >
-            <IsLoadindContext.Provider
-              value={[handleLoading]}
-            >
+          <IsLoginedContext.Provider value={[isLogined, handleIsLogined]}>
+            <IsLoadindContext.Provider value={[handleLoading]}>
               <MainLayout />
             </IsLoadindContext.Provider>
           </IsLoginedContext.Provider>
         }
       >
-        <Route
-          index
-          element={<MainPage />}
-        />
-        <Route
-          path="/RSS-eCommerce/signin"
-          element={<LoginPage />}
-        />
-        <Route
-          path="/RSS-eCommerce/signup"
-          element={<SignUpPage />}
-        />
-        <Route
-          path="*"
-          element={<NotFoundPage />}
-        />
+        <Route index element={<MainPage />} />
+        <Route path="/RSS-eCommerce/signin" element={<LoginPage />} />
+        <Route path="/RSS-eCommerce/signup" element={<SignUpPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
   );
@@ -126,10 +96,7 @@ function App() {
 
 export default App;
 
-export const createNotify = (
-  message?: string,
-  type?: NotifyType
-) => {
+export const createNotify = (message?: string, type?: NotifyType) => {
   switch (type) {
     case NotifyType.INFO: {
       toast.info(message);
@@ -153,20 +120,10 @@ export const createNotify = (
   }
 };
 
-export const notifyError = (
-  message: string
-) => {
-  createNotify(
-    message,
-    NotifyType.ERROR
-  );
+export const notifyError = (message: string) => {
+  createNotify(message, NotifyType.ERROR);
 };
 
-export const notifySuccess = (
-  message: string
-) => {
-  createNotify(
-    message,
-    NotifyType.SUCCESS
-  );
+export const notifySuccess = (message: string) => {
+  createNotify(message, NotifyType.SUCCESS);
 };

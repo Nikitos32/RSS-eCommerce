@@ -6,9 +6,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
 
-type Data =
-  | CustomerSignInResult
-  | ErrorObject[];
+type Data = CustomerSignInResult | ErrorObject[];
 
 /**
  * @interface CTResponse
@@ -44,10 +42,7 @@ export class CTResponseHandler {
   static makeSuccess(
     statusCode: HttpStatusCode,
     message: string,
-    data:
-      | CustomerSignInResult
-      | ErrorObject[]
-      | undefined
+    data: CustomerSignInResult | ErrorObject[] | undefined
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,
@@ -104,24 +99,17 @@ export class CTResponseHandler {
    *
    * @return CTResponse
    */
-  static handleCatch(
-    error: ClientResponse
-  ): CTResponse {
-    const result =
-      error.body as ErrorResponse;
+  static handleCatch(error: ClientResponse): CTResponse {
+    const result = error.body as ErrorResponse;
 
     return CTResponseHandler.makeError(
-      result.statusCode ||
-        error.statusCode ||
-        0,
+      result.statusCode || error.statusCode || 0,
       result.message,
       result.errors
     );
   }
 
-  static handleUnexpectedStatus(
-    statusCode: number | undefined
-  ): CTResponse {
+  static handleUnexpectedStatus(statusCode: number | undefined): CTResponse {
     return CTResponseHandler.makeError(
       statusCode || 0,
       `Status Code ${statusCode} is not expected`,

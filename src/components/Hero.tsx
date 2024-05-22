@@ -13,9 +13,7 @@ function Hero({
           <h1 className="text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
             {title}
           </h1>
-          <p className="my-4 text-xl text-white">
-            {subTitle}
-          </p>
+          <p className="my-4 text-xl text-white">{subTitle}</p>
         </div>
       </div>
     </section>

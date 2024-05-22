@@ -18,43 +18,31 @@ const {
   VITE_CTP_SCOPES = 'no scopes',
 } = import.meta.env;
 
-const authMiddlewareOptions: AuthMiddlewareOptions =
-  {
-    host: VITE_CTP_AUTH_URL,
-    projectKey: VITE_CTP_PROJECT_KEY,
-    credentials: {
-      clientId: VITE_CTP_CLIENT_ID,
-      clientSecret:
-        VITE_CTP_CLIENT_SECRET,
-    },
-    scopes: [VITE_CTP_SCOPES],
-    fetch,
-  };
+const authMiddlewareOptions: AuthMiddlewareOptions = {
+  host: VITE_CTP_AUTH_URL,
+  projectKey: VITE_CTP_PROJECT_KEY,
+  credentials: {
+    clientId: VITE_CTP_CLIENT_ID,
+    clientSecret: VITE_CTP_CLIENT_SECRET,
+  },
+  scopes: [VITE_CTP_SCOPES],
+  fetch,
+};
 
-const httpMiddlewareOptions: HttpMiddlewareOptions =
-  {
-    host: VITE_CTP_API_URL,
-    fetch,
-  };
+const httpMiddlewareOptions: HttpMiddlewareOptions = {
+  host: VITE_CTP_API_URL,
+  fetch,
+};
 
 const ctpClient = new ClientBuilder()
-  .withClientCredentialsFlow(
-    authMiddlewareOptions
-  )
-  .withHttpMiddleware(
-    httpMiddlewareOptions
-  )
+  .withClientCredentialsFlow(authMiddlewareOptions)
+  .withHttpMiddleware(httpMiddlewareOptions)
   .withLoggerMiddleware()
   .build();
 
-const createApiClient = (
-  ctpClient: Client
-): ByProjectKeyRequestBuilder => {
-  return createApiBuilderFromCtpClient(
-    ctpClient
-  ).withProjectKey({
+const createApiClient = (ctpClient: Client): ByProjectKeyRequestBuilder => {
+  return createApiBuilderFromCtpClient(ctpClient).withProjectKey({
     projectKey: VITE_CTP_PROJECT_KEY,
   });
 };
-export const apiRoot =
-  createApiClient(ctpClient);
+export const apiRoot = createApiClient(ctpClient);
