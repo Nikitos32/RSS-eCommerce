@@ -3,13 +3,13 @@ import './productPage.css';
 
 export const ProductPage = () => {
   return (
-    <div className="productPage">
-      <article className="product">
-        <section className="product__component productImg">
+    <article className="productPage">
+      <section className="product">
+        <div className="product__component productImg">
           <img src="" alt="Product" />
           <div></div>
-        </section>
-        <section className="product__component productData">
+        </div>
+        <div className="product__component productData">
           <div className="productData__title">
             <div className="font-bold">Marin White Dinner Plate</div>
             <div className="font-medium">
@@ -24,8 +24,8 @@ export const ProductPage = () => {
             />
           </div>
           <div></div>
-        </section>
-      </article>
-    </div>
+        </div>
+      </section>
+    </article>
   );
 };
