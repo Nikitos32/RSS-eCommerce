@@ -42,6 +42,7 @@ function UserInputString(props: UserInputStringProps) {
         }`}
         id={id}
         type={props.type}
+        value={props.valueUseState}
         autoComplete="off"
         onChange={(e) => props.setValueUseState(e.target.value)}
         required={props.isRequired}
@@ -60,7 +61,7 @@ function UserInputString(props: UserInputStringProps) {
       />
       <div
         id={cluesId}
-        className={`mt-1 flex flex-row rounded-md bg-moonNeutral-200 md:max-w-2xl md:mx-auto justify-start items-center gap-2 text-sm ${
+        className={`mt-1 py-1 flex flex-row rounded-md bg-moonNeutral-200 md:max-w-2xl md:mx-auto justify-start items-center gap-2 text-sm ${
           props.clues &&
           props.isFocusUseState &&
           (!props.valueUseState || !props.isValidValueUseState)
