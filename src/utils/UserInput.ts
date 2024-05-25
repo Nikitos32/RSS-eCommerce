@@ -29,6 +29,8 @@ const stringRules: InputStringRule = {
 const dateRules = {
   minAge: 18,
 };
+
+const clueRequired = 'Required';
 /**
  *
  * @description UserInput validator class
@@ -65,6 +67,10 @@ export class UserInput {
       return clue;
     }
     return ''; // no clue found
+  }
+
+  private static addRequiredClueBefore(clue: string): string {
+    return `${clueRequired} <br /> ${clue}`;
   }
   /**
    *
@@ -174,12 +180,22 @@ export class UserInput {
   }
   /**
    *
+   * @description method return hint for required name validation
+   *
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
+   */
+  static getNameRequiredClue(): string {
+    return UserInput.addRequiredClueBefore(UserInput.getNameClue());
+  }
+  /**
+   *
    * @description method return hint for password validation
    *
    * @return string
    */
   static getPasswordClue(): string {
-    return UserInput.getStringClue('password');
+    return UserInput.addRequiredClueBefore(UserInput.getStringClue('password'));
   }
   /**
    *
@@ -189,7 +205,7 @@ export class UserInput {
    * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getEmailClue(): string {
-    return UserInput.getStringClue('email');
+    return UserInput.addRequiredClueBefore(UserInput.getStringClue('email'));
   }
   /**
    *
@@ -200,5 +216,16 @@ export class UserInput {
    */
   static getBirthdayClue(): string {
     return `Must be ${dateRules.minAge} years old`;
+  }
+
+  /**
+   *
+   * @description method return hint for required birthday validation
+   *
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
+   */
+  static getBirthdayRequiredClue(): string {
+    return UserInput.addRequiredClueBefore(UserInput.getBirthdayClue());
   }
 }
