@@ -1,0 +1,25 @@
+.productPage{
+  @apply font-Inter text-moonBlack;
+  padding: 2rem 2vw;
+}
+.product{
+  display: flex;
+  flex-direction: column;
+}
+.productData__title{
+  @apply text-xl;
+}
+@media (min-width: 768px) {
+  .productPage{
+    padding: 2rem 10vw;
+  }
+  .product{
+    flex-direction: row;
+  }
+  .product__component{
+    width: 50%;
+  }
+  .productData__toCard{
+    width: 100%;
+  }
+}
