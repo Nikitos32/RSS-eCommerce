@@ -75,7 +75,10 @@ export class UserInput {
    * @return { true | false }  boolean
    */
   static checkNameValid(input: string): boolean {
-    return this.checkStringEmpty(input) || this.checkStringValid('name', input);
+    return (
+      UserInput.checkStringEmpty(input) ||
+      UserInput.checkStringValid('name', input)
+    );
   }
 
   /**
@@ -88,7 +91,8 @@ export class UserInput {
    */
   static checkNameRequiredValid(input: string): boolean {
     return (
-      !this.checkStringEmpty(input) && this.checkStringValid('name', input)
+      !UserInput.checkStringEmpty(input) &&
+      UserInput.checkStringValid('name', input)
     );
   }
   /**
@@ -101,7 +105,8 @@ export class UserInput {
    */
   static checkPasswordRequiredValid(input: string): boolean {
     return (
-      !this.checkStringEmpty(input) && this.checkStringValid('password', input)
+      !UserInput.checkStringEmpty(input) &&
+      UserInput.checkStringValid('password', input)
     );
   }
   /**
@@ -114,7 +119,8 @@ export class UserInput {
    */
   static checkEmailRequiredValid(input: string): boolean {
     return (
-      !this.checkStringEmpty(input) && this.checkStringValid('email', input)
+      !UserInput.checkStringEmpty(input) &&
+      UserInput.checkStringValid('email', input)
     );
   }
   /**
@@ -126,10 +132,35 @@ export class UserInput {
    * @return { true | false }  boolean
    */
   static checkBirthdayValid(input: string): boolean {
+    if (!input) {
+      return true;
+    }
+
     const birthDate = new Date(input);
     const currentDate = new Date();
-    const age = currentDate.getFullYear() - birthDate.getFullYear();
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const birthDateThisYear = new Date(
+      currentDate.getFullYear(),
+      birthDate.getMonth(),
+      birthDate.getDate()
+    );
+    if (birthDateThisYear > currentDate) {
+      age -= 1;
+    }
     return age >= dateRules.minAge;
+  }
+  /**
+   *
+   * @description required birthday validation method
+   *
+   * @param input  string
+   *
+   * @return { true | false }  boolean
+   */
+  static checkBirthdayRequiredValid(input: string): boolean {
+    return (
+      !UserInput.checkStringEmpty(input) && UserInput.checkBirthdayValid(input)
+    );
   }
   /**
    *
@@ -139,7 +170,7 @@ export class UserInput {
    * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getNameClue(): string {
-    return this.getStringClue('name');
+    return UserInput.getStringClue('name');
   }
   /**
    *
@@ -148,7 +179,7 @@ export class UserInput {
    * @return string
    */
   static getPasswordClue(): string {
-    return this.getStringClue('password');
+    return UserInput.getStringClue('password');
   }
   /**
    *
@@ -158,7 +189,7 @@ export class UserInput {
    * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getEmailClue(): string {
-    return this.getStringClue('email');
+    return UserInput.getStringClue('email');
   }
   /**
    *

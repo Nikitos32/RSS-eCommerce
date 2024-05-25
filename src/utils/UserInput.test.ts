@@ -38,4 +38,20 @@ describe('UserInput', () => {
     assert.equal(UserInput.checkEmailRequiredValid('test@example.com'), true);
     assert.equal(UserInput.checkEmailRequiredValid('te.st@example.co'), true);
   });
+
+  it('should return true for valid birthday', () => {
+    assert.equal(UserInput.checkBirthdayValid(''), true);
+    assert.equal(UserInput.checkBirthdayValid('1991-03-30'), true);
+  });
+
+  it('should return false for invalid birthday', () => {
+    assert.equal(UserInput.checkBirthdayValid('2009-03-30'), false);
+    assert.equal(UserInput.checkBirthdayValid('wrong'), false);
+  });
+
+  it('should return false for invalid required birthday', () => {
+    assert.equal(UserInput.checkBirthdayRequiredValid(''), false);
+    assert.equal(UserInput.checkBirthdayRequiredValid('2009-03-30'), false);
+    assert.equal(UserInput.checkBirthdayRequiredValid('wrong'), false);
+  });
 });
