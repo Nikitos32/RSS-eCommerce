@@ -135,7 +135,8 @@ export class UserInput {
    *
    * @description method return hint for name validation
    *
-   * @return string
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getNameClue(): string {
     return this.getStringClue('name');
@@ -153,7 +154,8 @@ export class UserInput {
    *
    * @description method return hint for email validation
    *
-   * @return string
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getEmailClue(): string {
     return this.getStringClue('email');
@@ -162,7 +164,8 @@ export class UserInput {
    *
    * @description method return hint for birthday validation
    *
-   * @return string
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getBirthdayClue(): string {
     return `Must be ${dateRules.minAge} years old`;
