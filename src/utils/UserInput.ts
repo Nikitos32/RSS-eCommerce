@@ -1,4 +1,15 @@
-type UserInputType = 'name' | 'email' | 'password' | 'date' | 'general';
+import {
+  CountryCode,
+  postcodeValidator,
+  postcodeValidatorExistsForCountry,
+} from 'postcode-validator';
+type UserInputType =
+  | 'name'
+  | 'email'
+  | 'password'
+  | 'date'
+  | 'general'
+  | 'postcode';
 
 type InputStringRule = {
   [key in UserInputType]?: { regex: RegExp; clue: string };
@@ -23,6 +34,10 @@ const stringRules: InputStringRule = {
       <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span>
       <span aria-label="dollar sign">$</span>
       <span aria-label="percent">%</span>`,
+  },
+  postcode: {
+    regex: /$/,
+    clue: 'Must be a valid postal code',
   },
 };
 
@@ -168,6 +183,38 @@ export class UserInput {
       !UserInput.checkStringEmpty(input) && UserInput.checkBirthdayValid(input)
     );
   }
+
+  /**
+   *
+   * @description postcode validation method
+   *  @param countryCode string
+   * @param input  string
+   *
+   * @return { true | false }  boolean
+   */
+  static checkPostcodeValid(countryCode: string, input: string): boolean {
+    if (!input) return true;
+    if (!postcodeValidatorExistsForCountry(countryCode as CountryCode))
+      return true; // we can't check let's believe
+    return postcodeValidator(input, countryCode as CountryCode);
+  }
+  /**
+   *
+   * @description required postcode validation method
+   *  @param countryCode string
+   * @param input  string
+   *
+   * @return { true | false }  boolean
+   */
+  static checkPostcodeRequiredValid(
+    countryCode: string,
+    input: string
+  ): boolean {
+    return (
+      !UserInput.checkStringEmpty(input) &&
+      UserInput.checkPostcodeValid(countryCode, input)
+    );
+  }
   /**
    *
    * @description method return hint for name validation
@@ -192,7 +239,8 @@ export class UserInput {
    *
    * @description method return hint for password validation
    *
-   * @return string
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getPasswordClue(): string {
     return UserInput.addRequiredClueBefore(UserInput.getStringClue('password'));
@@ -227,5 +275,30 @@ export class UserInput {
    */
   static getBirthdayRequiredClue(): string {
     return UserInput.addRequiredClueBefore(UserInput.getBirthdayClue());
+  }
+
+  /**
+   *
+   * @description method return hint for postcode validation
+   *
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
+   */
+  static getPostcodeClue(countryCode?: CountryCode): string {
+    const countryPart = countryCode ? `for ${countryCode}` : '';
+    return `${UserInput.getStringClue('postcode')}${countryPart}.`;
+  }
+
+  /**
+   *
+   * @description method return hint for required postcode validation
+   *
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
+   */
+  static getPostcodeRequiredClue(countryCode?: CountryCode): string {
+    return UserInput.addRequiredClueBefore(
+      UserInput.getPostcodeClue(countryCode)
+    );
   }
 }

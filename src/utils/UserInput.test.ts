@@ -54,4 +54,29 @@ describe('UserInput', () => {
     assert.equal(UserInput.checkBirthdayRequiredValid('2009-03-30'), false);
     assert.equal(UserInput.checkBirthdayRequiredValid('wrong'), false);
   });
+
+  it('should return true for valid postcode', () => {
+    assert.equal(UserInput.checkPostcodeValid('GB', ''), true);
+    assert.equal(UserInput.checkPostcodeValid('', 'W85TT'), true);
+    assert.equal(
+      UserInput.checkPostcodeValid('unknown country', 'W85TT'),
+      true
+    );
+    assert.equal(UserInput.checkPostcodeValid('GB', 'W85TT'), true);
+    assert.equal(UserInput.checkPostcodeValid('GB', 'w85tT'), true);
+    assert.equal(UserInput.checkPostcodeValid('DE', '22769'), true);
+  });
+
+  it('should return false for invalid postcode', () => {
+    assert.equal(UserInput.checkPostcodeValid('GB', 'W85TT1'), false);
+    22769;
+    assert.equal(UserInput.checkPostcodeValid('DE', '227D69'), false);
+  });
+
+  it('should return false for invalid required postcode', () => {
+    assert.equal(UserInput.checkPostcodeRequiredValid('GB', ''), false);
+    assert.equal(UserInput.checkPostcodeRequiredValid('GB', 'W85TT1'), false);
+    22769;
+    assert.equal(UserInput.checkPostcodeRequiredValid('DE', '227D69'), false);
+  });
 });
