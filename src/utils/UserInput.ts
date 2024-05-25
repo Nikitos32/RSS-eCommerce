@@ -5,9 +5,9 @@ type InputStringRule = {
 };
 
 const stringRules: InputStringRule = {
-  name: { regex: /^[a-zA-Z]+[a-zA-Z]+$/, clue: 'Only letters' },
+  name: { regex: /[a-zA-Z]+$/, clue: 'Latin letters only' },
   email: {
-    regex: /^([a-zA-Z0-9_\s.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/,
+    regex: /^([a-zA-Z0-9_\s.-])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     clue: 'Valid email address',
   },
   password: {
