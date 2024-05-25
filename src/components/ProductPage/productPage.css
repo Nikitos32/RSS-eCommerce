@@ -7,25 +7,12 @@
   flex-direction: column;
   gap: 40px;
 }
-.productData__title{
+.product__title{
   @apply text-xl;
 }
 
-.productImg_main-slide{
-  display: flex;
-  justify-content: center;
-  height: 511px;
-  margin-bottom: 32px
-}
-.product__main-swiper{
-  height: 100px;
-}
-.product__main-swiper img{
-  height: inherit;
-}
-
 @media (min-width: 768px) {
-  .productPage{
+  .productPage{ 
     padding: 2rem 10vw;
   }
   .product{
