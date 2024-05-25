@@ -17,7 +17,6 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
   return (
     <>
       <Swiper
-        loop={true}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[FreeMode, Thumbs]}
         centeredSlides={true}
@@ -37,11 +36,13 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
         modules={[FreeMode, Thumbs]}
         className="productImg__footer-swiper"
       >
-        {images.map((img, index) => (
-          <SwiperSlide className="productImg__slide" key={index}>
-            <img src={img} />
-          </SwiperSlide>
-        ))}
+        {images.length > 1
+          ? images.map((img, index) => (
+              <SwiperSlide className="productImg__slide" key={index}>
+                <img src={img} />
+              </SwiperSlide>
+            ))
+          : ''}
       </Swiper>
     </>
   );
