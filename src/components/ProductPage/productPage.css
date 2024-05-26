@@ -5,16 +5,19 @@
 .product{
   display: flex;
   flex-direction: column;
+  gap: 40px;
 }
-.productData__title{
+.product__title{
   @apply text-xl;
 }
+
 @media (min-width: 768px) {
-  .productPage{
+  .productPage{ 
     padding: 2rem 10vw;
   }
   .product{
     flex-direction: row;
+    gap: 50px;
   }
   .product__component{
     width: 50%;

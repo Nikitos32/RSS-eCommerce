@@ -1,0 +1,15 @@
+.productImg__slide{
+  display: flex;
+  justify-content: center;
+  height: inherit;
+}
+.productImg__main-swiper{
+  height: 511px;
+  margin-bottom: 32px
+}
+.productImg__footer-swiper{
+  height: 100px;
+}
+.productImg__footer-swiper img{
+  cursor: pointer;
+}
