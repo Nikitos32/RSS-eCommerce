@@ -6,7 +6,6 @@ type UserInputStringProps = {
   type: 'text' | 'password';
   label?: string;
   placeHolder?: string;
-  isRequired?: boolean;
   autocomplete: 'on' | 'off';
   valueUseState: string;
   setValueUseState: Dispatch<SetStateAction<string>>;
@@ -22,7 +21,7 @@ type UserInputStringProps = {
  * @param props
  * @returns
  */
-function UserInputString(props: UserInputStringProps) {
+function UserInputString(props: UserInputStringProps): JSX.Element {
   const id = makeIdFromLabel(props.label || 'no label');
   const cluesId = `clues-${id}`;
 
@@ -45,7 +44,6 @@ function UserInputString(props: UserInputStringProps) {
         value={props.valueUseState}
         autoComplete="off"
         onChange={(e) => props.setValueUseState(e.target.value)}
-        required={props.isRequired}
         placeholder={props.placeHolder}
         aria-invalid={props.isValidValueUseState ? 'false' : 'true'}
         aria-describedby={cluesId}
