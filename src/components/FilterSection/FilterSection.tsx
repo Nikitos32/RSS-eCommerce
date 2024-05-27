@@ -4,7 +4,7 @@ import { FilterPrice } from '../FilterPrice/FilterPrice';
 
 export const FilterSection = () => {
   return (
-    <section className="w-200">
+    <section>
       <FilterCategory />
       <FilterColor />
       <FilterPrice />
