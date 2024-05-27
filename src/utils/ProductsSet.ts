@@ -250,3 +250,172 @@ export const ProductsSet: ProductData[] = [
     searchKeywords: {},
   },
 ];
+
+[
+  {
+    // https://akshome.by/catalog/stol-dolce-new-d-120-750-belyy-dub-natural-nyy/
+    name: {
+      'en-US': 'Table DOLCE NEW',
+    },
+    description: {
+      'en-US':
+        'An original table in a modern style will be a great addition to the kitchen or dining area. The round table top is made of MDF, painted white. Legs made of metal painted in the color of wood',
+    },
+    categories: [
+      {
+        typeId: 'category',
+        id: 'ot-baldy-6',
+      },
+      {
+        typeId: 'category',
+        id: 'ot-baldy-79606',
+      },
+    ],
+    slug: {
+      'en-US': 'table',
+    },
+    categoryOrderHints: {},
+    masterVariant: {
+      id: 1,
+      sku: 'BC',
+      prices: [
+        {
+          id: 'ot-baldy-b14284vl4n8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'EUR',
+            centAmount: 19365,
+            fractionDigits: 2,
+          },
+          country: 'DE',
+        },
+        {
+          id: 'ot-baldy-4x3t4df8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'USD',
+            centAmount: 20979,
+            fractionDigits: 2,
+          },
+          country: 'US',
+        },
+      ],
+      images: [
+        {
+          url: '/public/photos/table1.1.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table1.2.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/bc-3.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+      ],
+      attributes: [
+        {
+          name: 'productspec',
+          value: {
+            'en-US': '- Includes 1 table',
+          },
+        },
+      ],
+    },
+    variants: [],
+    searchKeywords: {},
+  },
+  {
+    // https://akshome.by/catalog/stol-korsika-fotopechat-1200-1515-800-mramor-chernyy-9-chernyy-matovyy/
+    name: {
+      'en-US': 'Table DOLCE NEW',
+    },
+    description: {
+      'en-US':
+        'An original table in a modern style will be a great addition to the kitchen or dining area. The round table top is made of MDF, painted white. Legs made of metal painted in the color of wood',
+    },
+    categories: [
+      {
+        typeId: 'category',
+        id: 'ot-baldy-6',
+      },
+      {
+        typeId: 'category',
+        id: 'ot-baldy-79606',
+      },
+    ],
+    slug: {
+      'en-US': 'table',
+    },
+    categoryOrderHints: {},
+    masterVariant: {
+      id: 1,
+      sku: 'BC',
+      prices: [
+        {
+          id: 'ot-baldy-b14284vl4n8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'EUR',
+            centAmount: 19365,
+            fractionDigits: 2,
+          },
+          country: 'DE',
+        },
+        {
+          id: 'ot-baldy-4x3t4df8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'USD',
+            centAmount: 20979,
+            fractionDigits: 2,
+          },
+          country: 'US',
+        },
+      ],
+      images: [
+        {
+          url: '/public/photos/table1.1.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table1.2.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/bc-3.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+      ],
+      attributes: [
+        {
+          name: 'productspec',
+          value: {
+            'en-US': '- Includes 1 table',
+          },
+        },
+      ],
+    },
+    variants: [],
+    searchKeywords: {},
+  },
+];
