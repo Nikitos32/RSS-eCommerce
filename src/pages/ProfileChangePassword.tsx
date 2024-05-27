@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import UserInputString from '../components/UserInputString';
 import { UserInput } from '../utils';
+import { useNavigate } from 'react-router-dom';
 function ChangePassword() {
+  const navigate = useNavigate();
+
   const pwdCurrentRef = useRef<HTMLInputElement>(null);
 
   const [pwdCurrent, setPwdCurrent] = useState('');
@@ -46,6 +49,10 @@ function ChangePassword() {
     <p dangerouslySetInnerHTML={{ __html: UserInput.getPasswordClue() }} />
   );
 
+  const handleReset = async (e: FormEvent) => {
+    e.preventDefault();
+    navigate(-1);
+  };
   return (
     <section className="bg-moonNeutral-300 dark:bg-moonNeutral-700">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -53,7 +60,10 @@ function ChangePassword() {
           <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-moonBlack md:text-2xl dark:text-moonNeutral-100">
             Change Password
           </h2>
-          <form className="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="">
+          <form
+            className="mt-4 space-y-4 lg:mt-5 md:space-y-5"
+            onReset={handleReset}
+          >
             <div className="mb-10">
               <UserInputString
                 type="password"
