@@ -1,7 +1,9 @@
+import { FilterSection } from '../FilterSection/FilterSection';
+
 export const CatalogPage = () => {
   return (
     <div>
-      <p>Hello</p>
+      <FilterSection />
     </div>
   );
 };
