@@ -1,9 +1,17 @@
-export const CategoryCheckbox = (category: string, amountItems: number) => {
+interface CategoryCheckboxProps {
+  category: string;
+  amountItems: number;
+}
+
+export const CategoryCheckbox = ({
+  category,
+  amountItems,
+}: CategoryCheckboxProps) => {
   return (
-    <>
-      <label htmlFor={category}>{category}</label>
+    <div className="flex">
       <input type="checkbox" id={category} />
+      <label htmlFor={category}>{category}</label>
       <p>{amountItems}</p>
-    </>
+    </div>
   );
 };
