@@ -418,4 +418,87 @@ export const ProductsSet: ProductData[] = [
     variants: [],
     searchKeywords: {},
   },
+  {
+    // https://akshome.by/catalog/stol-razdvizhnoy-promo-tip-3-900-1698-670-dub-sonoma-svetlyy-belyy/
+    name: {
+      'en-US': 'Sliding table PROMO Type 3',
+    },
+    description: {
+      'en-US':
+        'The table top and legs are made of chipboard - chipboard with laminated coating. Due to the polymer film, the material is more resistant to mechanical damage and temperature changes.',
+    },
+    categories: [
+      {
+        typeId: 'category',
+        id: 'ot-baldy-8',
+      },
+      {
+        typeId: 'category',
+        id: 'ot-baldy-34816',
+      },
+    ],
+    slug: {
+      'en-US': 'Sliding-table',
+    },
+    categoryOrderHints: {},
+    masterVariant: {
+      id: 1,
+      sku: 'BC',
+      prices: [
+        {
+          id: 'ot-baldy-b48560vl4n8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'EUR',
+            centAmount: 5728,
+            fractionDigits: 2,
+          },
+          country: 'DE',
+        },
+        {
+          id: 'ot-baldy-3i9t4gb6',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'USD',
+            centAmount: 6206,
+            fractionDigits: 2,
+          },
+          country: 'US',
+        },
+      ],
+      images: [
+        {
+          url: '/public/photos/table3-1.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table3-2.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table3-3.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+      ],
+      attributes: [
+        {
+          name: 'productspec',
+          value: {
+            'en-US': "- Includes 1 'Sliding-table'",
+          },
+        },
+      ],
+    },
+    variants: [],
+    searchKeywords: {},
+  },
 ];
