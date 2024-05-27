@@ -1,3 +1,8 @@
 export const FilterCategory = () => {
-  return <>category</>;
+  return (
+    <div>
+      <p>Category:</p>
+      <button></button>
+    </div>
+  );
 };
