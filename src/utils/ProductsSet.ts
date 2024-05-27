@@ -338,24 +338,24 @@ export const ProductsSet: ProductData[] = [
   {
     // https://akshome.by/catalog/stol-korsika-fotopechat-1200-1515-800-mramor-chernyy-9-chernyy-matovyy/
     name: {
-      'en-US': 'Table DOLCE NEW',
+      'en-US': 'CORSICA Table',
     },
     description: {
       'en-US':
-        'An original table in a modern style will be a great addition to the kitchen or dining area. The round table top is made of MDF, painted white. Legs made of metal painted in the color of wood',
+        'Corsica kitchen table with photo printing is suitable for any interior. A distinctive feature of this table is a single support made of MDF in the color of the base. Sliding table, butterfly layout mechanism',
     },
     categories: [
       {
         typeId: 'category',
-        id: 'ot-baldy-6',
+        id: 'ot-baldy-7',
       },
       {
         typeId: 'category',
-        id: 'ot-baldy-79606',
+        id: 'ot-baldy-87080',
       },
     ],
     slug: {
-      'en-US': 'table',
+      'en-US': 'table-butterfly',
     },
     categoryOrderHints: {},
     masterVariant: {
@@ -363,21 +363,21 @@ export const ProductsSet: ProductData[] = [
       sku: 'BC',
       prices: [
         {
-          id: 'ot-baldy-b14284vl4n8',
+          id: 'ot-baldy-b62912vl4n8',
           value: {
             type: 'centPrecision',
             currencyCode: 'EUR',
-            centAmount: 19365,
+            centAmount: 16797,
             fractionDigits: 2,
           },
           country: 'DE',
         },
         {
-          id: 'ot-baldy-4x3t4df8',
+          id: 'ot-baldy-5g1t4df8',
           value: {
             type: 'centPrecision',
             currencyCode: 'USD',
-            centAmount: 20979,
+            centAmount: 18197,
             fractionDigits: 2,
           },
           country: 'US',
@@ -410,7 +410,7 @@ export const ProductsSet: ProductData[] = [
         {
           name: 'productspec',
           value: {
-            'en-US': '- Includes 1 table',
+            'en-US': "- Includes 1 'butterfly-table'",
           },
         },
       ],
