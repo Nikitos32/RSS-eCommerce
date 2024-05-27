@@ -302,21 +302,21 @@ export const ProductsSet: ProductData[] = [
       ],
       images: [
         {
-          url: '/public/photos/table1.1.webp',
+          url: '/public/photos/table1-1.webp',
           dimensions: {
             w: 1200,
             h: 1200,
           },
         },
         {
-          url: '/public/photos/table1.2.webp',
+          url: '/public/photos/table1-2.webp',
           dimensions: {
             w: 1200,
             h: 1200,
           },
         },
         {
-          url: '/public/photos/bc-3.webp',
+          url: '/public/photos/table1-3.webp',
           dimensions: {
             w: 1200,
             h: 1200,
@@ -385,21 +385,21 @@ export const ProductsSet: ProductData[] = [
       ],
       images: [
         {
-          url: '/public/photos/table1.1.webp',
+          url: '/public/photos/table2-1.webp',
           dimensions: {
             w: 1200,
             h: 1200,
           },
         },
         {
-          url: '/public/photos/table1.2.webp',
+          url: '/public/photos/table2-2.webp',
           dimensions: {
             w: 1200,
             h: 1200,
           },
         },
         {
-          url: '/public/photos/bc-3.webp',
+          url: '/public/photos/table2-3.webp',
           dimensions: {
             w: 1200,
             h: 1200,
