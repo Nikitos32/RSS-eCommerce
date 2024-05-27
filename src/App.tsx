@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { Oval } from 'react-loader-spinner';
 import './App.css';
+import { CatalogPage } from './components/CatalogPage/CatalogPage';
 
 export const IsLoginedContext = createContext([
   false,
@@ -58,6 +59,7 @@ function App() {
         }
       >
         <Route index element={<MainPage />} />
+        <Route path="/RSS-eCommerce/catalog" element={<CatalogPage />} />
         <Route path="/RSS-eCommerce/signin" element={<LoginPage />} />
         <Route path="/RSS-eCommerce/signup" element={<SignUpPage />} />
         <Route path="*" element={<NotFoundPage />} />
