@@ -13,7 +13,7 @@ export const FilterPrice = () => {
   };
 
   return (
-    <div className="flex flex-col gap-3 border-b-2 w-60 pb-9">
+    <div className="flex flex-col gap-3 border-b-2 pb-9 pl-5">
       <p>Price:</p>
       <p>
         Current Range: ${currentRangeValue[0]} - ${currentRangeValue[1]}
