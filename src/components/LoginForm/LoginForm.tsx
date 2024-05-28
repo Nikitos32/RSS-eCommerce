@@ -8,7 +8,6 @@ import {
   InputType,
 } from '../../constants';
 import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
-import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 import { Navigate } from 'react-router-dom';
 import {
@@ -17,6 +16,7 @@ import {
   notifyError,
   notifySuccess,
 } from '../../App';
+import { useApiSignIn } from '../../hooks/useApiSignIn';
 
 export const LoginForm = () => {
   const [handleLoading] = useContext(IsLoadindContext);
@@ -26,6 +26,8 @@ export const LoginForm = () => {
   const [emailInputValue, setEmailInputValue] = useState<string>('');
 
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
+
+  const { signIn } = useApiSignIn(emailInputValue, passwordInputValue);
 
   const handleValue = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
@@ -50,15 +52,16 @@ export const LoginForm = () => {
   };
 
   async function LogIn() {
-    const customerService = new CustomerService();
+    //const customerService = new CustomerService();
 
     handleLoading(true);
 
-    const response: CTResponse = await customerService.signIn(
-      emailInputValue,
-      passwordInputValue
-    );
+    // const response: CTResponse = await customerService.signIn(
+    //   emailInputValue,
+    //   passwordInputValue
+    // );
     //'nikita2024@tut.by', 'Nikita2024@'
+    const response: CTResponse = await signIn();
     if (response.ok) {
       handleLoading(false);
       notifySuccess('Success Authorization!');
