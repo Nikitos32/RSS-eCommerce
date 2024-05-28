@@ -87,6 +87,19 @@ export class UserInput {
   private static addRequiredClueBefore(clue: string): string {
     return `${clueRequired} <br /> ${clue}`;
   }
+
+  /**
+   *
+   * @description input not empty validation method
+   *
+   * @param input  string
+   *
+   * @return { true | false }  boolean
+   */
+  static checkInputEmpty(input: string): boolean {
+    return UserInput.checkStringEmpty(input);
+  }
+
   /**
    *
    * @description name validation method
@@ -300,5 +313,16 @@ export class UserInput {
     return UserInput.addRequiredClueBefore(
       UserInput.getPostcodeClue(countryCode)
     );
+  }
+
+  /**
+   *
+   * @description method return hint for required input
+   *
+   * @return string to be parsed into a JSX.ELement
+   * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
+   */
+  static getRequiredClue(): string {
+    return UserInput.addRequiredClueBefore('');
   }
 }

@@ -1,6 +1,7 @@
 import {
   ByProjectKeyRequestBuilder,
   ClientResponse,
+  CustomerChangePassword,
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
@@ -38,6 +39,15 @@ export class CustomerRequests {
     where: string;
   }): Promise<ClientResponse> {
     const result = await this.apiRoot.customers().head({ queryArgs }).execute();
+    return result;
+  }
+
+  async changePassword(customerChangePassword: CustomerChangePassword) {
+    const result = await this.apiRoot
+      .customers()
+      .password()
+      .post({ body: customerChangePassword })
+      .execute();
     return result;
   }
 }
