@@ -2,7 +2,7 @@ import { ColorBox } from '../ColorBox/ColorBox';
 
 export const FilterColor = () => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 border-b-2 w-60 pb-3">
       <p>Color:</p>
       <div className="flex gap-1">
         <ColorBox color="bg-red-600" />

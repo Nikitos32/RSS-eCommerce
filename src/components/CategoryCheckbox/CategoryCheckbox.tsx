@@ -8,7 +8,7 @@ export const CategoryCheckbox = ({
   amountItems,
 }: CategoryCheckboxProps) => {
   return (
-    <div className="flex w-40 justify-between">
+    <div className="flex w-60 justify-between">
       <div>
         <input type="checkbox" id={category} />
         <label htmlFor={category}>{category}</label>
