@@ -250,3 +250,255 @@ export const ProductsSet: ProductData[] = [
     searchKeywords: {},
   },
 ];
+
+[
+  {
+    // https://akshome.by/catalog/stol-dolce-new-d-120-750-belyy-dub-natural-nyy/
+    name: {
+      'en-US': 'Table DOLCE NEW',
+    },
+    description: {
+      'en-US':
+        'An original table in a modern style will be a great addition to the kitchen or dining area. The round table top is made of MDF, painted white. Legs made of metal painted in the color of wood',
+    },
+    categories: [
+      {
+        typeId: 'category',
+        id: 'ot-baldy-6',
+      },
+      {
+        typeId: 'category',
+        id: 'ot-baldy-79606',
+      },
+    ],
+    slug: {
+      'en-US': 'table',
+    },
+    categoryOrderHints: {},
+    masterVariant: {
+      id: 1,
+      sku: 'BC',
+      prices: [
+        {
+          id: 'ot-baldy-b14284vl4n8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'EUR',
+            centAmount: 19365,
+            fractionDigits: 2,
+          },
+          country: 'DE',
+        },
+        {
+          id: 'ot-baldy-4x3t4df8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'USD',
+            centAmount: 20979,
+            fractionDigits: 2,
+          },
+          country: 'US',
+        },
+      ],
+      images: [
+        {
+          url: '/public/photos/table1-1.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table1-2.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table1-3.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+      ],
+      attributes: [
+        {
+          name: 'productspec',
+          value: {
+            'en-US': '- Includes 1 table',
+          },
+        },
+      ],
+    },
+    variants: [],
+    searchKeywords: {},
+  },
+  {
+    // https://akshome.by/catalog/stol-korsika-fotopechat-1200-1515-800-mramor-chernyy-9-chernyy-matovyy/
+    name: {
+      'en-US': 'CORSICA Table',
+    },
+    description: {
+      'en-US':
+        'Corsica kitchen table with photo printing is suitable for any interior. A distinctive feature of this table is a single support made of MDF in the color of the base. Sliding table, butterfly layout mechanism',
+    },
+    categories: [
+      {
+        typeId: 'category',
+        id: 'ot-baldy-7',
+      },
+      {
+        typeId: 'category',
+        id: 'ot-baldy-87080',
+      },
+    ],
+    slug: {
+      'en-US': 'table-butterfly',
+    },
+    categoryOrderHints: {},
+    masterVariant: {
+      id: 1,
+      sku: 'BC',
+      prices: [
+        {
+          id: 'ot-baldy-b62912vl4n8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'EUR',
+            centAmount: 16797,
+            fractionDigits: 2,
+          },
+          country: 'DE',
+        },
+        {
+          id: 'ot-baldy-5g1t4df8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'USD',
+            centAmount: 18197,
+            fractionDigits: 2,
+          },
+          country: 'US',
+        },
+      ],
+      images: [
+        {
+          url: '/public/photos/table2-1.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table2-2.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table2-3.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+      ],
+      attributes: [
+        {
+          name: 'productspec',
+          value: {
+            'en-US': "- Includes 1 'butterfly-table'",
+          },
+        },
+      ],
+    },
+    variants: [],
+    searchKeywords: {},
+  },
+  {
+    // https://akshome.by/catalog/stol-razdvizhnoy-promo-tip-3-900-1698-670-dub-sonoma-svetlyy-belyy/
+    name: {
+      'en-US': 'Sliding table PROMO Type 3',
+    },
+    description: {
+      'en-US':
+        'The table top and legs are made of chipboard - chipboard with laminated coating. Due to the polymer film, the material is more resistant to mechanical damage and temperature changes.',
+    },
+    categories: [
+      {
+        typeId: 'category',
+        id: 'ot-baldy-8',
+      },
+      {
+        typeId: 'category',
+        id: 'ot-baldy-34816',
+      },
+    ],
+    slug: {
+      'en-US': 'Sliding-table',
+    },
+    categoryOrderHints: {},
+    masterVariant: {
+      id: 1,
+      sku: 'BC',
+      prices: [
+        {
+          id: 'ot-baldy-b48560vl4n8',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'EUR',
+            centAmount: 5728,
+            fractionDigits: 2,
+          },
+          country: 'DE',
+        },
+        {
+          id: 'ot-baldy-3i9t4gb6',
+          value: {
+            type: 'centPrecision',
+            currencyCode: 'USD',
+            centAmount: 6206,
+            fractionDigits: 2,
+          },
+          country: 'US',
+        },
+      ],
+      images: [
+        {
+          url: '/public/photos/table3-1.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table3-2.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+        {
+          url: '/public/photos/table3-3.webp',
+          dimensions: {
+            w: 1200,
+            h: 1200,
+          },
+        },
+      ],
+      attributes: [
+        {
+          name: 'productspec',
+          value: {
+            'en-US': "- Includes 1 'Sliding-table'",
+          },
+        },
+      ],
+    },
+    variants: [],
+    searchKeywords: {},
+  },
+];
