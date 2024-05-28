@@ -2,7 +2,7 @@ import { CategoryCheckbox } from '../CategoryCheckbox/CategoryCheckbox';
 
 export const FilterCategory = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <p>Category:</p>
       <CategoryCheckbox category="Tables" amountItems={3} />
       <CategoryCheckbox category="Chairs" amountItems={3} />

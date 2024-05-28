@@ -4,7 +4,7 @@ import { FilterPrice } from '../FilterPrice/FilterPrice';
 
 export const FilterSection = () => {
   return (
-    <section>
+    <section className="flex flex-col p-6 gap-5">
       <FilterCategory />
       <FilterColor />
       <FilterPrice />
