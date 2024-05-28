@@ -7,19 +7,19 @@ type UserInputStringProps = {
   label?: string;
   placeHolder?: string;
   autocomplete: 'on' | 'off';
-  valueUseState: string;
+  value: string;
+  isValidValue: boolean;
+  isCluesVisible: boolean;
   setValueUseState: Dispatch<SetStateAction<string>>;
-  isValidValueUseState: boolean;
-  isFocusUseState: boolean;
   setFocusUseState: Dispatch<SetStateAction<boolean>>;
-  elementUseRef?: React.RefObject<HTMLInputElement>;
   clues?: JSX.Element;
+  elementUseRef?: React.RefObject<HTMLInputElement>;
 };
 
 /**
  * @description standard input component for user string fields
  * @param props
- * @returns
+ * @returns JSX.Element
  */
 function UserInputString(props: UserInputStringProps): JSX.Element {
   const id = makeIdFromLabel(props.label || 'no label');
@@ -35,17 +35,15 @@ function UserInputString(props: UserInputStringProps): JSX.Element {
       </label>
       <input
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          !props.valueUseState || props.isValidValueUseState
-            ? ''
-            : ' border-red-500'
+          props.isValidValue ? '' : ' border-red-500'
         }`}
         id={id}
         type={props.type}
-        value={props.valueUseState}
+        value={props.value}
         autoComplete="off"
         onChange={(e) => props.setValueUseState(e.target.value)}
         placeholder={props.placeHolder}
-        aria-invalid={props.isValidValueUseState ? 'false' : 'true'}
+        aria-invalid={props.isValidValue ? 'false' : 'true'}
         aria-describedby={cluesId}
         onFocus={
           props.setFocusUseState ? () => props.setFocusUseState(true) : () => {}
@@ -60,11 +58,7 @@ function UserInputString(props: UserInputStringProps): JSX.Element {
       <div
         id={cluesId}
         className={`mt-1 py-1 flex flex-row rounded-md bg-moonNeutral-200 md:max-w-2xl md:mx-auto justify-start items-center gap-2 text-sm ${
-          props.clues &&
-          props.isFocusUseState &&
-          (!props.valueUseState || !props.isValidValueUseState)
-            ? ' '
-            : ' hidden'
+          props.isCluesVisible ? ' ' : ' hidden'
         }`}
       >
         <BsInfoCircle className="ml-2 text-xl" />
