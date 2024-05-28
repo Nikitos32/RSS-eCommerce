@@ -1,6 +1,8 @@
 import {
   BaseAddress,
   ClientResponse,
+  Customer,
+  CustomerChangePassword,
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
@@ -74,6 +76,27 @@ export class CustomerService {
     }
   }
 
+  async changePassword(
+    customerChangePassword: CustomerChangePassword
+  ): Promise<CTResponse> {
+    try {
+      const answer = await this.customerRequests.changePassword(
+        customerChangePassword
+      );
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body as Customer
+        );
+      } else {
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
   private async checkUserExists(lowercaseEmail: string): Promise<CTResponse> {
     const queryArgs = {
       where: `lowercaseEmail="${lowercaseEmail}"`,
@@ -100,6 +123,7 @@ export class CustomerService {
       return response;
     }
   }
+
   createDraft(
     email: string,
     password: string,
