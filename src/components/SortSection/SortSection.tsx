@@ -1,9 +1,10 @@
-import { SortSelect } from '../SortSelect/SortSelect';
+import { SearchInput } from '../UI/SearchInput/SearchInput';
+import { SortSelect } from '../UI/SortSelect/SortSelect';
 
 export const SortSection = () => {
   return (
     <div className="flex justify-between">
-      <div>search</div>
+      <SearchInput />
       <div className="flex gap-2 justify-end items-center">
         <p>Sort by:</p>
         <SortSelect />
