@@ -2,6 +2,8 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import UserInputString from '../components/UserInputString';
 import { UserInput } from '../utils';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 function ChangePassword() {
   const navigate = useNavigate();
 
@@ -42,13 +44,17 @@ function ChangePassword() {
     setValidMatch(pwd === match);
     setCluesVisibleMatch(matchFocus && (!match || !validMatch));
   }, [pwd, match, validPwd, validMatch, matchFocus]);
+
   const pwdCurrentClue = (
     <p dangerouslySetInnerHTML={{ __html: UserInput.getRequiredClue() }} />
   );
   const pwdClues = (
     <p dangerouslySetInnerHTML={{ __html: UserInput.getPasswordClue() }} />
   );
-
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    toast.success('Password Changed');
+  };
   const handleReset = async (e: FormEvent) => {
     e.preventDefault();
     navigate(-1);
@@ -62,6 +68,7 @@ function ChangePassword() {
           </h2>
           <form
             className="mt-4 space-y-4 lg:mt-5 md:space-y-5"
+            onSubmit={handleSubmit}
             onReset={handleReset}
           >
             <div className="mb-10">
