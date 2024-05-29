@@ -1,0 +1,34 @@
+.productDialog{
+  width: 100vw;
+  min-width: 360px;
+  height: 100vh;
+  padding: 5vh 0;
+
+  position: fixed;
+  top: 0;
+
+  background-color: rgba(0, 0, 0, 0.082);
+
+  z-index: 2;
+}
+.productDialog_active{
+  display: flex;
+}
+.productDialog_container{
+  margin: auto;
+
+  padding: 1rem;
+  background-color: white;
+
+  border-radius: 1rem;
+}
+.productDialog__img{
+  height: min-content;
+  object-fit: contain;
+}
+
+@media (min-width: 500px) {
+  .productDialog__img{
+    height: 85vh;
+  }
+}
