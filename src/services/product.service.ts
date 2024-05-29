@@ -46,11 +46,54 @@ export class ProductService {
       if (answer.statusCode === HttpStatusCode.OK_200 && !product) {
         return CTResponseHandler.makeError(
           HttpStatusCode.NOT_FOUND_404,
-          'Not Found Product',
+          'Product Not Found',
           undefined
         );
       }
 
+      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
+  async getProductsAll(locale: string = 'en-US'): Promise<CTResponse> {
+    const query = `
+    query(($locale: Locale) {
+      products {
+        count
+        total
+        results {
+          id
+          key
+          skus
+          masterData {
+            current {
+              name(locale: $locale)
+              masterVariant {
+                attributesRaw {
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    const variables = { locale };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body
+        );
+      }
       return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
     } catch (error) {
       return CTResponseHandler.handleCatch(error as ClientResponse);
