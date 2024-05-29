@@ -1,6 +1,7 @@
 .productPage{
   @apply font-Inter text-moonBlack;
   padding: 2rem 2vw;
+  min-width: 360px;
 }
 .product{
   display: flex;

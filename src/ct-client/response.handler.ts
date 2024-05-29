@@ -1,5 +1,6 @@
 import {
   ClientResponse,
+  Customer,
   CustomerSignInResult,
   ErrorObject,
   ErrorResponse,

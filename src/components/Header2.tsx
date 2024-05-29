@@ -21,6 +21,9 @@ function Links() {
       <Link to="../RSS-eCommerce" className="hover:text-moonNeutral-600">
         Home
       </Link>
+      <Link to="./catalog" className="hover:text-gray-500">
+        Catalog
+      </Link>
       <Link to="./about" className="hover:text-moonNeutral-600">
         About
       </Link>
