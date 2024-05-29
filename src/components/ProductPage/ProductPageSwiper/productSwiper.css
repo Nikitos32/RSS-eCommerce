@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   height: inherit;
+  cursor: pointer;
 }
 .productImg__main-swiper{
   height: 511px;
