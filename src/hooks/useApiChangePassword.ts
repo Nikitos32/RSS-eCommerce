@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { CustomerRequests } from '../ct-client';
+
 import { useLocalStorage } from './useLocalStorage';
-import { CustomerChangePassword } from '@commercetools/platform-sdk';
+import { Customer, CustomerChangePassword } from '@commercetools/platform-sdk';
+import { CustomerService } from '../services/customer.service';
+import { CTResponse } from '../ct-client';
 
 export function useApiChangePassword(
   currentPassword: string,
@@ -10,11 +12,12 @@ export function useApiChangePassword(
   const [isOk, setIsOk] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [response, setResponse] = useState<CTResponse>();
 
-  const [id] = useLocalStorage<string>('apiCustomerId', '');
-  const [version] = useLocalStorage<number>('apiCustomerVersion', 0);
+  const [id] = useLocalStorage('apiCustomerId', '');
+  const [version, setVersion] = useLocalStorage('apiCustomerVersion', 0);
 
-  const customerRequests: CustomerRequests = new CustomerRequests();
+  const customerService: CustomerService = new CustomerService();
 
   const customerChangePassword: CustomerChangePassword = {
     id,
@@ -23,22 +26,28 @@ export function useApiChangePassword(
     newPassword,
   };
 
-  const changePassword = async () => {
+  const changePassword = async (): Promise<CTResponse> => {
     setIsLoading(true);
-    try {
-      const result = customerRequests.changePassword(customerChangePassword);
-      console.log(result);
-    } catch (error) {
-      setIsOk(false);
-      setErrorMsg('Error');
-      console.log(error);
-    }
+    console.log({ currentPassword }, { newPassword });
+
+    const answer = await customerService.changePassword(customerChangePassword);
+
+    setResponse({ ...response, ...answer });
+
     setIsLoading(false);
+    if (answer.ok) {
+      const data = answer.data as Customer;
+      setVersion(data.version);
+    }
+
+    return answer;
   };
 
   useEffect(() => {
-    changePassword();
-  });
+    setErrorMsg(response?.message || '');
+    setIsOk(response?.ok || false);
+    console.log('Use Effect', response);
+  }, [response]);
 
-  return { isOk, isLoading, errorMsg };
+  return { isOk, isLoading, errorMsg, changePassword };
 }

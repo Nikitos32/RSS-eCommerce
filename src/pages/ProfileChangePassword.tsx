@@ -1,11 +1,15 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
+import { FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import UserInputString from '../components/UserInputString';
 import { UserInput } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useApiChangePassword } from '../hooks';
+import { IsLoadindContext } from '../App';
 
 function ChangePassword() {
   const navigate = useNavigate();
+
+  const [handleLoading] = useContext(IsLoadindContext);
 
   const pwdCurrentRef = useRef<HTMLInputElement>(null);
 
@@ -23,6 +27,8 @@ function ChangePassword() {
   const [validMatch, setValidMatch] = useState(false);
   const [cluesVisibleMatch, setCluesVisibleMatch] = useState(false);
   const [matchFocus, setMatchFocus] = useState(false);
+
+  const { changePassword } = useApiChangePassword(pwdCurrent, pwd);
 
   useEffect(() => {
     if (pwdCurrentRef.current) {
@@ -53,7 +59,15 @@ function ChangePassword() {
   );
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    toast.success('Password Changed');
+    handleLoading(true);
+    const answer = await changePassword();
+    if (answer.ok) {
+      toast.success('Password Changed');
+      navigate(-1);
+    } else {
+      toast.error(answer.message);
+    }
+    handleLoading(false);
   };
   const handleReset = async (e: FormEvent) => {
     e.preventDefault();
