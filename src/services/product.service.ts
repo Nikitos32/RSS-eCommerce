@@ -59,7 +59,7 @@ export class ProductService {
 
   async getProductsAll(locale: string = 'en-US'): Promise<CTResponse> {
     const query = `
-    query(($locale: Locale) {
+    query($locale: Locale) {
       products {
         count
         total
