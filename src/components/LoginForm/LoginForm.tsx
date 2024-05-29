@@ -52,15 +52,8 @@ export const LoginForm = () => {
   };
 
   async function LogIn() {
-    //const customerService = new CustomerService();
-
     handleLoading(true);
 
-    // const response: CTResponse = await customerService.signIn(
-    //   emailInputValue,
-    //   passwordInputValue
-    // );
-    //'nikita2024@tut.by', 'Nikita2024@'
     const response: CTResponse = await signIn();
     if (response.ok) {
       handleLoading(false);
