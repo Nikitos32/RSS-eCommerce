@@ -325,4 +325,16 @@ export class UserInput {
   static getRequiredClue(): string {
     return UserInput.addRequiredClueBefore('');
   }
+
+  /**
+   *
+   * @description method return the latest date to accept for [input type="date"]
+   *
+   * @return string in format YYYY-DD-MM
+   */
+  static getMaxForDateOfBirth(minAge: number = dateRules.minAge): string {
+    const maxDate = new Date();
+    maxDate.setFullYear(maxDate.getFullYear() - minAge);
+    return maxDate.toISOString().split('T')[0];
+  }
 }
