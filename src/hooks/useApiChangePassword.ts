@@ -46,7 +46,6 @@ export function useApiChangePassword(
   useEffect(() => {
     setErrorMsg(response?.message || '');
     setIsOk(response?.ok || false);
-    console.log('Use Effect', response);
   }, [response]);
 
   return { isOk, isLoading, errorMsg, changePassword };
