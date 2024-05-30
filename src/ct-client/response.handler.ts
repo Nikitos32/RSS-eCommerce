@@ -8,7 +8,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
 
-type Data = GraphQLResponse | CustomerSignInResult | ErrorObject[];
+type Data = Customer | GraphQLResponse | CustomerSignInResult | ErrorObject[];
 
 /**
  * @interface CTResponse
@@ -17,7 +17,7 @@ type Data = GraphQLResponse | CustomerSignInResult | ErrorObject[];
  * @typedef {object} CTResponse
  * @property {boolean} ok Result of Request Success - true, Error - false
  * @property {string} message message from Response for Errors
- * @property {GraphQLResponse | CustomerSignInResult | ErrorObject[]} data
+ * @property {Customer | GraphQLResponse | CustomerSignInResult | ErrorObject[]} data
  */
 export interface CTResponse {
   ok: boolean;
@@ -44,7 +44,12 @@ export class CTResponseHandler {
   static makeSuccess(
     statusCode: HttpStatusCode,
     message: string,
-    data: GraphQLResponse | CustomerSignInResult | ErrorObject[] | undefined
+    data:
+      | Customer
+      | GraphQLResponse
+      | CustomerSignInResult
+      | ErrorObject[]
+      | undefined
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,

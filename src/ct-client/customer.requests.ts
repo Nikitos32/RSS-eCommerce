@@ -42,11 +42,22 @@ export class CustomerRequests {
     return result;
   }
 
-  async changePassword(customerChangePassword: CustomerChangePassword) {
+  async changePassword(
+    customerChangePassword: CustomerChangePassword
+  ): Promise<ClientResponse> {
     const result = await this.apiRoot
       .customers()
       .password()
       .post({ body: customerChangePassword })
+      .execute();
+    return result;
+  }
+
+  async getCustomerById(id: string): Promise<ClientResponse> {
+    const result = await this.apiRoot
+      .customers()
+      .withId({ ID: id })
+      .get()
       .execute();
     return result;
   }
