@@ -66,6 +66,7 @@ function Profile() {
     valid: false,
     visibleClue: false,
     focus: false,
+    readonly: false,
   };
 
   const [firstName, setFirstName] = useState(inputStringInitState);
@@ -93,6 +94,7 @@ function Profile() {
       ...firstName,
       valid,
       visibleClue: firstName.focus && !valid,
+      readonly: !editProfile,
     });
   }, [firstName, editProfile]);
 
@@ -102,6 +104,7 @@ function Profile() {
       ...lastName,
       valid,
       visibleClue: lastName.focus && !valid,
+      readonly: !editProfile,
     });
   }, [lastName, editProfile]);
 

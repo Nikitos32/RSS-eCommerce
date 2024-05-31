@@ -14,6 +14,7 @@ function ChangePassword() {
     valid: false,
     visibleClue: false,
     focus: false,
+    readonly: false,
   };
 
   const [handleLoading] = useContext(IsLoadindContext);

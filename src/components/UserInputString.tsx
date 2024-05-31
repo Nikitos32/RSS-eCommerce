@@ -7,6 +7,7 @@ export type UserInputState = {
   valid: boolean;
   visibleClue: boolean;
   focus: boolean;
+  readonly: boolean;
 };
 
 type UserInputStringProps = {
@@ -38,6 +39,7 @@ function UserInputString(props: UserInputStringProps): JSX.Element {
         {props.label}
       </label>
       <input
+        readOnly={props.state.readonly}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
           props.state.valid ? '' : ' border-red-500'
         }`}
