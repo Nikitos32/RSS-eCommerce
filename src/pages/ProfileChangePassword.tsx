@@ -9,26 +9,23 @@ import { IsLoadindContext } from '../App';
 function ChangePassword() {
   const navigate = useNavigate();
 
+  const inputStringInitState = {
+    value: '',
+    valid: false,
+    visibleClue: false,
+    focus: false,
+    readonly: false,
+  };
+
   const [handleLoading] = useContext(IsLoadindContext);
 
   const pwdCurrentRef = useRef<HTMLInputElement>(null);
 
-  const [pwdCurrent, setPwdCurrent] = useState('');
-  const [validPwdCurrent, setValidPwdCurrent] = useState(false);
-  const [cluesVisiblePwdCurrent, setCluesVisiblePwdCurrent] = useState(false);
-  const [pwdCurrentFocus, setPwdCurrentFocus] = useState(false);
+  const [current, setCurrent] = useState(inputStringInitState);
+  const [pwd, setPwd] = useState(inputStringInitState);
+  const [match, setMatch] = useState(inputStringInitState);
 
-  const [pwd, setPwd] = useState('');
-  const [validPwd, setValidPwd] = useState(false);
-  const [cluesVisiblePwd, setCluesVisiblePwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
-
-  const [match, setMatch] = useState('');
-  const [validMatch, setValidMatch] = useState(false);
-  const [cluesVisibleMatch, setCluesVisibleMatch] = useState(false);
-  const [matchFocus, setMatchFocus] = useState(false);
-
-  const { changePassword } = useApiChangePassword(pwdCurrent, pwd);
+  const { changePassword } = useApiChangePassword(current.value, pwd.value);
 
   useEffect(() => {
     if (pwdCurrentRef.current) {
@@ -37,19 +34,31 @@ function ChangePassword() {
   }, []);
 
   useEffect(() => {
-    setValidPwdCurrent(!UserInput.checkInputEmpty(pwdCurrent));
-    setCluesVisiblePwdCurrent(pwdCurrentFocus && !validPwdCurrent);
-  }, [pwdCurrent, validPwdCurrent, pwdCurrentFocus]);
+    const valid = !UserInput.checkInputEmpty(current.value);
+    setCurrent({
+      ...current,
+      valid,
+      visibleClue: current.focus && !valid,
+    });
+  }, [current]);
 
   useEffect(() => {
-    setValidPwd(UserInput.checkPasswordRequiredValid(pwd));
-    setCluesVisiblePwd(pwdFocus && (!pwd || !validPwd));
-  }, [pwd, validPwd, pwdFocus]);
+    const valid = UserInput.checkPasswordRequiredValid(pwd.value);
+    setPwd({
+      ...pwd,
+      valid,
+      visibleClue: pwd.focus && (!pwd.value || !valid),
+    });
+  }, [pwd]);
 
   useEffect(() => {
-    setValidMatch(pwd === match);
-    setCluesVisibleMatch(matchFocus && (!match || !validMatch));
-  }, [pwd, match, validPwd, validMatch, matchFocus]);
+    const valid = pwd.value === match.value;
+    setMatch({
+      ...match,
+      valid,
+      visibleClue: match.focus && (!match.value || !valid),
+    });
+  }, [pwd, match]);
 
   const pwdCurrentClue = (
     <p dangerouslySetInnerHTML={{ __html: UserInput.getRequiredClue() }} />
@@ -91,11 +100,8 @@ function ChangePassword() {
                 label="Current Password"
                 placeHolder="********"
                 autocomplete="off"
-                value={pwdCurrent}
-                setValueUseState={setPwdCurrent}
-                isValidValue={validPwdCurrent}
-                isCluesVisible={cluesVisiblePwdCurrent}
-                setFocusUseState={setPwdCurrentFocus}
+                state={current}
+                setState={setCurrent}
                 clues={pwdCurrentClue}
                 elementUseRef={pwdCurrentRef}
               />
@@ -106,11 +112,8 @@ function ChangePassword() {
                 label="New Password"
                 placeHolder="********"
                 autocomplete="off"
-                value={pwd}
-                setValueUseState={setPwd}
-                isValidValue={validPwd}
-                isCluesVisible={cluesVisiblePwd}
-                setFocusUseState={setPwdFocus}
+                state={pwd}
+                setState={setPwd}
                 clues={pwdClues}
               />
             </div>
@@ -120,11 +123,8 @@ function ChangePassword() {
                 label="Confirm Password"
                 placeHolder="********"
                 autocomplete="off"
-                value={match}
-                setValueUseState={setMatch}
-                isValidValue={validMatch}
-                isCluesVisible={cluesVisibleMatch}
-                setFocusUseState={setMatchFocus}
+                state={match}
+                setState={setMatch}
                 clues={<p>Must match the new password input field.</p>}
               />
             </div>
@@ -132,7 +132,7 @@ function ChangePassword() {
               <button
                 className="bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
                 type="submit"
-                disabled={!validPwdCurrent || !validPwd || !validMatch}
+                disabled={!current.valid || !pwd.valid || !match.valid}
               >
                 Change Password
               </button>

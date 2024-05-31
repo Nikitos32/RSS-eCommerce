@@ -97,6 +97,24 @@ export class CustomerService {
     }
   }
 
+  async getCustomerById(id: string): Promise<CTResponse> {
+    try {
+      const answer = await this.customerRequests.getCustomerById(id);
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body as Customer
+        );
+      } else {
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
   private async checkUserExists(lowercaseEmail: string): Promise<CTResponse> {
     const queryArgs = {
       where: `lowercaseEmail="${lowercaseEmail}"`,
