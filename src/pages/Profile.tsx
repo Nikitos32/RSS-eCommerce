@@ -61,15 +61,16 @@ function Profile() {
 
   const [editProfile, setEditProfile] = useState(false);
 
-  const [firstName, setFirstName] = useState('');
-  const [validFirstName, setValidFirstName] = useState(false);
-  const [cluesVisibleFirstName, setCluesVisibleFirstName] = useState(false);
-  const [firstNameFocus, setFirstNameFocus] = useState(false);
+  const inputStringInitState = {
+    value: '',
+    valid: false,
+    visibleClue: false,
+    focus: false,
+  };
 
-  const [lastName, setLastName] = useState('');
-  const [validLastName, setValidLastName] = useState(false);
-  const [cluesVisibleLastName, setCluesVisibleLastName] = useState(false);
-  const [lastNameFocus, setLastNameFocus] = useState(false);
+  const [firstName, setFirstName] = useState(inputStringInitState);
+
+  const [lastName, setLastName] = useState(inputStringInitState);
 
   const [dob, setDob] = useState('');
   const [validDob, setValidDob] = useState(false);
@@ -87,14 +88,22 @@ function Profile() {
     />
   );
   useEffect(() => {
-    setValidFirstName(!UserInput.checkInputEmpty(firstName) || !editProfile);
-    setCluesVisibleFirstName(firstNameFocus && !validFirstName);
-  }, [firstName, validFirstName, firstNameFocus, editProfile]);
+    const valid = !UserInput.checkInputEmpty(firstName.value) || !editProfile;
+    setFirstName({
+      ...firstName,
+      valid,
+      visibleClue: firstName.focus && !valid,
+    });
+  }, [firstName, editProfile]);
 
   useEffect(() => {
-    setValidLastName(!UserInput.checkInputEmpty(lastName) || !editProfile);
-    setCluesVisibleLastName(lastNameFocus && !validLastName);
-  }, [lastName, validLastName, lastNameFocus, editProfile]);
+    const valid = !UserInput.checkInputEmpty(lastName.value) || !editProfile;
+    setLastName({
+      ...lastName,
+      valid,
+      visibleClue: lastName.focus && !valid,
+    });
+  }, [lastName, editProfile]);
 
   useEffect(() => {
     setValidDob(UserInput.checkBirthdayRequiredValid(dob) || !editProfile);
@@ -104,8 +113,14 @@ function Profile() {
   useEffect(() => {
     if (ok) {
       const { firstName, lastName, dateOfBirth } = customer as Customer;
-      setFirstName(firstName as string);
-      setLastName(lastName as string);
+      setFirstName((prevState) => ({
+        ...prevState,
+        value: firstName as string,
+      }));
+      setLastName((prevState) => ({
+        ...prevState,
+        value: lastName as string,
+      }));
       setDob(dateOfBirth as string);
       setAddresses([...makeAddressesForProfile(customer as Customer)]);
     }
@@ -152,11 +167,8 @@ function Profile() {
                 label="First Name"
                 placeHolder="Name"
                 autocomplete="off"
-                value={firstName}
-                setValueUseState={setFirstName}
-                isValidValue={validFirstName}
-                isCluesVisible={cluesVisibleFirstName}
-                setFocusUseState={setFirstNameFocus}
+                state={firstName}
+                setState={setFirstName}
                 clues={nameClue}
               />
             </div>
@@ -166,11 +178,8 @@ function Profile() {
                 label="Last Name"
                 placeHolder="Surname"
                 autocomplete="off"
-                value={lastName}
-                setValueUseState={setLastName}
-                isValidValue={validLastName}
-                isCluesVisible={cluesVisibleLastName}
-                setFocusUseState={setLastNameFocus}
+                state={lastName}
+                setState={setLastName}
                 clues={nameClue}
               />
             </div>
@@ -212,7 +221,7 @@ function Profile() {
               <button
                 className="bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
                 type="submit"
-                disabled={!validFirstName || !validLastName || !validDob}
+                disabled={!firstName.valid || !lastName.valid || !validDob}
               >
                 Update
               </button>
