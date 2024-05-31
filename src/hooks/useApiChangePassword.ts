@@ -28,7 +28,6 @@ export function useApiChangePassword(
 
   const changePassword = async (): Promise<CTResponse> => {
     setIsLoading(true);
-    console.log({ currentPassword }, { newPassword });
 
     const answer = await customerService.changePassword(customerChangePassword);
 

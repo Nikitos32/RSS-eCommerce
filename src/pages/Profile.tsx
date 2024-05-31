@@ -23,7 +23,6 @@ import { Customer } from '@commercetools/platform-sdk';
 
 type AddressProps = { address: AddressForProfile };
 function Address({ address }: AddressProps) {
-  console.log(address);
   return (
     <>
       <div className="flex flex-row justify-end gap-1 text-2xl">
