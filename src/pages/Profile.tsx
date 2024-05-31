@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import UserInputString from '../components/UserInputString';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import {
   AddressForProfile,
   UserInput,
@@ -88,6 +88,20 @@ function Profile() {
       dangerouslySetInnerHTML={{ __html: UserInput.getBirthdayRequiredClue() }}
     />
   );
+  const fillProfile = (customer: Customer | undefined) => {
+    if (!customer) return;
+
+    const { firstName, lastName, dateOfBirth } = customer;
+    setFirstName((prevState) => ({
+      ...prevState,
+      value: firstName as string,
+    }));
+    setLastName((prevState) => ({
+      ...prevState,
+      value: lastName as string,
+    }));
+    setDob(dateOfBirth as string);
+  };
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(firstName.value) || !editProfile;
     setFirstName({
@@ -115,16 +129,7 @@ function Profile() {
 
   useEffect(() => {
     if (ok) {
-      const { firstName, lastName, dateOfBirth } = customer as Customer;
-      setFirstName((prevState) => ({
-        ...prevState,
-        value: firstName as string,
-      }));
-      setLastName((prevState) => ({
-        ...prevState,
-        value: lastName as string,
-      }));
-      setDob(dateOfBirth as string);
+      fillProfile(customer);
       setAddresses([...makeAddressesForProfile(customer as Customer)]);
     }
   }, [ok, customer]);
@@ -133,7 +138,11 @@ function Profile() {
     e.preventDefault();
     setEditProfile(!editProfile);
   };
-
+  const handleResetProfile = async (e: FormEvent) => {
+    e.preventDefault();
+    fillProfile(customer);
+    setEditProfile(false);
+  };
   return (
     <>
       <section
@@ -145,14 +154,16 @@ function Profile() {
               <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-moonBlack md:text-2xl dark:text-moonNeutral-100">
                 My Profile
               </h2>
-              <a
-                href=""
-                onClick={handleClickEditProfile}
-                title="Click to Edit"
-                className="text-2xl hover:text-moonNeutral-600"
-              >
-                <CiEdit />
-              </a>
+              {!editProfile && (
+                <a
+                  href=""
+                  onClick={handleClickEditProfile}
+                  title="Click to Edit"
+                  className="text-2xl hover:text-moonNeutral-600"
+                >
+                  <CiEdit />
+                </a>
+              )}
             </div>
             <Link
               to="./changepwd"
@@ -163,7 +174,10 @@ function Profile() {
               <PiPasswordBold className="inline" />
             </Link>
           </div>
-          <form className="relative mt-4 space-y-4 lg:mt-5 md:space-y-5">
+          <form
+            onReset={handleResetProfile}
+            className="relative mt-4 space-y-4 lg:mt-5 md:space-y-5"
+          >
             <div className="mb-4">
               <UserInputString
                 type="text"
