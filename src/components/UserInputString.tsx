@@ -2,16 +2,20 @@ import { Dispatch, SetStateAction } from 'react';
 import { makeIdFromLabel } from '../utils';
 import { BsInfoCircle } from 'react-icons/bs';
 
+export type UserInputState = {
+  value: string;
+  valid: boolean;
+  visibleClue: boolean;
+  focus: boolean;
+};
+
 type UserInputStringProps = {
   type: 'text' | 'password';
   label?: string;
   placeHolder?: string;
   autocomplete: 'on' | 'off';
-  value: string;
-  isValidValue: boolean;
-  isCluesVisible: boolean;
-  setValueUseState: Dispatch<SetStateAction<string>>;
-  setFocusUseState: Dispatch<SetStateAction<boolean>>;
+  state: UserInputState;
+  setState: Dispatch<SetStateAction<UserInputState>>;
   clues?: JSX.Element;
   elementUseRef?: React.RefObject<HTMLInputElement>;
 };
@@ -35,30 +39,26 @@ function UserInputString(props: UserInputStringProps): JSX.Element {
       </label>
       <input
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          props.isValidValue ? '' : ' border-red-500'
+          props.state.valid ? '' : ' border-red-500'
         }`}
         id={id}
         type={props.type}
-        value={props.value}
+        value={props.state?.value}
         autoComplete="off"
-        onChange={(e) => props.setValueUseState(e.target.value)}
+        onChange={(e) =>
+          props.setState({ ...props.state, value: e.target.value })
+        }
         placeholder={props.placeHolder}
-        aria-invalid={props.isValidValue ? 'false' : 'true'}
+        aria-invalid={props.state.valid ? 'false' : 'true'}
         aria-describedby={cluesId}
-        onFocus={
-          props.setFocusUseState ? () => props.setFocusUseState(true) : () => {}
-        }
-        onBlur={
-          props.setFocusUseState
-            ? () => props.setFocusUseState(false)
-            : () => {}
-        }
+        onFocus={() => props.setState({ ...props.state, focus: true })}
+        onBlur={() => props.setState({ ...props.state, focus: false })}
         ref={props.elementUseRef}
       />
       <div
         id={cluesId}
         className={`mt-1 py-1 flex flex-row rounded-md bg-moonNeutral-200 md:max-w-2xl md:mx-auto justify-start items-center gap-2 text-sm ${
-          props.isCluesVisible ? ' ' : ' hidden'
+          props.state.visibleClue ? ' ' : ' hidden'
         }`}
       >
         <BsInfoCircle className="ml-2 text-xl" />
