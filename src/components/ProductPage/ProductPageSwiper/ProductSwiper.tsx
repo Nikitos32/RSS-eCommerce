@@ -15,7 +15,8 @@ type ProductSwiperProps = {
 export const ProductSwiper = ({ images }: ProductSwiperProps) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [flagDialog, setFlagDialog] = useState(false);
-  const [currentImage, setCurrentImage] = useState<SwiperType | null>(null);
+  const [dialogImage, setCurrentImage] = useState<SwiperType | null>(null);
+  const [mainSlide, setMainSlide] = useState<SwiperType | null>(null);
 
   return (
     <>
@@ -24,7 +25,7 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
           onClick={() => {
             setFlagDialog(true);
           }}
-          controller={{ control: currentImage }}
+          controller={{ control: mainSlide }}
           onSwiper={setCurrentImage}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Thumbs, Controller]}
@@ -57,10 +58,10 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
       </div>
       <EnlargedImageModal
         images={images}
-        currentImage={currentImage}
+        currentImage={dialogImage}
         flagDialog={flagDialog}
         onclick={() => setFlagDialog(false)}
-        setCurrentImage={setCurrentImage}
+        setCurrentImage={setMainSlide}
       />
     </>
   );
