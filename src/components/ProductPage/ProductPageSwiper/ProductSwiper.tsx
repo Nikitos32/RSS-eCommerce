@@ -5,6 +5,7 @@ import { FreeMode, Thumbs, Controller } from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/free-mode';
+import 'swiper/css/zoom';
 import 'swiper/css/thumbs';
 import './productSwiper.css';
 
@@ -42,15 +43,20 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
         <Swiper
           onSwiper={setThumbsSwiper}
           slidesPerView={5}
+          spaceBetween={5}
           freeMode={true}
+          watchSlidesProgress={true}
           centerInsufficientSlides={true}
           modules={[FreeMode, Thumbs]}
           className="productImg__footer-swiper"
         >
           {images.length > 1
             ? images.map((img, index) => (
-                <SwiperSlide className="productImg__slide" key={index}>
-                  <img src={img} />
+                <SwiperSlide
+                  className="productImg__slide productImg__footer-slide"
+                  key={index}
+                >
+                  <img className="productImg__footer-img" src={img} />
                 </SwiperSlide>
               ))
             : ''}

@@ -11,6 +11,14 @@
 .productImg__footer-swiper{
   height: 100px;
 }
-.productImg__footer-swiper img{
+.productImg__footer-slide{
+  opacity: 0.4;
+}
+.productImg__footer-slide.swiper-slide-thumb-active{
+  opacity: 1;
+}
+.productImg__footer-img{
+  position: relative;
+  height: 100%;
   cursor: pointer;
 }
