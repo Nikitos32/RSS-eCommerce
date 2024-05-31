@@ -104,23 +104,23 @@ function Profile() {
   };
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(firstName.value) || !editProfile;
-    setFirstName({
-      ...firstName,
+    setFirstName((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: firstName.focus && !valid,
       readonly: !editProfile,
-    });
-  }, [firstName, editProfile]);
+    }));
+  }, [firstName.value, firstName.focus, editProfile]);
 
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(lastName.value) || !editProfile;
-    setLastName({
-      ...lastName,
+    setLastName((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: lastName.focus && !valid,
       readonly: !editProfile,
-    });
-  }, [lastName, editProfile]);
+    }));
+  }, [lastName.value, lastName.focus, editProfile]);
 
   useEffect(() => {
     setValidDob(UserInput.checkBirthdayRequiredValid(dob) || !editProfile);
