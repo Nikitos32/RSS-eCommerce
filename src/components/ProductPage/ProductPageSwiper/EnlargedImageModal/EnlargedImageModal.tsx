@@ -1,6 +1,12 @@
 import { IoCloseCircle } from 'react-icons/io5';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Thumbs, Mousewheel, Pagination } from 'swiper/modules';
+import {
+  FreeMode,
+  Thumbs,
+  Mousewheel,
+  Pagination,
+  Controller,
+} from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -14,6 +20,7 @@ type ProductSwiperProps = {
   currentImage: SwiperType | null;
   flagDialog: boolean;
   onclick: () => void;
+  setCurrentImage: (arg0: SwiperType) => void;
 };
 
 export const EnlargedImageModal = ({
@@ -21,6 +28,7 @@ export const EnlargedImageModal = ({
   currentImage,
   flagDialog,
   onclick,
+  setCurrentImage,
 }: ProductSwiperProps) => {
   return (
     <dialog
@@ -38,18 +46,18 @@ export const EnlargedImageModal = ({
           />
         </div>
         <Swiper
-          modules={[FreeMode, Thumbs, Mousewheel, Pagination]}
-          thumbs={{ swiper: currentImage }}
+          modules={[FreeMode, Thumbs, Mousewheel, Pagination, Controller]}
+          controller={{ control: currentImage }}
+          onSwiper={setCurrentImage}
           direction="vertical"
           mousewheel={true}
           pagination={{
             clickable: true,
           }}
-          zoom={true}
           centeredSlides={true}
           slidesPerView={1}
-          spaceBetween={5}
-          className="productDialog__img"
+          spaceBetween={10}
+          className="productDialog__swiper"
         >
           {images.map((img, index) => (
             <SwiperSlide key={index}>
