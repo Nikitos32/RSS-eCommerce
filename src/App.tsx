@@ -66,7 +66,7 @@ function App() {
         <Route path="/RSS-eCommerce/signin" element={<LoginPage />} />
         <Route path="/RSS-eCommerce/signup" element={<SignUpPage />} />
         <Route path="/RSS-eCommerce/profile" element={<Profile />} />
-        <Route path="/RSS-eCommerce/product/:id" element={<ProductPage />} />
+        <Route path="/RSS-eCommerce/product/:key" element={<ProductPage />} />
         <Route
           path="/RSS-eCommerce/profile/changepwd"
           element={<ProfileChangePassword />}
