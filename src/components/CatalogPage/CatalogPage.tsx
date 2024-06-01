@@ -49,10 +49,11 @@ export const CatalogPage = () => {
                   <ProductPreviewItem
                     key={element.id}
                     imgUrl={`../RSS-eCommerce/public/photos/bc-${index}.webp`}
-                    productCategory="Chairs"
-                    productDescription="lorem10"
-                    productName="232kdfkd"
-                    productPrice="$359.99"
+                    /* ${element.masterData.current.categories[0].typeId} */
+                    productCategory={`Chairs`}
+                    productDescription={`${element.masterData.current.description}`}
+                    productName={`${element.masterData.current.name}`}
+                    productPrice={`${element.masterData.current.masterVariant.price}`}
                   />
                 );
               })}
