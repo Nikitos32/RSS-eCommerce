@@ -4,8 +4,12 @@ import {
   Customer,
   CustomerChangePassword,
   CustomerDraft,
+  CustomerSetDateOfBirthAction,
+  CustomerSetFirstNameAction,
+  CustomerSetLastNameAction,
   CustomerSignInResult,
   CustomerSignin,
+  CustomerUpdate,
   ErrorObject,
 } from '@commercetools/platform-sdk';
 import {
@@ -100,6 +104,57 @@ export class CustomerService {
   async getCustomerById(id: string): Promise<CTResponse> {
     try {
       const answer = await this.customerRequests.getCustomerById(id);
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body as Customer
+        );
+      } else {
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
+  async updateCustomerProfile(
+    id: string,
+    version: number,
+    firstName?: string,
+    lastName?: string,
+    dateOfBirth?: string
+  ): Promise<CTResponse> {
+    const customerUpdate: CustomerUpdate = { version, actions: [] };
+
+    if (firstName) {
+      customerUpdate.actions.push({ firstName } as CustomerSetFirstNameAction);
+    }
+
+    if (lastName) {
+      customerUpdate.actions.push({ lastName } as CustomerSetLastNameAction);
+    }
+
+    if (dateOfBirth) {
+      customerUpdate.actions.push({
+        dateOfBirth,
+      } as CustomerSetDateOfBirthAction);
+    }
+
+    if (!customerUpdate.actions.length) {
+      return CTResponseHandler.makeError(
+        HttpStatusCode.NO_CONTENT_204,
+        'No changes to update',
+        undefined
+      );
+    }
+
+    try {
+      const answer = await this.customerRequests.updateCustomer(
+        id,
+        customerUpdate
+      );
 
       if (answer.statusCode === HttpStatusCode.OK_200) {
         return CTResponseHandler.makeSuccess(

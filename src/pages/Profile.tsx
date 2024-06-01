@@ -138,7 +138,14 @@ function Profile() {
     e.preventDefault();
     setEditProfile(!editProfile);
   };
-  const handleResetProfile = async (e: FormEvent) => {
+
+  const handleSubmitProfile = async (e: FormEvent) => {
+    e.preventDefault();
+    fillProfile(customer);
+    setEditProfile(false);
+  };
+
+  const handleResetProfile = (e: FormEvent) => {
     e.preventDefault();
     fillProfile(customer);
     setEditProfile(false);
@@ -175,6 +182,7 @@ function Profile() {
             </Link>
           </div>
           <form
+            onSubmit={handleSubmitProfile}
             onReset={handleResetProfile}
             className="relative mt-4 space-y-4 lg:mt-5 md:space-y-5"
           >
