@@ -6,19 +6,19 @@
 
   position: fixed;
   top: 0;
+  z-index: 2;
 
   background-color: rgba(0, 0, 0, 0.082);
-
-  z-index: 2;
+  cursor: pointer;
 }
 .productDialog_active{
   display: flex;
 }
 .productDialog_container{
   margin: auto;
-
   padding: 1rem;
   background-color: white;
+  cursor: default;
 
   border-radius: 1rem;
 }
