@@ -99,4 +99,56 @@ export class ProductService {
       return CTResponseHandler.handleCatch(error as ClientResponse);
     }
   }
+
+  async getProductByKey(
+    key: string,
+    locale: string = 'en-US'
+  ): Promise<CTResponse> {
+    const query = `
+    query($key: String, $locale: Locale) {
+      product(key: $key) {
+        key
+        masterData {
+          current {
+            skus
+            name(locale: $locale)
+            description(locale: $locale)
+            categories {
+              id
+              name(locale:$locale)
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    const variables = { key, locale };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      const { product } = answer.body.data;
+
+      if (answer.statusCode === HttpStatusCode.OK_200 && product) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body
+        );
+      }
+
+      if (answer.statusCode === HttpStatusCode.OK_200 && !product) {
+        return CTResponseHandler.makeError(
+          HttpStatusCode.NOT_FOUND_404,
+          'Product Not Found',
+          undefined
+        );
+      }
+
+      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
 }
