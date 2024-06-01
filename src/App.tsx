@@ -21,6 +21,7 @@ import './App.css';
 import { CatalogPage } from './components/CatalogPage/CatalogPage';
 import ProfileChangePassword from './pages/ProfileChangePassword';
 import Profile from './pages/Profile';
+import { ProductPage } from './components/ProductPage/ProductPage';
 
 export const IsLoginedContext = createContext([
   false,
@@ -65,6 +66,7 @@ function App() {
         <Route path="/RSS-eCommerce/signin" element={<LoginPage />} />
         <Route path="/RSS-eCommerce/signup" element={<SignUpPage />} />
         <Route path="/RSS-eCommerce/profile" element={<Profile />} />
+        <Route path="/RSS-eCommerce/product/:id" element={<ProductPage />} />
         <Route
           path="/RSS-eCommerce/profile/changepwd"
           element={<ProfileChangePassword />}
