@@ -4,10 +4,17 @@
   height: inherit;
   cursor: pointer;
 }
+
 .productImg__main-swiper{
   height: 511px;
   margin-bottom: 32px
 }
+.productImg__main-swiper .swiper-button-prev::after,
+.productImg__main-swiper .swiper-button-next::after{
+  padding: 1rem;
+  @apply text-moonBlack;
+}
+
 .productImg__footer-swiper{
   height: 100px;
 }

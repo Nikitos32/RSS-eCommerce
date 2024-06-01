@@ -50,6 +50,7 @@ export const EnlargedImageModal = ({
           controller={{ control: currentImage }}
           onSwiper={setCurrentImage}
           direction="vertical"
+          grabCursor={true}
           mousewheel={true}
           pagination={{
             clickable: true,

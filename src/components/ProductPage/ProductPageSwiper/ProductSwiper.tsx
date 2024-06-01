@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { EnlargedImageModal } from './EnlargedImageModal/EnlargedImageModal';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode, Thumbs, Controller } from 'swiper/modules';
+import { FreeMode, Thumbs, Controller, Navigation } from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/zoom';
+import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import './productSwiper.css';
 
@@ -26,10 +27,11 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
           onClick={() => {
             setFlagDialog(true);
           }}
+          navigation={true}
           controller={{ control: mainSlide }}
           onSwiper={setCurrentImage}
           thumbs={{ swiper: thumbsSwiper }}
-          modules={[FreeMode, Thumbs, Controller]}
+          modules={[FreeMode, Thumbs, Controller, Navigation]}
           allowTouchMove={false}
           centeredSlides={true}
           className="productImg__main-swiper"
@@ -42,12 +44,13 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
         </Swiper>
         <Swiper
           onSwiper={setThumbsSwiper}
+          grabCursor={true}
           slidesPerView={5}
           spaceBetween={5}
           freeMode={true}
           watchSlidesProgress={true}
           centerInsufficientSlides={true}
-          modules={[FreeMode, Thumbs]}
+          modules={[FreeMode, Thumbs, Navigation]}
           className="productImg__footer-swiper"
         >
           {images.length > 1
