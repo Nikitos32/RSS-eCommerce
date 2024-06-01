@@ -4,30 +4,37 @@ import { useState } from 'react';
 import { IoCartOutline } from 'react-icons/io5';
 import { MdOutlineViewInAr } from 'react-icons/md';
 
-export const ProductPreviewItem = () => {
+interface ProductPreviewItemProps {
+  imgUrl: string;
+  productCategory: string;
+  productName: string;
+  productDescription: string;
+  productPrice: string;
+}
+
+export const ProductPreviewItem = ({
+  imgUrl,
+  productCategory,
+  productName,
+  productDescription,
+  productPrice,
+}: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
   return (
     <div className="bg-slate-300 w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20">
       <div>
-        <img
-          src="../RSS-eCommerce/public/photos/bc-1.webp"
-          alt="photo"
-          className="size-44 rounded"
-        />
+        <img src={imgUrl} alt="photo" className="size-44 rounded" />
       </div>
       <div className="flex flex-col w-2/5 gap-5 pt-3">
         <div className="flex flex-col gap-1">
-          <p className="text-gray-500">Chairs</p>
-          <p className="font-semibold">Upholstered chair with wooden legs</p>
+          <p className="text-gray-500">{productCategory}</p>
+          <p className="font-semibold">{productName}</p>
         </div>
-        <p className="w-full text-gray-500">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta,
-          dolores?
-        </p>
+        <p className="w-full text-gray-500">{productDescription}</p>
       </div>
       <div className="flex w-2/5 flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
-          <p className="font-semibold">$359.99</p>
+          <p className="font-semibold">{productPrice}</p>
           <Rating
             readOnly
             style={{ maxWidth: 100 }}
