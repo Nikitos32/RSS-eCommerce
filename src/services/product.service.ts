@@ -69,8 +69,18 @@ export class ProductService {
           skus
           masterData {
             current {
+              description(locale: $locale)
+              categories {
+                id
+                name(locale:$locale)
+            }
               name(locale: $locale)
               masterVariant {
+                id
+                images {
+                  url
+                  label
+                }
                 attributesRaw {
                   name
                 }

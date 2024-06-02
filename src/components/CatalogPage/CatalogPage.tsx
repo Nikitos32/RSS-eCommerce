@@ -44,13 +44,16 @@ export const CatalogPage = () => {
           <h1 className="text-2xl">Products</h1>
           <section className="flex flex-col gap-5 flex-wrap">
             {allProducts &&
-              allProducts.results.map((element, index) => {
+              allProducts.results.map((element) => {
                 return (
                   <ProductPreviewItem
                     key={element.id}
-                    imgUrl={`../RSS-eCommerce/public/photos/bc-${index}.webp`}
-                    /* ${element.masterData.current.categories[0].typeId} */
-                    productCategory={`Chairs`}
+                    imgUrl={
+                      element.masterData.current.masterVariant.images
+                        ? `${element.masterData.current.masterVariant.images[0].url}`
+                        : ''
+                    }
+                    productCategory={`${element.masterData.current.categories[0].name}`}
                     productDescription={`${element.masterData.current.description}`}
                     productName={`${element.masterData.current.name}`}
                     productPrice={`${element.masterData.current.masterVariant.price}`}
