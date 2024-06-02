@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import UserInputString from '../components/UserInputString';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   AddressForProfile,
   UserInput,
@@ -83,6 +83,8 @@ function Profile() {
     readonly: false,
   };
 
+  const firstNameRef = useRef<HTMLInputElement>(null);
+
   const [email, setEmail] = useState(inputStringInitState);
   const [firstName, setFirstName] = useState(inputStringInitState);
 
@@ -153,6 +155,7 @@ function Profile() {
       setEditProfile(false);
     }
     if (!okUpdate && errorMsgUpdate) {
+      firstNameRef.current?.focus();
       toast.error(errorMsgUpdate);
     }
   }, [okUpdate, customerAfterUpdate, errorMsgUpdate]);
@@ -191,6 +194,12 @@ function Profile() {
     setValidDob(UserInput.checkBirthdayRequiredValid(dob) || !editProfile);
     setCluesVisibleDob(dobFocus && !validDob);
   }, [dob, dobFocus, validDob, editProfile]);
+
+  useEffect(() => {
+    if (editProfile) {
+      firstNameRef.current?.focus();
+    }
+  }, [editProfile]);
 
   useEffect(() => {
     setEditProfile(false);
@@ -266,6 +275,7 @@ function Profile() {
                 state={firstName}
                 setState={setFirstName}
                 clues={nameClue}
+                elementUseRef={firstNameRef}
               />
             </div>
             <div className="mb-4">
