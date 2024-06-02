@@ -37,7 +37,10 @@ export const ProductPage = () => {
                 customClass="productData__toCard"
               />
             </div>
-            <div>{productData.description}</div>
+            <div className="productinfo">
+              <h3 className="productinfo__title">Details</h3>
+              {productData.description}
+            </div>
           </div>
         </section>
       )}
