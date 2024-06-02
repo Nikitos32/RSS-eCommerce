@@ -3,6 +3,7 @@ import { EnlargedImageModal } from './EnlargedImageModal/EnlargedImageModal';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Thumbs, Controller, Navigation } from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper/types';
+import { ImagesProduct } from '../../../type/types/productPageType';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/zoom';
@@ -11,7 +12,7 @@ import 'swiper/css/thumbs';
 import './productSwiper.css';
 
 type ProductSwiperProps = {
-  images: string[];
+  images: ImagesProduct[];
 };
 
 export const ProductSwiper = ({ images }: ProductSwiperProps) => {
@@ -38,7 +39,7 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
         >
           {images.map((img, index) => (
             <SwiperSlide className="productImg__slide" key={index}>
-              <img src={img} />
+              <img src={img.url} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -59,7 +60,7 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
                   className="productImg__slide productImg__footer-slide"
                   key={index}
                 >
-                  <img className="productImg__footer-img" src={img} />
+                  <img className="productImg__footer-img" src={img.url} />
                 </SwiperSlide>
               ))
             : ''}

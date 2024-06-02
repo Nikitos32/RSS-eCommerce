@@ -117,6 +117,11 @@ export class ProductService {
               id
               name(locale:$locale)
             }
+            masterVariant {
+              images {
+                url
+              }
+            }
           }
         }
       }

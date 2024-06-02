@@ -8,6 +8,7 @@ import {
   Controller,
 } from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper/types';
+import { ImagesProduct } from '../../../../type/types/productPageType';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/zoom';
@@ -16,7 +17,7 @@ import 'swiper/css/pagination';
 import './enlargedImageModal.css';
 
 type ProductSwiperProps = {
-  images: string[];
+  images: ImagesProduct[];
   currentImage: SwiperType | null;
   flagDialog: boolean;
   onclick: () => void;
@@ -63,7 +64,7 @@ export const EnlargedImageModal = ({
           {images.map((img, index) => (
             <SwiperSlide key={index}>
               <div className="swiper-zoom-container">
-                <img className="object-contain h-full" src={img} />
+                <img className="object-contain h-full" src={img.url} />
               </div>
             </SwiperSlide>
           ))}
