@@ -81,6 +81,12 @@ export class ProductService {
                   url
                   label
                 }
+                prices {
+                  id
+                  value {
+                    centAmount
+                  }
+                }
                 attributesRaw {
                   name
                 }

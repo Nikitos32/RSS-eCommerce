@@ -56,7 +56,7 @@ export const CatalogPage = () => {
                     productCategory={`${element.masterData.current.categories[0].name}`}
                     productDescription={`${element.masterData.current.description}`}
                     productName={`${element.masterData.current.name}`}
-                    productPrice={`${element.masterData.current.masterVariant.price}`}
+                    productPrice={`$${element.masterData.current.masterVariant.prices[0].value.centAmount}`}
                   />
                 );
               })}
