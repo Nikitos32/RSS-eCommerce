@@ -4,9 +4,12 @@
   height: inherit;
   cursor: pointer;
 }
+.productImg__slide img{
+  object-fit: contain;
+}
 
 .productImg__main-swiper{
-  height: 511px;
+  max-height: 511px;
   margin-bottom: 32px
 }
 .productImg__main-swiper .swiper-button-prev::after,
@@ -16,7 +19,7 @@
 }
 
 .productImg__footer-swiper{
-  height: 100px;
+  max-height: 100px;
 }
 .productImg__footer-slide{
   opacity: 0.4;
@@ -28,4 +31,10 @@
   position: relative;
   height: 100%;
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .productImg__main-swiper{
+    margin-bottom: 0
+  }
 }

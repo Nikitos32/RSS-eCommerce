@@ -8,14 +8,23 @@
   flex-direction: column;
   gap: 40px;
 }
+.product__component{
+  display: flex;
+  flex-direction: column;
+  gap: 10px
+}
+
 .product__title{
   @apply text-xl;
 }
 
+.productinfo__title{
+  @apply border-moonBlack text-xl font-semibold;
+  border-bottom: 1px solid ;
+  margin: 10px 0;
+}
+
 @media (min-width: 768px) {
-  .productPage{ 
-    padding: 2rem 10vw;
-  }
   .product{
     flex-direction: row;
     gap: 50px;
@@ -25,5 +34,10 @@
   }
   .productData__toCard{
     width: 100%;
+  }
+}
+@media (min-width: 1024px) {
+  .productPage{ 
+    padding: 2rem 10vw;
   }
 }
