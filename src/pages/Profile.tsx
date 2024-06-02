@@ -21,6 +21,7 @@ import { CiBookmarkCheck } from 'react-icons/ci';
 import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
 import { Customer } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
+import AddressEdit from '../components/AddressEdit';
 
 type AddressProps = { address: AddressForProfile };
 function Address({ address }: AddressProps) {
@@ -63,6 +64,8 @@ function Profile() {
     ok: okLoad,
     customer: customerAfterLoad,
   } = useApiGetCustomer();
+
+  const [showAddressForm] = useState(true);
 
   const isUpdateAddress = false;
 
@@ -354,6 +357,7 @@ function Profile() {
               <CiCirclePlus />
             </a>
           </div>
+          {showAddressForm && <AddressEdit />}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
             {addresses?.map((address) => (
               <Address key={address.id} address={address} />
