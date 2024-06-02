@@ -2,6 +2,7 @@ import {
   BaseAddress,
   ClientResponse,
   Customer,
+  CustomerChangeEmailAction,
   CustomerChangePassword,
   CustomerDraft,
   CustomerSetDateOfBirthAction,
@@ -122,23 +123,38 @@ export class CustomerService {
   async updateCustomerProfile(
     id: string,
     version: number,
-    firstName?: string,
-    lastName?: string,
-    dateOfBirth?: string
+    email: string,
+    firstName: string,
+    lastName: string,
+    dateOfBirth: string
   ): Promise<CTResponse> {
     const customerUpdate: CustomerUpdate = { version, actions: [] };
 
+    if (email) {
+      customerUpdate.actions.push({
+        email,
+        action: 'changeEmail',
+      } as CustomerChangeEmailAction);
+    }
+
     if (firstName) {
-      customerUpdate.actions.push({ firstName } as CustomerSetFirstNameAction);
+      customerUpdate.actions.push({
+        firstName,
+        action: 'setFirstName',
+      } as CustomerSetFirstNameAction);
     }
 
     if (lastName) {
-      customerUpdate.actions.push({ lastName } as CustomerSetLastNameAction);
+      customerUpdate.actions.push({
+        lastName,
+        action: 'setLastName',
+      } as CustomerSetLastNameAction);
     }
 
     if (dateOfBirth) {
       customerUpdate.actions.push({
         dateOfBirth,
+        action: 'setDateOfBirth',
       } as CustomerSetDateOfBirthAction);
     }
 
