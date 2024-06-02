@@ -13,8 +13,8 @@ import Spinner from '../Spinner';
 export const ProductPage = () => {
   const { key } = useParams();
   const { loading, product } = useApiGetProduct(key);
-  console.log(product);
   const productData = product?.data.product.masterData.current as ProductAPI;
+  console.log(productData);
   return (
     <article className="productPage">
       <Spinner isLoading={loading} />
