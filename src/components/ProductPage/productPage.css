@@ -25,9 +25,6 @@
 }
 
 @media (min-width: 768px) {
-  .productPage{ 
-    padding: 2rem 10vw;
-  }
   .product{
     flex-direction: row;
     gap: 50px;
@@ -37,5 +34,10 @@
   }
   .productData__toCard{
     width: 100%;
+  }
+}
+@media (min-width: 1024px) {
+  .productPage{ 
+    padding: 2rem 10vw;
   }
 }
