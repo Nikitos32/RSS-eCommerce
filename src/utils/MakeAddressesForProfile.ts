@@ -32,6 +32,9 @@ export const makeAddressesForProfile = (
   customer: Customer
 ): AddressForProfile[] => {
   const result: AddressForProfile[] = [];
+  if (!customer) {
+    return result;
+  }
 
   const {
     billingAddressIds,
