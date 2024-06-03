@@ -41,10 +41,25 @@ export const ProductPage = () => {
           </div>
           <div className="product__component productData">
             <div className="productData__title">
-              <div className="font-bold">{productData.name}</div>
-              <div className="font-medium">
-                <span className="mr-4">{`${convertPrice(price?.discounted.value.centAmount, price?.discounted.value.fractionDigits)}€`}</span>
-                <span className="text-moonNeutral-500">{`${convertPrice(price?.value.centAmount, price?.value.fractionDigits)}€`}</span>
+              <div className="text-2xl font-bold">{productData.name}</div>
+              <div className="productData__pricesContainer text-xl font-medium">
+                <span className="productData__discount">
+                  <span
+                    className={`${price?.discounted ? 'productData__valueDiscount text-base' : ''}`}
+                  >
+                    {price?.discounted
+                      ? `-${price?.discounted.discount.value.permyriad / 100}%`
+                      : ''}
+                  </span>
+                  <span className="text-moonBrown">
+                    {price?.discounted
+                      ? `${convertPrice(price?.discounted.value.centAmount, price?.discounted.value.fractionDigits)}€`
+                      : ''}
+                  </span>
+                </span>
+                <span
+                  className={`${price?.discounted ? `text-moonNeutral-500 ml-7` : ''}`}
+                >{`${convertPrice(price?.value.centAmount, price?.value.fractionDigits)}€`}</span>
               </div>
             </div>
             <div>

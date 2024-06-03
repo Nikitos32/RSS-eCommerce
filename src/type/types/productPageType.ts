@@ -22,7 +22,7 @@ export type ProductPrice = {
       currencyCode: string;
       fractionDigits: number;
     };
-  };
+  } | null;
 };
 
 export type ProductAPI = {
