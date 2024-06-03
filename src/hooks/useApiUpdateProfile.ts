@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CustomerService } from '../services';
-import { Customer } from '@commercetools/platform-sdk';
+import { BaseAddress, Customer } from '@commercetools/platform-sdk';
 
 const initProfileUpdates = {
   id: '',
@@ -10,12 +10,23 @@ const initProfileUpdates = {
   lastName: '',
   dateOfBirth: '',
 };
+type AddressNew = {
+  id: string;
+  version: number;
+  address?: BaseAddress;
+};
 
+const initAddressNew: AddressNew = {
+  id: '',
+  version: 0,
+  address: undefined,
+};
 export function useApiUpdateProfile() {
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [profileUpdates, setProfileUpdates] = useState(initProfileUpdates);
+  const [newAddress, setNewAddress] = useState(initAddressNew);
   const [customerAfterUpdate, setCustomerAfterUpdate] = useState<Customer>();
 
   useEffect(() => {
@@ -47,11 +58,38 @@ export function useApiUpdateProfile() {
 
     getCustomer();
   }, [profileUpdates]);
+
+  useEffect(() => {
+    const { id, version, address } = newAddress;
+    if (!id || !address) {
+      return;
+    }
+
+    const addAddress = async () => {
+      const customerService = new CustomerService();
+      setLoading(true);
+      const response = await customerService.updateCustomerAddAddress(
+        id,
+        version,
+        address
+      );
+      setOk(response.ok);
+      setErrorMsg(response.message as string);
+      if (response.ok) {
+        setCustomerAfterUpdate(response.data as Customer);
+      }
+      setLoading(false);
+    };
+
+    addAddress();
+  }, [newAddress]);
+
   return {
     loading,
     ok,
     errorMsg,
     setProfileUpdates,
+    setNewAddress,
     customerAfterUpdate,
   };
 }

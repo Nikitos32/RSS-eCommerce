@@ -10,51 +10,13 @@ import {
 import { BsInfoCircle } from 'react-icons/bs';
 import { PiPasswordBold } from 'react-icons/pi';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import {
-  CiCirclePlus,
-  CiDeliveryTruck,
-  CiEdit,
-  CiFileOn,
-  CiTrash,
-} from 'react-icons/ci';
-import { CiBookmarkCheck } from 'react-icons/ci';
+import { CiCirclePlus, CiEdit } from 'react-icons/ci';
 import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
 import { Customer } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
+import AddressEdit, { AddressEditData } from '../components/AddressEdit';
+import AddressLine from '../components/AddressLine';
 
-type AddressProps = { address: AddressForProfile };
-function Address({ address }: AddressProps) {
-  return (
-    <>
-      <div className="flex flex-row justify-end gap-1 text-2xl">
-        {address.isDefault && <CiBookmarkCheck title="Default" />}
-        {address.isDefault && address.isShipping && (
-          <CiDeliveryTruck title="Shipping Address" />
-        )}
-        {address.isDefault && address.isBilling && (
-          <CiFileOn title="Shipping Address" />
-        )}
-        {!address.isDefault && address.isShipping && (
-          <CiDeliveryTruck title="Shipping Address" />
-        )}
-        {!address.isDefault && address.isBilling && (
-          <CiDeliveryTruck title="Shipping Address" />
-        )}
-      </div>
-      <p>{address.strAddress}</p>
-      <div className="flex flex-row gap-4 text-2xl">
-        <a href="" title="Edit" className=" hover:text-moonNeutral-600">
-          <CiEdit />
-        </a>
-        {!address.isDefault && (
-          <a href="" title="Delete" className=" hover:text-moonNeutral-600">
-            <CiTrash />
-          </a>
-        )}
-      </div>
-    </>
-  );
-}
 function Profile() {
   const [customer, setCustomer] = useState<Customer>();
 
@@ -64,9 +26,16 @@ function Profile() {
     customer: customerAfterLoad,
   } = useApiGetCustomer();
 
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [addAddress, setAddAddress] = useState(false);
+  const [dataAddressForm, setDataAddressForm] = useState<AddressEditData>({
+    country: '',
+  });
+
   const isUpdateAddress = false;
 
   const [editProfile, setEditProfile] = useState(false);
+
   const {
     ok: okUpdate,
     loading: isUpdatingProfile,
@@ -126,6 +95,18 @@ function Profile() {
   };
 
   const prepareProfileUpdates = (customer: Customer | undefined) => {
+    if (!customer) return;
+    setProfileUpdates(() => ({
+      id: customer.id,
+      version: customer.version,
+      email: customer.email !== email.value ? email.value : '',
+      firstName: customer.firstName !== firstName.value ? firstName.value : '',
+      lastName: customer.lastName !== lastName.value ? lastName.value : '',
+      dateOfBirth: customer.dateOfBirth !== dob ? dob : '',
+    }));
+  };
+
+  const prepareAddressUpdate = () => {
     if (!customer) return;
     setProfileUpdates(() => ({
       id: customer.id,
@@ -201,9 +182,12 @@ function Profile() {
     }
   }, [editProfile]);
 
+  useEffect(() => {}, [dataAddressForm]);
+
   useEffect(() => {
     setEditProfile(false);
   }, [customerAfterUpdate]);
+
   const handleClickEditProfile = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setEditProfile(!editProfile);
@@ -219,6 +203,94 @@ function Profile() {
     fillProfile(customer);
     setEditProfile(false);
   };
+
+  const handleClickAddAddress = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (!showAddressForm) {
+      setAddAddress(true);
+      setShowAddressForm(true);
+
+      setDataAddressForm(() => ({
+        firstName: customer?.firstName,
+        lastName: customer?.lastName,
+        country: '',
+        isBilling: false,
+        isBillingDefault: false,
+        isShipping: false,
+        isShippingDefault: false,
+      }));
+    }
+  };
+
+  const handleResetAddressForm = (e: FormEvent) => {
+    e.preventDefault();
+    setShowAddressForm(false);
+    setAddAddress(false);
+  };
+
+  const handleSubmitAddressForm = () => {
+    console.log(dataAddressForm);
+    prepareAddressUpdate();
+  };
+
+  const handleClickEditAddress = (key: string) => {
+    if (showAddressForm) {
+      return;
+    }
+    console.log(customer);
+    const updateAddress = customer?.addresses.filter(
+      (item) => item.id === key
+    )[0];
+    if (!updateAddress) {
+      return;
+    }
+    const {
+      id,
+      firstName,
+      lastName,
+      apartment,
+      streetNumber,
+      streetName,
+      city,
+      region,
+      postalCode,
+      country,
+    } = updateAddress;
+
+    const {
+      billingAddressIds,
+      shippingAddressIds,
+      defaultBillingAddressId,
+      defaultShippingAddressId,
+    } = customer;
+
+    const isBilling = billingAddressIds
+      ? billingAddressIds?.findIndex((item) => item === id) > -1
+      : false;
+
+    const isShipping = shippingAddressIds
+      ? shippingAddressIds?.findIndex((item) => item === id) > -1
+      : false;
+
+    setShowAddressForm(true);
+    setDataAddressForm(() => ({
+      addressId: id,
+      firstName,
+      lastName,
+      apartment,
+      streetNumber,
+      streetName,
+      city,
+      region,
+      postalCode,
+      country,
+      isBilling,
+      isBillingDefault: id === defaultBillingAddressId,
+      isShipping,
+      isShippingDefault: id === defaultShippingAddressId,
+    }));
+  };
+
   return (
     <>
       <section
@@ -346,17 +418,33 @@ function Profile() {
             <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-moonBlack md:text-2xl dark:text-moonNeutral-100">
               My Addresses
             </h2>
-            <a
-              href=""
-              title="Add New Address"
-              className="text-2xl hover:text-moonNeutral-600"
-            >
-              <CiCirclePlus />
-            </a>
+            {!addAddress && (
+              <a
+                onClick={handleClickAddAddress}
+                href=""
+                title="Add New Address"
+                className="text-2xl hover:text-moonNeutral-600"
+              >
+                <CiCirclePlus />
+              </a>
+            )}
           </div>
+          {showAddressForm && (
+            <AddressEdit
+              data={dataAddressForm}
+              setData={setDataAddressForm}
+              onReset={handleResetAddressForm}
+              onSubmit={handleSubmitAddressForm}
+            />
+          )}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
             {addresses?.map((address) => (
-              <Address key={address.id} address={address} />
+              <AddressLine
+                key={address.id}
+                address={address}
+                showEdit={!showAddressForm}
+                onEdit={handleClickEditAddress}
+              />
             ))}
           </div>
           <Spinner isLoading={isUpdateAddress} />

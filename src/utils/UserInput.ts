@@ -298,7 +298,7 @@ export class UserInput {
    * Use <p dangerouslySetInnerHTML={{ __html: UserInput.get*Clue() }} />
    */
   static getPostcodeClue(countryCode?: CountryCode): string {
-    const countryPart = countryCode ? `for ${countryCode}` : '';
+    const countryPart = countryCode ? ` for ${countryCode}` : '';
     return `${UserInput.getStringClue('postcode')}${countryPart}.`;
   }
 
