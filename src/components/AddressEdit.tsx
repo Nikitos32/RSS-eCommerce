@@ -14,6 +14,7 @@ const inputStringInitState = {
 };
 
 export interface AddressEditData extends BaseAddress {
+  addressId?: string;
   isShipping: boolean;
   isShippingDefault: boolean;
   isBilling: boolean;
@@ -26,6 +27,7 @@ type AddressEditProps = {
 };
 
 function AddressEdit(props: AddressEditProps) {
+  const [add, setAdd] = useState(false);
   const [firstName, setFirstName] = useState(inputStringInitState);
   const [lastName, setLastName] = useState(inputStringInitState);
   const [apartment, setApartment] = useState(inputStringInitState);
@@ -69,6 +71,7 @@ function AddressEdit(props: AddressEditProps) {
       isShippingDefault = false,
       isBilling = false,
       isBillingDefault = false,
+      addressId = '',
     } = props.data as AddressEditData;
     setFirstName((prevState) => ({
       ...prevState,
@@ -110,6 +113,7 @@ function AddressEdit(props: AddressEditProps) {
     setShippingDefault(isShippingDefault);
     setBilling(isBilling);
     setBillingDefault(isBillingDefault);
+    setAdd(addressId === '');
   }, [props.data]);
 
   useEffect(() => {
@@ -181,12 +185,15 @@ function AddressEdit(props: AddressEditProps) {
   return (
     <form
       onReset={props.onReset}
-      className="flex items-center justify-start gap-3"
+      className="flex flex-col items-center justify-start gap-3 md:flex-row"
     >
       <div>
-        <label className="relative inline-flex items-center cursor-pointer">
+        <label
+          className={`relative inline-flex items-center ${add ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+        >
           <input
             type="checkbox"
+            disabled={add}
             value=""
             checked={shipping}
             onChange={(e) => setShipping(e.target.checked)}
@@ -201,9 +208,12 @@ function AddressEdit(props: AddressEditProps) {
           <span className="mr-3 text-sm font-medium text-gray-600 ">
             Default
           </span>
-          <label className="relative flex items-center  cursor-pointer">
+          <label
+            className={`relative inline-flex items-center ${add ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          >
             <input
               type="checkbox"
+              disabled={add}
               value=""
               checked={shippingDefault}
               onChange={(e) => setShippingDefault(e.target.checked)}
@@ -212,9 +222,12 @@ function AddressEdit(props: AddressEditProps) {
             <div className="w-9 h-5 bg-gray-200 hover:bg-gray-300 peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-moonNeutral-800 hover:peer-checked:bg-moonNeutral-600"></div>
           </label>
         </div>
-        <label className="relative inline-flex items-center cursor-pointer">
+        <label
+          className={`relative inline-flex items-center ${add ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+        >
           <input
             type="checkbox"
+            disabled={add}
             value=""
             checked={billing}
             onChange={(e) => setBilling(e.target.checked)}
@@ -229,9 +242,12 @@ function AddressEdit(props: AddressEditProps) {
           <span className="mr-3 text-sm font-medium text-gray-600 ">
             Default
           </span>
-          <label className="relative flex items-center  cursor-pointer">
+          <label
+            className={`relative inline-flex items-center ${add ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+          >
             <input
               type="checkbox"
+              disabled={add}
               value=""
               checked={billingDefault}
               onChange={(e) => setBillingDefault(e.target.checked)}
@@ -393,7 +409,7 @@ function AddressEdit(props: AddressEditProps) {
             !country.valid
           }
         >
-          Update
+          {add ? 'Add' : 'Update'}
         </button>
         <button
           className="bg-moonNeutral-700 text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
