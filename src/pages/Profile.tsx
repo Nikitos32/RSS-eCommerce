@@ -14,7 +14,7 @@ import { CiCirclePlus, CiEdit } from 'react-icons/ci';
 import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
 import { Customer } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
-import AddressEdit from '../components/AddressEdit';
+import AddressEdit, { AddressEditData } from '../components/AddressEdit';
 import AddressLine from '../components/AddressLine';
 
 function Profile() {
@@ -26,9 +26,11 @@ function Profile() {
     customer: customerAfterLoad,
   } = useApiGetCustomer();
 
-  const [showAddressForm, setShowAddressForm] = useState(true);
+  const [showAddressForm, setShowAddressForm] = useState(false);
   const [addAddress, setAddAddress] = useState(false);
-  const [, setEditAddress] = useState(false);
+  const [dataAddressForm, setDataAddressForm] = useState<AddressEditData>({
+    country: '',
+  });
 
   const isUpdateAddress = false;
 
@@ -104,6 +106,18 @@ function Profile() {
     }));
   };
 
+  const prepareAddressUpdate = () => {
+    if (!customer) return;
+    setProfileUpdates(() => ({
+      id: customer.id,
+      version: customer.version,
+      email: customer.email !== email.value ? email.value : '',
+      firstName: customer.firstName !== firstName.value ? firstName.value : '',
+      lastName: customer.lastName !== lastName.value ? lastName.value : '',
+      dateOfBirth: customer.dateOfBirth !== dob ? dob : '',
+    }));
+  };
+
   useEffect(() => {
     fillProfile(customer);
     setAddresses([...makeAddressesForProfile(customer as Customer)]);
@@ -168,9 +182,7 @@ function Profile() {
     }
   }, [editProfile]);
 
-  useEffect(() => {
-    setShowAddressForm(addAddress);
-  }, [addAddress]);
+  useEffect(() => {}, [dataAddressForm]);
 
   useEffect(() => {
     setEditProfile(false);
@@ -194,14 +206,89 @@ function Profile() {
 
   const handleClickAddAddress = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    setAddAddress(!addAddress);
+    if (!showAddressForm) {
+      setAddAddress(true);
+      setShowAddressForm(true);
+
+      setDataAddressForm(() => ({
+        firstName: customer?.firstName,
+        lastName: customer?.lastName,
+        country: '',
+        isBilling: false,
+        isBillingDefault: false,
+        isShipping: false,
+        isShippingDefault: false,
+      }));
+    }
   };
 
-  const handleResetShowAddressForm = (e: FormEvent) => {
+  const handleResetAddressForm = (e: FormEvent) => {
     e.preventDefault();
     setShowAddressForm(false);
     setAddAddress(false);
-    setEditAddress(false);
+  };
+
+  const handleSubmitAddressForm = () => {
+    console.log(dataAddressForm);
+    prepareAddressUpdate();
+  };
+
+  const handleClickEditAddress = (key: string) => {
+    if (showAddressForm) {
+      return;
+    }
+    console.log(customer);
+    const updateAddress = customer?.addresses.filter(
+      (item) => item.id === key
+    )[0];
+    if (!updateAddress) {
+      return;
+    }
+    const {
+      id,
+      firstName,
+      lastName,
+      apartment,
+      streetNumber,
+      streetName,
+      city,
+      region,
+      postalCode,
+      country,
+    } = updateAddress;
+
+    const {
+      billingAddressIds,
+      shippingAddressIds,
+      defaultBillingAddressId,
+      defaultShippingAddressId,
+    } = customer;
+
+    const isBilling = billingAddressIds
+      ? billingAddressIds?.findIndex((item) => item === id) > -1
+      : false;
+
+    const isShipping = shippingAddressIds
+      ? shippingAddressIds?.findIndex((item) => item === id) > -1
+      : false;
+
+    setShowAddressForm(true);
+    setDataAddressForm(() => ({
+      addressId: id,
+      firstName,
+      lastName,
+      apartment,
+      streetNumber,
+      streetName,
+      city,
+      region,
+      postalCode,
+      country,
+      isBilling,
+      isBillingDefault: id === defaultBillingAddressId,
+      isShipping,
+      isShippingDefault: id === defaultShippingAddressId,
+    }));
   };
 
   return (
@@ -343,11 +430,21 @@ function Profile() {
             )}
           </div>
           {showAddressForm && (
-            <AddressEdit onReset={handleResetShowAddressForm} />
+            <AddressEdit
+              data={dataAddressForm}
+              setData={setDataAddressForm}
+              onReset={handleResetAddressForm}
+              onSubmit={handleSubmitAddressForm}
+            />
           )}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
             {addresses?.map((address) => (
-              <AddressLine key={address.id} address={address} />
+              <AddressLine
+                key={address.id}
+                address={address}
+                showEdit={!showAddressForm}
+                onEdit={handleClickEditAddress}
+              />
             ))}
           </div>
           <Spinner isLoading={isUpdateAddress} />

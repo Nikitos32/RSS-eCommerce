@@ -1,4 +1,4 @@
-import { FormEventHandler, useEffect, useState } from 'react';
+import { FormEvent, FormEventHandler, useEffect, useState } from 'react';
 import UserInputString from './UserInputString';
 import { BaseAddress } from '@commercetools/platform-sdk';
 import { UserInput } from '../utils';
@@ -15,15 +15,17 @@ const inputStringInitState = {
 
 export interface AddressEditData extends BaseAddress {
   addressId?: string;
-  isShipping: boolean;
-  isShippingDefault: boolean;
-  isBilling: boolean;
-  isBillingDefault: boolean;
+  isShipping?: boolean;
+  isShippingDefault?: boolean;
+  isBilling?: boolean;
+  isBillingDefault?: boolean;
 }
 
 type AddressEditProps = {
-  data: AddressEditData | undefined;
+  data: AddressEditData;
+  setData: React.Dispatch<React.SetStateAction<AddressEditData>>;
   onReset: FormEventHandler<HTMLFormElement>;
+  onSubmit: () => void;
 };
 
 function AddressEdit(props: AddressEditProps) {
@@ -182,9 +184,26 @@ function AddressEdit(props: AddressEditProps) {
     }));
   }, [country.value, country.focus]);
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    props.setData(() => ({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      apartment: apartment.value,
+      streetNumber: streetNumber.value,
+      streetName: streetName.value,
+      city: city.value,
+      region: region.value,
+      postalCode: postalCode.value,
+      country: country.value,
+    }));
+    props.onSubmit();
+  };
+
   return (
     <form
       onReset={props.onReset}
+      onSubmit={handleSubmit}
       className="flex flex-col items-center justify-start gap-3 md:flex-row"
     >
       <div>
