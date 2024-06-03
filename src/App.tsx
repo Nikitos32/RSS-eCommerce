@@ -52,7 +52,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        path="/RSS-eCommerce"
+        path="/"
         element={
           <IsLoginedContext.Provider value={[isLogined, handleIsLogined]}>
             <IsLoadindContext.Provider value={[handleLoading]}>
@@ -62,15 +62,12 @@ function App() {
         }
       >
         <Route index element={<MainPage />} />
-        <Route path="/RSS-eCommerce/catalog" element={<CatalogPage />} />
-        <Route path="/RSS-eCommerce/signin" element={<LoginPage />} />
-        <Route path="/RSS-eCommerce/signup" element={<SignUpPage />} />
-        <Route path="/RSS-eCommerce/profile" element={<Profile />} />
-        <Route path="/RSS-eCommerce/product/:key" element={<ProductPage />} />
-        <Route
-          path="/RSS-eCommerce/profile/changepwd"
-          element={<ProfileChangePassword />}
-        />
+        <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/signin" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/product/:key" element={<ProductPage />} />
+        <Route path="/profile/changepwd" element={<ProfileChangePassword />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )

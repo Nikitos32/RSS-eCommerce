@@ -11,7 +11,7 @@ export const ShowPasswordRadio = ({
     <div className={`w-10`} onClick={() => handleVisibility()}>
       <img
         className={`w-6 h-6`}
-        src={`../RSS-eCommerce/png/${!visible ? 'close' : 'open'}Eye.png`}
+        src={`/png/${!visible ? 'close' : 'open'}Eye.png`}
         alt="eye"
       />
     </div>

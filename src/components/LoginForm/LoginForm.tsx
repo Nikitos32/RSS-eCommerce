@@ -78,7 +78,7 @@ export const LoginForm = () => {
   };
 
   return isLogined ? (
-    <Navigate to="/RSS-eCommerce" />
+    <Navigate to="/" />
   ) : (
     <>
       <form onSubmit={handleSubmit} className={classes.loginForm}>
