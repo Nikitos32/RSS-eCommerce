@@ -1,6 +1,7 @@
 import { FormEventHandler, useEffect, useState } from 'react';
 import UserInputString from './UserInputString';
 import { BaseAddress } from '@commercetools/platform-sdk';
+import { UserInput } from '../utils';
 
 const inputStringInitState = {
   value: '',
@@ -38,6 +39,15 @@ function AddressEdit(props: AddressEditProps) {
   const [shippingDefault, setShippingDefault] = useState(false);
   const [billing, setBilling] = useState(false);
   const [billingDefault, setBillingDefault] = useState(false);
+
+  const clue = (
+    <p dangerouslySetInnerHTML={{ __html: UserInput.getRequiredClue() }} />
+  );
+  const cluePostalCode = (
+    <p
+      dangerouslySetInnerHTML={{ __html: UserInput.getPostcodeRequiredClue() }}
+    />
+  );
 
   useEffect(() => {
     if (!props.data) {
@@ -99,6 +109,72 @@ function AddressEdit(props: AddressEditProps) {
     setBilling(isBilling);
     setBillingDefault(isBillingDefault);
   }, [props.data]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkInputEmpty(firstName.value);
+    setFirstName((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: firstName.focus && !valid,
+    }));
+  }, [firstName.value, firstName.focus]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkInputEmpty(lastName.value);
+    setLastName((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: lastName.focus && !valid,
+    }));
+  }, [lastName.value, lastName.focus]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkInputEmpty(streetNumber.value);
+    setStreetNumber((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: streetNumber.focus && !valid,
+    }));
+  }, [streetNumber.value, streetNumber.focus]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkInputEmpty(streetName.value);
+    setStreetName((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: streetName.focus && !valid,
+    }));
+  }, [streetName.value, streetName.focus]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkInputEmpty(city.value);
+    setCity((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: city.focus && !valid,
+    }));
+  }, [city.value, city.focus]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkPostcodeRequiredValid(
+      country.value,
+      postalCode.value
+    );
+    setPostalCode((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: postalCode.focus && !valid,
+    }));
+  }, [postalCode.value, postalCode.focus, country.value]);
+
+  useEffect(() => {
+    const valid = !UserInput.checkInputEmpty(country.value);
+    setStreetName((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: country.focus && !valid,
+    }));
+  }, [country.value, country.focus]);
 
   return (
     <form
@@ -172,6 +248,7 @@ function AddressEdit(props: AddressEditProps) {
             autocomplete="off"
             state={firstName}
             setState={setFirstName}
+            clues={clue}
           />
         </div>
         <div className="mb-1">
@@ -182,6 +259,7 @@ function AddressEdit(props: AddressEditProps) {
             autocomplete="off"
             state={lastName}
             setState={setLastName}
+            clues={clue}
           />
         </div>
         <div className="mb-1">
@@ -202,6 +280,7 @@ function AddressEdit(props: AddressEditProps) {
             autocomplete="off"
             state={streetNumber}
             setState={setStreetNumber}
+            clues={clue}
           />
         </div>
         <div className="mb-1">
@@ -212,6 +291,7 @@ function AddressEdit(props: AddressEditProps) {
             autocomplete="off"
             state={streetName}
             setState={setStreetName}
+            clues={clue}
           />
         </div>
         <div className="mb-1">
@@ -222,6 +302,7 @@ function AddressEdit(props: AddressEditProps) {
             autocomplete="off"
             state={city}
             setState={setCity}
+            clues={clue}
           />
         </div>
         <div className="mb-1">
@@ -242,9 +323,10 @@ function AddressEdit(props: AddressEditProps) {
             autocomplete="off"
             state={postalCode}
             setState={setPostalCode}
+            clues={cluePostalCode}
           />
         </div>
-        <div className="block mb-1">
+        <div className="mb-1">
           <label
             htmlFor="countries"
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -276,7 +358,7 @@ function AddressEdit(props: AddressEditProps) {
               validCountry ? '' : ' border-red-500'
             }`}
           >
-            <option selected>Choose a country</option>
+            <option defaultValue={country.value}>Choose a country</option>
             <option value="US">United States</option>
             <option value="CA">Canada</option>
             <option value="DE">Germany</option>
