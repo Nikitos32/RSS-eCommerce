@@ -2,6 +2,8 @@ import { FormEventHandler, useEffect, useState } from 'react';
 import UserInputString from './UserInputString';
 import { BaseAddress } from '@commercetools/platform-sdk';
 import { UserInput } from '../utils';
+import { BsInfoCircle } from 'react-icons/bs';
+import { CountryCode } from 'postcode-validator';
 
 const inputStringInitState = {
   value: '',
@@ -24,8 +26,6 @@ type AddressEditProps = {
 };
 
 function AddressEdit(props: AddressEditProps) {
-  const validCountry = true;
-
   const [firstName, setFirstName] = useState(inputStringInitState);
   const [lastName, setLastName] = useState(inputStringInitState);
   const [apartment, setApartment] = useState(inputStringInitState);
@@ -45,7 +45,9 @@ function AddressEdit(props: AddressEditProps) {
   );
   const cluePostalCode = (
     <p
-      dangerouslySetInnerHTML={{ __html: UserInput.getPostcodeRequiredClue() }}
+      dangerouslySetInnerHTML={{
+        __html: UserInput.getPostcodeRequiredClue(country.value as CountryCode),
+      }}
     />
   );
 
@@ -156,7 +158,7 @@ function AddressEdit(props: AddressEditProps) {
   }, [city.value, city.focus]);
 
   useEffect(() => {
-    const valid = !UserInput.checkPostcodeRequiredValid(
+    const valid = UserInput.checkPostcodeRequiredValid(
       country.value,
       postalCode.value
     );
@@ -169,7 +171,7 @@ function AddressEdit(props: AddressEditProps) {
 
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(country.value);
-    setStreetName((prevState) => ({
+    setCountry((prevState) => ({
       ...prevState,
       valid,
       visibleClue: country.focus && !valid,
@@ -261,7 +263,7 @@ function AddressEdit(props: AddressEditProps) {
             setState={setLastName}
             clues={clue}
           />
-        </div>
+        </div>{' '}
         <div className="mb-1">
           <UserInputString
             type="text"
@@ -328,7 +330,7 @@ function AddressEdit(props: AddressEditProps) {
         </div>
         <div className="mb-1">
           <label
-            htmlFor="countries"
+            htmlFor="country"
             className="block text-gray-700 text-sm font-bold mb-2"
           >
             Country
@@ -355,22 +357,41 @@ function AddressEdit(props: AddressEditProps) {
               }))
             }
             className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-              validCountry ? '' : ' border-red-500'
+              country.valid ? '' : ' border-red-500'
             }`}
+            aria-invalid={country.valid ? 'false' : 'true'}
+            aria-describedby="hint-country"
           >
-            <option defaultValue={country.value}>Choose a country</option>
+            <option value="">Choose Country</option>
             <option value="US">United States</option>
             <option value="CA">Canada</option>
             <option value="DE">Germany</option>
             <option value="GB">Great Britain</option>
           </select>
+          <div
+            id="hint-country"
+            className={`mt-1 py-1 flex flex-row rounded-md bg-moonNeutral-200 md:max-w-2xl md:mx-auto justify-start items-center gap-2 text-sm ${
+              country.visibleClue ? ' ' : ' hidden'
+            }`}
+          >
+            <BsInfoCircle className="ml-2 text-xl" />
+            {clue}
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-4">
         <button
           className="bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
           type="submit"
-          disabled={!firstName.valid || !lastName.valid}
+          disabled={
+            !firstName.valid ||
+            !lastName.valid ||
+            !streetNumber.valid ||
+            !streetName.valid ||
+            !city.valid ||
+            !postalCode.valid ||
+            !country.valid
+          }
         >
           Update
         </button>
