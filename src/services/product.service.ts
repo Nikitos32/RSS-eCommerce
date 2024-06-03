@@ -182,6 +182,69 @@ export class ProductService {
     }
   }
 
+  async filterProductByPrice(
+    locale: string = 'en-US',
+    filterValueMin: string = '',
+    filterValueMax: string = ''
+  ): Promise<CTResponse> {
+    const query = `
+    query($locale: Locale) {
+      products (where: "masterData(current(masterVariant(prices(value(centAmount > ${filterValueMin}00 and centAmount < ${filterValueMax}00)))))") {
+        count
+        total
+        results {
+          id
+          key
+          skus
+          masterData {
+            current {
+              description(locale: $locale)
+              categories {
+                id
+                name(locale:$locale)
+            }
+              name(locale: $locale)
+              masterVariant {
+                id
+                images {
+                  url
+                  label
+                }
+                prices {
+                  id
+                  value {
+                    centAmount
+                  }
+                }
+                attributesRaw {
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    `;
+
+    const variables = { locale };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body
+        );
+      }
+      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
   async getProductsAll(locale: string = 'en-US'): Promise<CTResponse> {
     const query = `
     query($locale: Locale) {
