@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import UserInputString from './UserInputString';
 import { BaseAddress } from '@commercetools/platform-sdk';
 
@@ -18,15 +18,88 @@ export interface AddressEditData extends BaseAddress {
 }
 
 type AddressEditProps = {
-  data: AddressEditData;
+  data: AddressEditData | undefined;
   onReset: FormEventHandler<HTMLFormElement>;
 };
 
 function AddressEdit(props: AddressEditProps) {
   const validCountry = true;
-  const [firstName, setFirstName] = useState(inputStringInitState);
 
+  const [firstName, setFirstName] = useState(inputStringInitState);
   const [lastName, setLastName] = useState(inputStringInitState);
+  const [apartment, setApartment] = useState(inputStringInitState);
+  const [streetNumber, setStreetNumber] = useState(inputStringInitState);
+  const [streetName, setStreetName] = useState(inputStringInitState);
+  const [city, setCity] = useState(inputStringInitState);
+  const [region, setRegion] = useState(inputStringInitState);
+  const [postalCode, setPostalCode] = useState(inputStringInitState);
+  const [country, setCountry] = useState(inputStringInitState);
+  const [shipping, setShipping] = useState(false);
+  const [shippingDefault, setShippingDefault] = useState(false);
+  const [billing, setBilling] = useState(false);
+  const [billingDefault, setBillingDefault] = useState(false);
+
+  useEffect(() => {
+    if (!props.data) {
+      return;
+    }
+    const {
+      firstName = '',
+      lastName = '',
+      apartment = '',
+      streetNumber = '',
+      streetName = '',
+      city = '',
+      region = '',
+      postalCode = '',
+      country = '',
+      isShipping = false,
+      isShippingDefault = false,
+      isBilling = false,
+      isBillingDefault = false,
+    } = props.data as AddressEditData;
+    setFirstName((prevState) => ({
+      ...prevState,
+      value: firstName,
+    }));
+    setLastName((prevState) => ({
+      ...prevState,
+      value: lastName,
+    }));
+    setApartment((prevState) => ({
+      ...prevState,
+      value: apartment,
+    }));
+    setStreetNumber((prevState) => ({
+      ...prevState,
+      value: streetNumber,
+    }));
+    setStreetName((prevState) => ({
+      ...prevState,
+      value: streetName,
+    }));
+    setCity((prevState) => ({
+      ...prevState,
+      value: city,
+    }));
+    setRegion((prevState) => ({
+      ...prevState,
+      value: region,
+    }));
+    setPostalCode((prevState) => ({
+      ...prevState,
+      value: postalCode,
+    }));
+    setCountry((prevState) => ({
+      ...prevState,
+      value: country,
+    }));
+    setShipping(isShipping);
+    setShippingDefault(isShippingDefault);
+    setBilling(isBilling);
+    setBillingDefault(isBillingDefault);
+  }, [props.data]);
+
   return (
     <form
       onReset={props.onReset}
@@ -34,7 +107,13 @@ function AddressEdit(props: AddressEditProps) {
     >
       <div>
         <label className="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" value="" className="sr-only peer" />
+          <input
+            type="checkbox"
+            value=""
+            checked={shipping}
+            onChange={(e) => setShipping(e.target.checked)}
+            className="sr-only peer"
+          />
           <div className="w-9 h-5 bg-gray-200 hover:bg-gray-300 peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-moonNeutral-800 hover:peer-checked:bg-moonNeutral-600"></div>
           <span className="ml-3 text-sm font-medium text-gray-600 ">
             Shipping
@@ -45,12 +124,24 @@ function AddressEdit(props: AddressEditProps) {
             Default
           </span>
           <label className="relative flex items-center  cursor-pointer">
-            <input type="checkbox" value="" className="sr-only peer" />
+            <input
+              type="checkbox"
+              value=""
+              checked={shippingDefault}
+              onChange={(e) => setShippingDefault(e.target.checked)}
+              className="sr-only peer"
+            />
             <div className="w-9 h-5 bg-gray-200 hover:bg-gray-300 peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-moonNeutral-800 hover:peer-checked:bg-moonNeutral-600"></div>
           </label>
         </div>
         <label className="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" value="" className="sr-only peer" />
+          <input
+            type="checkbox"
+            value=""
+            checked={billing}
+            onChange={(e) => setBilling(e.target.checked)}
+            className="sr-only peer"
+          />
           <div className="w-9 h-5 bg-gray-200 hover:bg-gray-300 peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-moonNeutral-800 hover:peer-checked:bg-moonNeutral-600"></div>
           <span className="ml-3 text-sm font-medium text-gray-600 ">
             Billing
@@ -61,10 +152,15 @@ function AddressEdit(props: AddressEditProps) {
             Default
           </span>
           <label className="relative flex items-center  cursor-pointer">
-            <input type="checkbox" value="" className="sr-only peer" />
+            <input
+              type="checkbox"
+              value=""
+              checked={billingDefault}
+              onChange={(e) => setBillingDefault(e.target.checked)}
+              className="sr-only peer"
+            />
             <div className="w-9 h-5 bg-gray-200 hover:bg-gray-300 peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-moonNeutral-800 hover:peer-checked:bg-moonNeutral-600"></div>
-          </label>{' '}
-          CiDeliveryTruck,
+          </label>
         </div>
       </div>
       <div className="flex flex-row flex-wrap gap-1">
@@ -94,18 +190,18 @@ function AddressEdit(props: AddressEditProps) {
             label="Apartment/Suite"
             placeHolder=""
             autocomplete="off"
-            state={lastName}
-            setState={setLastName}
+            state={apartment}
+            setState={setApartment}
           />
         </div>
         <div className="mb-1">
           <UserInputString
             type="text"
-            label="Building"
+            label="Street Number"
             placeHolder=""
             autocomplete="off"
-            state={lastName}
-            setState={setLastName}
+            state={streetNumber}
+            setState={setStreetNumber}
           />
         </div>
         <div className="mb-1">
@@ -114,8 +210,8 @@ function AddressEdit(props: AddressEditProps) {
             label="Street Name"
             placeHolder=""
             autocomplete="off"
-            state={lastName}
-            setState={setLastName}
+            state={streetName}
+            setState={setStreetName}
           />
         </div>
         <div className="mb-1">
@@ -124,8 +220,8 @@ function AddressEdit(props: AddressEditProps) {
             label="City"
             placeHolder=""
             autocomplete="off"
-            state={lastName}
-            setState={setLastName}
+            state={city}
+            setState={setCity}
           />
         </div>
         <div className="mb-1">
@@ -134,8 +230,8 @@ function AddressEdit(props: AddressEditProps) {
             label="Region"
             placeHolder=""
             autocomplete="off"
-            state={lastName}
-            setState={setLastName}
+            state={region}
+            setState={setRegion}
           />
         </div>
         <div className="mb-1">
@@ -144,8 +240,8 @@ function AddressEdit(props: AddressEditProps) {
             label="Postal Code"
             placeHolder=""
             autocomplete="off"
-            state={lastName}
-            setState={setLastName}
+            state={postalCode}
+            setState={setPostalCode}
           />
         </div>
         <div className="block mb-1">
@@ -156,7 +252,26 @@ function AddressEdit(props: AddressEditProps) {
             Country
           </label>
           <select
-            id="countries"
+            id="country"
+            value={country.value}
+            onChange={(e) =>
+              setCountry((prevState) => ({
+                ...prevState,
+                value: e.target.value,
+              }))
+            }
+            onFocus={() =>
+              setCountry((prevState) => ({
+                ...prevState,
+                focus: true,
+              }))
+            }
+            onBlur={() =>
+              setCountry((prevState) => ({
+                ...prevState,
+                focus: false,
+              }))
+            }
             className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
               validCountry ? '' : ' border-red-500'
             }`}
