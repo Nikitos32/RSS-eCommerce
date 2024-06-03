@@ -10,11 +10,27 @@ import 'swiper/css/thumbs';
 import './productPage.css';
 import Spinner from '../Spinner';
 
+const convertPrice = function (
+  centAmount: number | undefined,
+  fractionDigits: number | undefined
+) {
+  if (!centAmount || !fractionDigits) return 'No price';
+  const floatAmount = centAmount / Math.pow(10, fractionDigits);
+  return Number.isInteger(floatAmount)
+    ? floatAmount.toFixed(0)
+    : floatAmount.toFixed(fractionDigits);
+};
+
 export const ProductPage = () => {
   const { key } = useParams();
   const { loading, product } = useApiGetProduct(key);
+
   const productData = product?.data.product.masterData.current as ProductAPI;
-  console.log(productData);
+  const price = productData?.masterVariant.prices.find(
+    (priceEl) => priceEl.value.currencyCode === 'EUR'
+  );
+
+  console.log(productData, price);
   return (
     <article className="productPage">
       <Spinner isLoading={loading} />
@@ -27,7 +43,7 @@ export const ProductPage = () => {
             <div className="productData__title">
               <div className="font-bold">{productData.name}</div>
               <div className="font-medium">
-                <span className="mr-4">$35</span>
+                <span className="mr-4">{`${convertPrice(price?.value.centAmount, price?.value.fractionDigits)}€`}</span>
                 <span className="text-moonNeutral-500">$50</span>
               </div>
             </div>

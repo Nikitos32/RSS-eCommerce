@@ -121,6 +121,13 @@ export class ProductService {
               images {
                 url
               }
+              prices {
+                value{
+                  fractionDigits
+                  centAmount
+                  currencyCode
+                }
+              }
             }
           }
         }
