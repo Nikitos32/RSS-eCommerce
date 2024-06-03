@@ -67,6 +67,7 @@ function Profile() {
 
   const [showAddressForm, setShowAddressForm] = useState(true);
   const [addAddress, setAddAddress] = useState(false);
+  const [, setEditAddress] = useState(false);
 
   const isUpdateAddress = false;
 
@@ -235,6 +236,13 @@ function Profile() {
     setAddAddress(!addAddress);
   };
 
+  const handleResetShowAddressForm = (e: FormEvent) => {
+    e.preventDefault();
+    setShowAddressForm(false);
+    setAddAddress(false);
+    setEditAddress(false);
+  };
+
   return (
     <>
       <section
@@ -373,7 +381,9 @@ function Profile() {
               </a>
             )}
           </div>
-          {showAddressForm && <AddressEdit />}
+          {showAddressForm && (
+            <AddressEdit onReset={handleResetShowAddressForm} />
+          )}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
             {addresses?.map((address) => (
               <Address key={address.id} address={address} />
