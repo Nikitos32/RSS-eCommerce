@@ -37,7 +37,7 @@ export const CatalogPage = () => {
     handleLoading(true);
     const productService = new ProductService();
     if (currentSearch) {
-      /*   const data: Promise<CTResponse> = productService.searchProduct(
+      const data: Promise<CTResponse> = productService.searchProduct(
         'en-US',
         currentSearch
       );
@@ -46,7 +46,7 @@ export const CatalogPage = () => {
         setAllProducts(
           ((response.data as CTResponse).data as ProductsData).products
         );
-      }); */
+      });
       handleLoading(false);
     } else {
       if (currentSort === 'a-z') {
@@ -96,8 +96,8 @@ export const CatalogPage = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
           <section className="flex flex-col gap-5 flex-wrap">
-            {allProducts &&
-              allProducts.results.map((element) => {
+            {allProducts?.total !== 0 ? (
+              allProducts?.results.map((element) => {
                 return (
                   <ProductPreviewItem
                     key={element.key}
@@ -112,7 +112,10 @@ export const CatalogPage = () => {
                     productPrice={`$${element.masterData.current.masterVariant.prices ? element.masterData.current.masterVariant.prices[0].value.centAmount : ''}`}
                   />
                 );
-              })}
+              })
+            ) : (
+              <p>No Match</p>
+            )}
           </section>
         </div>
       </div>
