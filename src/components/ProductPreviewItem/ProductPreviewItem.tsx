@@ -3,6 +3,7 @@ import '@smastrom/react-rating/style.css';
 import { useState } from 'react';
 import { IoCartOutline } from 'react-icons/io5';
 import { MdOutlineViewInAr } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 interface ProductPreviewItemProps {
   imgUrl: string;
@@ -10,6 +11,7 @@ interface ProductPreviewItemProps {
   productName: string;
   productDescription: string;
   productPrice: string;
+  id: string;
 }
 
 export const ProductPreviewItem = ({
@@ -18,6 +20,7 @@ export const ProductPreviewItem = ({
   productName,
   productDescription,
   productPrice,
+  id,
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
   return (
@@ -45,9 +48,12 @@ export const ProductPreviewItem = ({
           />
         </div>
         <div className="flex flex-col gap-2 items-center">
-          <a className="cursor-pointer flex gap-1 justify-center items-center">
+          <Link
+            to={`/product/${id}`}
+            className="cursor-pointer flex gap-1 justify-center items-center"
+          >
             View Details <MdOutlineViewInAr />
-          </a>
+          </Link>
           <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
             <IoCartOutline className="size-6" />
             Add to Cart

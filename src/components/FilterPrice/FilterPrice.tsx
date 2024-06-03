@@ -1,17 +1,15 @@
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import { useState } from 'react';
 
-export const FilterPrice = () => {
-  const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
-    0, 1000,
-  ]);
-  const handleRangeSlider = (event: number | number[]) => {
-    if (typeof event !== 'number') {
-      setCurrentRangeValue(event);
-    }
-  };
+interface FilterPriceProps {
+  currentRangeValue: number[];
+  handleRangeSlider: (event: number | number[]) => void;
+}
 
+export const FilterPrice = ({
+  currentRangeValue,
+  handleRangeSlider,
+}: FilterPriceProps) => {
   return (
     <div className="flex flex-col gap-3 border-b-2 pb-9 pl-5">
       <p>Price:</p>
@@ -26,7 +24,7 @@ export const FilterPrice = () => {
           step={1}
           min={0}
           max={1000}
-          pushable={100}
+          pushable={10}
           onChange={(event) => handleRangeSlider(event)}
         />
       </div>

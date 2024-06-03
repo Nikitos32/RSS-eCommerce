@@ -1,13 +1,21 @@
 import { FilterCategory } from '../FilterCategory/FilterCategory';
-import { FilterColor } from '../FilterColor/FilterColor';
 import { FilterPrice } from '../FilterPrice/FilterPrice';
+interface FilterSectionProps {
+  currentRangeValue: number[];
+  handleRangeSlider: (event: number | number[]) => void;
+}
 
-export const FilterSection = () => {
+export const FilterSection = ({
+  currentRangeValue,
+  handleRangeSlider,
+}: FilterSectionProps) => {
   return (
     <section className="flex w-80 flex-col pt-5 gap-5 border-r-2">
       <FilterCategory />
-      <FilterColor />
-      <FilterPrice />
+      <FilterPrice
+        currentRangeValue={currentRangeValue}
+        handleRangeSlider={handleRangeSlider}
+      />
     </section>
   );
 };
