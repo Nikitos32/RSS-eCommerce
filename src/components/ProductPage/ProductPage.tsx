@@ -43,8 +43,8 @@ export const ProductPage = () => {
             <div className="productData__title">
               <div className="font-bold">{productData.name}</div>
               <div className="font-medium">
-                <span className="mr-4">{`${convertPrice(price?.value.centAmount, price?.value.fractionDigits)}€`}</span>
-                <span className="text-moonNeutral-500">$50</span>
+                <span className="mr-4">{`${convertPrice(price?.discounted.value.centAmount, price?.discounted.value.fractionDigits)}€`}</span>
+                <span className="text-moonNeutral-500">{`${convertPrice(price?.value.centAmount, price?.value.fractionDigits)}€`}</span>
               </div>
             </div>
             <div>

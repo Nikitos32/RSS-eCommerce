@@ -8,6 +8,21 @@ export type ProductPrice = {
     centAmount: number;
     currencyCode: string;
   };
+  discounted: {
+    discount: {
+      id: string;
+      name: string;
+      value: {
+        type: string;
+        permyriad: number;
+      };
+    };
+    value: {
+      centAmount: number;
+      currencyCode: string;
+      fractionDigits: number;
+    };
+  };
 };
 
 export type ProductAPI = {

@@ -33,6 +33,7 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
           onSwiper={setCurrentImage}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Thumbs, Controller, Navigation]}
+          spaceBetween={5}
           allowTouchMove={false}
           centeredSlides={true}
           className="productImg__main-swiper"
@@ -60,7 +61,9 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
                   className="productImg__slide productImg__footer-slide"
                   key={index}
                 >
-                  <img className="productImg__footer-img" src={img.url} />
+                  <div className="swiper-zoom-container">
+                    <img className="productImg__footer-img" src={img.url} />
+                  </div>
                 </SwiperSlide>
               ))
             : ''}

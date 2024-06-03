@@ -105,7 +105,7 @@ export class ProductService {
     locale: string = 'en-US'
   ): Promise<CTResponse> {
     const query = `
-    query($key: String, $locale: Locale) {
+    query ($key: String, $locale: Locale) {
       product(key: $key) {
         key
         masterData {
@@ -115,17 +115,34 @@ export class ProductService {
             description(locale: $locale)
             categories {
               id
-              name(locale:$locale)
+              name(locale: $locale)
             }
             masterVariant {
               images {
                 url
               }
               prices {
-                value{
+                value {
                   fractionDigits
                   centAmount
                   currencyCode
+                }
+                discounted {
+                  value {
+                    centAmount
+                    fractionDigits
+                    currencyCode
+                  }
+                  discount {
+                    id
+                    name(locale: $locale)
+                    value {
+                      type
+                      ... on RelativeDiscountValue {
+                        permyriad
+                      }
+                    }
+                  }
                 }
               }
             }
