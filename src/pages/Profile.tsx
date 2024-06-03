@@ -65,11 +65,13 @@ function Profile() {
     customer: customerAfterLoad,
   } = useApiGetCustomer();
 
-  const [showAddressForm] = useState(true);
+  const [showAddressForm, setShowAddressForm] = useState(true);
+  const [addAddress, setAddAddress] = useState(false);
 
   const isUpdateAddress = false;
 
   const [editProfile, setEditProfile] = useState(false);
+
   const {
     ok: okUpdate,
     loading: isUpdatingProfile,
@@ -205,8 +207,13 @@ function Profile() {
   }, [editProfile]);
 
   useEffect(() => {
+    setShowAddressForm(addAddress);
+  }, [addAddress]);
+
+  useEffect(() => {
     setEditProfile(false);
   }, [customerAfterUpdate]);
+
   const handleClickEditProfile = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setEditProfile(!editProfile);
@@ -222,6 +229,12 @@ function Profile() {
     fillProfile(customer);
     setEditProfile(false);
   };
+
+  const handleClickAddAddress = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    setAddAddress(!addAddress);
+  };
+
   return (
     <>
       <section
@@ -349,13 +362,16 @@ function Profile() {
             <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-moonBlack md:text-2xl dark:text-moonNeutral-100">
               My Addresses
             </h2>
-            <a
-              href=""
-              title="Add New Address"
-              className="text-2xl hover:text-moonNeutral-600"
-            >
-              <CiCirclePlus />
-            </a>
+            {!addAddress && (
+              <a
+                onClick={handleClickAddAddress}
+                href=""
+                title="Add New Address"
+                className="text-2xl hover:text-moonNeutral-600"
+              >
+                <CiCirclePlus />
+              </a>
+            )}
           </div>
           {showAddressForm && <AddressEdit />}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
