@@ -2,6 +2,7 @@ import {
   BaseAddress,
   ClientResponse,
   Customer,
+  CustomerAddAddressAction,
   CustomerChangeEmailAction,
   CustomerChangePassword,
   CustomerDraft,
@@ -156,6 +157,48 @@ export class CustomerService {
         dateOfBirth,
         action: 'setDateOfBirth',
       } as CustomerSetDateOfBirthAction);
+    }
+
+    if (!customerUpdate.actions.length) {
+      return CTResponseHandler.makeError(
+        HttpStatusCode.NO_CONTENT_204,
+        'No changes to update',
+        undefined
+      );
+    }
+
+    try {
+      const answer = await this.customerRequests.updateCustomer(
+        id,
+        customerUpdate
+      );
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body as Customer
+        );
+      } else {
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
+  async updateCustomerAddAddress(
+    id: string,
+    version: number,
+    address: BaseAddress
+  ): Promise<CTResponse> {
+    const customerUpdate: CustomerUpdate = { version, actions: [] };
+
+    if (address) {
+      customerUpdate.actions.push({
+        address,
+        action: 'addAddress',
+      } as CustomerAddAddressAction);
     }
 
     if (!customerUpdate.actions.length) {
