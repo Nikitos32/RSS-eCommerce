@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 import UserInputString from './UserInputString';
+import { BaseAddress } from '@commercetools/platform-sdk';
 
 const inputStringInitState = {
   value: '',
@@ -9,13 +10,28 @@ const inputStringInitState = {
   readonly: false,
 };
 
-function AddressEdit() {
+export interface AddressEditData extends BaseAddress {
+  isShipping: boolean;
+  isShippingDefault: boolean;
+  isBilling: boolean;
+  isBillingDefault: boolean;
+}
+
+type AddressEditProps = {
+  data: AddressEditData;
+  onReset: FormEventHandler<HTMLFormElement>;
+};
+
+function AddressEdit(props: AddressEditProps) {
   const validCountry = true;
   const [firstName, setFirstName] = useState(inputStringInitState);
 
   const [lastName, setLastName] = useState(inputStringInitState);
   return (
-    <form className="flex items-center justify-start gap-3">
+    <form
+      onReset={props.onReset}
+      className="flex items-center justify-start gap-3"
+    >
       <div>
         <label className="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" value="" className="sr-only peer" />
@@ -47,7 +63,8 @@ function AddressEdit() {
           <label className="relative flex items-center  cursor-pointer">
             <input type="checkbox" value="" className="sr-only peer" />
             <div className="w-9 h-5 bg-gray-200 hover:bg-gray-300 peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-moonNeutral-800 hover:peer-checked:bg-moonNeutral-600"></div>
-          </label>
+          </label>{' '}
+          CiDeliveryTruck,
         </div>
       </div>
       <div className="flex flex-row flex-wrap gap-1">
