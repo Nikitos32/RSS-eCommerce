@@ -21,7 +21,7 @@ export const ProductPreviewItem = ({
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
   return (
-    <div className="bg-slate-300 w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20">
+    <div className="transition duration-700 ease-in-out bg-slate-300 w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20 hover:shadow-[1px_1px_8px]">
       <div>
         <img src={imgUrl} alt="photo" className="size-44 rounded" />
       </div>
@@ -30,7 +30,9 @@ export const ProductPreviewItem = ({
           <p className="text-gray-500">{productCategory}</p>
           <p className="font-semibold">{productName}</p>
         </div>
-        <p className="w-full text-gray-500">{productDescription}</p>
+        <p className="w-full text-gray-500 line-clamp-3">
+          {productDescription}
+        </p>
       </div>
       <div className="flex w-2/5 flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
@@ -46,7 +48,7 @@ export const ProductPreviewItem = ({
           <a className="cursor-pointer flex gap-1 justify-center items-center">
             View Details <MdOutlineViewInAr />
           </a>
-          <button className="flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950">
+          <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
             <IoCartOutline className="size-6" />
             Add to Cart
           </button>

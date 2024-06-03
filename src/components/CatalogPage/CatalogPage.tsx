@@ -47,7 +47,7 @@ export const CatalogPage = () => {
               allProducts.results.map((element) => {
                 return (
                   <ProductPreviewItem
-                    key={element.id}
+                    key={element.key}
                     imgUrl={
                       element.masterData.current.masterVariant.images
                         ? `${element.masterData.current.masterVariant.images[0].url}`
@@ -56,7 +56,7 @@ export const CatalogPage = () => {
                     productCategory={`${element.masterData.current.categories[0].name}`}
                     productDescription={`${element.masterData.current.description}`}
                     productName={`${element.masterData.current.name}`}
-                    productPrice={`$${element.masterData.current.masterVariant.prices[0].value.centAmount}`}
+                    productPrice={`$${element.masterData.current.masterVariant.prices ? element.masterData.current.masterVariant.prices[0].value.centAmount : ''}`}
                   />
                 );
               })}
