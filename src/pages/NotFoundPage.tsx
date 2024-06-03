@@ -20,7 +20,7 @@ function NotFoundPage() {
           <FaArrowLeft className="inline-block" /> Go Back
         </Link>
         <Link
-          to="/RSS-eCommerce"
+          to="/"
           className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
         >
           To Main Page

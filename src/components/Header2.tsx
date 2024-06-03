@@ -18,7 +18,7 @@ function Links() {
 
   return (
     <>
-      <Link to="../RSS-eCommerce" className="hover:text-moonNeutral-600">
+      <Link to="/" className="hover:text-moonNeutral-600">
         Home
       </Link>
       <Link to="./catalog" className="hover:text-gray-500">
@@ -68,12 +68,12 @@ function Links() {
 function Logo() {
   return (
     <Link
-      to="../RSS-eCommerce"
+      to="/"
       className="flex items-center h-10 px-10 font-bold uppercase italic text-white hover:opacity-90"
     >
       <img
         className="h-8 w-auto"
-        src="../RSS-eCommerce/png/Random20Logo.png"
+        src="/png/Random20Logo.png"
         alt="Random Twenty Logo"
       />
     </Link>
