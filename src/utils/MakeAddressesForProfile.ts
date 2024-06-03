@@ -14,12 +14,21 @@ const makeAddress = (
   isShipping: boolean,
   isDefault: boolean
 ): AddressForProfile => {
+  const {
+    streetName = '',
+    streetNumber = '',
+    region = '',
+    apartment = '',
+    city = '',
+    postalCode = '',
+    country = '',
+  } = address;
   return {
     id: address.id as string,
     isDefault,
     isShipping,
     isBilling,
-    strAddress: `${address.streetNumber} ${address.streetName}, ${address.city}, ${address.state}, ${address.postalCode}, ${address.country}`,
+    strAddress: `${apartment}, ${streetNumber} ${streetName} street, ${city}, ${region}, ${postalCode}, ${country}`,
   };
 };
 
