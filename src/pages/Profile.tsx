@@ -10,52 +10,13 @@ import {
 import { BsInfoCircle } from 'react-icons/bs';
 import { PiPasswordBold } from 'react-icons/pi';
 import { RiLockPasswordLine } from 'react-icons/ri';
-import {
-  CiCirclePlus,
-  CiDeliveryTruck,
-  CiEdit,
-  CiFileOn,
-  CiTrash,
-} from 'react-icons/ci';
-import { CiBookmarkCheck } from 'react-icons/ci';
+import { CiCirclePlus, CiEdit } from 'react-icons/ci';
 import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
 import { Customer } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
 import AddressEdit from '../components/AddressEdit';
+import AddressLine from '../components/AddressLine';
 
-type AddressProps = { address: AddressForProfile };
-function Address({ address }: AddressProps) {
-  return (
-    <>
-      <div className="flex flex-row justify-end gap-1 text-2xl">
-        {address.isDefault && <CiBookmarkCheck title="Default" />}
-        {address.isDefault && address.isShipping && (
-          <CiDeliveryTruck title="Shipping Address" />
-        )}
-        {address.isDefault && address.isBilling && (
-          <CiFileOn title="Shipping Address" />
-        )}
-        {!address.isDefault && address.isShipping && (
-          <CiDeliveryTruck title="Shipping Address" />
-        )}
-        {!address.isDefault && address.isBilling && (
-          <CiDeliveryTruck title="Shipping Address" />
-        )}
-      </div>
-      <p>{address.strAddress}</p>
-      <div className="flex flex-row gap-4 text-2xl">
-        <a href="" title="Edit" className=" hover:text-moonNeutral-600">
-          <CiEdit />
-        </a>
-        {!address.isDefault && (
-          <a href="" title="Delete" className=" hover:text-moonNeutral-600">
-            <CiTrash />
-          </a>
-        )}
-      </div>
-    </>
-  );
-}
 function Profile() {
   const [customer, setCustomer] = useState<Customer>();
 
@@ -386,7 +347,7 @@ function Profile() {
           )}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
             {addresses?.map((address) => (
-              <Address key={address.id} address={address} />
+              <AddressLine key={address.id} address={address} />
             ))}
           </div>
           <Spinner isLoading={isUpdateAddress} />
