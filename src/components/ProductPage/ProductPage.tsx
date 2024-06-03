@@ -30,7 +30,6 @@ export const ProductPage = () => {
     (priceEl) => priceEl.value.currencyCode === 'EUR'
   );
 
-  console.log(productData, price);
   return (
     <article className="productPage">
       <Spinner isLoading={loading} />
