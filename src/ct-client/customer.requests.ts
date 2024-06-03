@@ -5,6 +5,7 @@ import {
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  CustomerUpdate,
 } from '@commercetools/platform-sdk';
 import { apiRoot } from './client.builder';
 
@@ -58,6 +59,18 @@ export class CustomerRequests {
       .customers()
       .withId({ ID: id })
       .get()
+      .execute();
+    return result;
+  }
+
+  async updateCustomer(
+    id: string,
+    customerUpdate: CustomerUpdate
+  ): Promise<ClientResponse> {
+    const result = await this.apiRoot
+      .customers()
+      .withId({ ID: id })
+      .post({ body: customerUpdate })
       .execute();
     return result;
   }

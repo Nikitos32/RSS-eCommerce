@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import UserInputString from '../components/UserInputString';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import {
   AddressForProfile,
   UserInput,
@@ -18,8 +18,9 @@ import {
   CiTrash,
 } from 'react-icons/ci';
 import { CiBookmarkCheck } from 'react-icons/ci';
-import { useApiGetCustomer } from '../hooks';
+import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
 import { Customer } from '@commercetools/platform-sdk';
+import { toast } from 'react-toastify';
 
 type AddressProps = { address: AddressForProfile };
 function Address({ address }: AddressProps) {
@@ -55,11 +56,24 @@ function Address({ address }: AddressProps) {
   );
 }
 function Profile() {
-  const { loading: isLoading, ok, customer } = useApiGetCustomer();
-  const isUpdateProfile = false;
+  const [customer, setCustomer] = useState<Customer>();
+
+  const {
+    loading: isLoading,
+    ok: okLoad,
+    customer: customerAfterLoad,
+  } = useApiGetCustomer();
+
   const isUpdateAddress = false;
 
   const [editProfile, setEditProfile] = useState(false);
+  const {
+    ok: okUpdate,
+    loading: isUpdatingProfile,
+    errorMsg: errorMsgUpdate,
+    setProfileUpdates,
+    customerAfterUpdate,
+  } = useApiUpdateProfile();
 
   const inputStringInitState = {
     value: '',
@@ -69,6 +83,9 @@ function Profile() {
     readonly: false,
   };
 
+  const firstNameRef = useRef<HTMLInputElement>(null);
+
+  const [email, setEmail] = useState(inputStringInitState);
   const [firstName, setFirstName] = useState(inputStringInitState);
 
   const [lastName, setLastName] = useState(inputStringInitState);
@@ -80,6 +97,9 @@ function Profile() {
 
   const [addresses, setAddresses] = useState<AddressForProfile[]>();
 
+  const emailClue = (
+    <p dangerouslySetInnerHTML={{ __html: UserInput.getEmailClue() }} />
+  );
   const nameClue = (
     <p dangerouslySetInnerHTML={{ __html: UserInput.getRequiredClue() }} />
   );
@@ -88,25 +108,87 @@ function Profile() {
       dangerouslySetInnerHTML={{ __html: UserInput.getBirthdayRequiredClue() }}
     />
   );
+  const fillProfile = (customer: Customer | undefined) => {
+    if (!customer) return;
+
+    const { email, firstName, lastName, dateOfBirth } = customer;
+
+    setEmail((prevState) => ({ ...prevState, value: email as string }));
+    setFirstName((prevState) => ({
+      ...prevState,
+      value: firstName as string,
+    }));
+    setLastName((prevState) => ({
+      ...prevState,
+      value: lastName as string,
+    }));
+    setDob(dateOfBirth as string);
+  };
+
+  const prepareProfileUpdates = (customer: Customer | undefined) => {
+    if (!customer) return;
+    setProfileUpdates(() => ({
+      id: customer.id,
+      version: customer.version,
+      email: customer.email !== email.value ? email.value : '',
+      firstName: customer.firstName !== firstName.value ? firstName.value : '',
+      lastName: customer.lastName !== lastName.value ? lastName.value : '',
+      dateOfBirth: customer.dateOfBirth !== dob ? dob : '',
+    }));
+  };
+
+  useEffect(() => {
+    fillProfile(customer);
+    setAddresses([...makeAddressesForProfile(customer as Customer)]);
+  }, [customer]);
+
+  useEffect(() => {
+    if (okLoad) {
+      setCustomer(customerAfterLoad);
+    }
+  }, [okLoad, customerAfterLoad]);
+
+  useEffect(() => {
+    if (okUpdate) {
+      toast.success('Profile Updated');
+      setCustomer(customerAfterUpdate);
+      setEditProfile(false);
+    }
+    if (!okUpdate && errorMsgUpdate) {
+      firstNameRef.current?.focus();
+      toast.error(errorMsgUpdate);
+    }
+  }, [okUpdate, customerAfterUpdate, errorMsgUpdate]);
+
+  useEffect(() => {
+    const valid =
+      UserInput.checkEmailRequiredValid(email.value) || !editProfile;
+    setEmail((prevState) => ({
+      ...prevState,
+      valid,
+      visibleClue: email.focus && !valid,
+      readonly: !editProfile,
+    }));
+  }, [email.value, email.focus, editProfile]);
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(firstName.value) || !editProfile;
-    setFirstName({
-      ...firstName,
+    setFirstName((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: firstName.focus && !valid,
       readonly: !editProfile,
-    });
-  }, [firstName, editProfile]);
+    }));
+  }, [firstName.value, firstName.focus, editProfile]);
 
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(lastName.value) || !editProfile;
-    setLastName({
-      ...lastName,
+    setLastName((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: lastName.focus && !valid,
       readonly: !editProfile,
-    });
-  }, [lastName, editProfile]);
+    }));
+  }, [lastName.value, lastName.focus, editProfile]);
 
   useEffect(() => {
     setValidDob(UserInput.checkBirthdayRequiredValid(dob) || !editProfile);
@@ -114,26 +196,29 @@ function Profile() {
   }, [dob, dobFocus, validDob, editProfile]);
 
   useEffect(() => {
-    if (ok) {
-      const { firstName, lastName, dateOfBirth } = customer as Customer;
-      setFirstName((prevState) => ({
-        ...prevState,
-        value: firstName as string,
-      }));
-      setLastName((prevState) => ({
-        ...prevState,
-        value: lastName as string,
-      }));
-      setDob(dateOfBirth as string);
-      setAddresses([...makeAddressesForProfile(customer as Customer)]);
+    if (editProfile) {
+      firstNameRef.current?.focus();
     }
-  }, [ok, customer]);
+  }, [editProfile]);
 
+  useEffect(() => {
+    setEditProfile(false);
+  }, [customerAfterUpdate]);
   const handleClickEditProfile = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     setEditProfile(!editProfile);
   };
 
+  const handleSubmitProfile = async (e: FormEvent) => {
+    e.preventDefault();
+    prepareProfileUpdates(customer);
+  };
+
+  const handleResetProfile = (e: FormEvent) => {
+    e.preventDefault();
+    fillProfile(customer);
+    setEditProfile(false);
+  };
   return (
     <>
       <section
@@ -145,14 +230,16 @@ function Profile() {
               <h2 className="mb-1 text-xl font-bold leading-tight tracking-tight text-moonBlack md:text-2xl dark:text-moonNeutral-100">
                 My Profile
               </h2>
-              <a
-                href=""
-                onClick={handleClickEditProfile}
-                title="Click to Edit"
-                className="text-2xl hover:text-moonNeutral-600"
-              >
-                <CiEdit />
-              </a>
+              {!editProfile && (
+                <a
+                  href=""
+                  onClick={handleClickEditProfile}
+                  title="Click to Edit"
+                  className="text-2xl hover:text-moonNeutral-600"
+                >
+                  <CiEdit />
+                </a>
+              )}
             </div>
             <Link
               to="./changepwd"
@@ -163,7 +250,22 @@ function Profile() {
               <PiPasswordBold className="inline" />
             </Link>
           </div>
-          <form className="relative mt-4 space-y-4 lg:mt-5 md:space-y-5">
+          <form
+            onSubmit={handleSubmitProfile}
+            onReset={handleResetProfile}
+            className="relative mt-4 space-y-4 lg:mt-5 md:space-y-5"
+          >
+            <div className="mb-4">
+              <UserInputString
+                type="text"
+                label="Email"
+                placeHolder="Email address"
+                autocomplete="off"
+                state={email}
+                setState={setEmail}
+                clues={emailClue}
+              />
+            </div>
             <div className="mb-4">
               <UserInputString
                 type="text"
@@ -173,6 +275,7 @@ function Profile() {
                 state={firstName}
                 setState={setFirstName}
                 clues={nameClue}
+                elementUseRef={firstNameRef}
               />
             </div>
             <div className="mb-4">
@@ -235,7 +338,7 @@ function Profile() {
                 Cancel
               </button>
             </div>
-            <Spinner isLoading={isUpdateProfile} />
+            <Spinner isLoading={isUpdatingProfile} />
           </form>
         </div>
         <div className="relative w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 dark:bg-gray-800 dark:border-gray-700 sm:p-8">

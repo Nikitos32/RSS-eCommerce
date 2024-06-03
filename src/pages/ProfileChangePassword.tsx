@@ -22,6 +22,7 @@ function ChangePassword() {
   const pwdCurrentRef = useRef<HTMLInputElement>(null);
 
   const [current, setCurrent] = useState(inputStringInitState);
+
   const [pwd, setPwd] = useState(inputStringInitState);
   const [match, setMatch] = useState(inputStringInitState);
 
@@ -35,30 +36,30 @@ function ChangePassword() {
 
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(current.value);
-    setCurrent({
-      ...current,
+    setCurrent((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: current.focus && !valid,
-    });
-  }, [current]);
+    }));
+  }, [current.focus, current.value]);
 
   useEffect(() => {
     const valid = UserInput.checkPasswordRequiredValid(pwd.value);
-    setPwd({
-      ...pwd,
+    setPwd((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: pwd.focus && (!pwd.value || !valid),
-    });
-  }, [pwd]);
+    }));
+  }, [pwd.value, pwd.focus]);
 
   useEffect(() => {
     const valid = pwd.value === match.value;
-    setMatch({
-      ...match,
+    setMatch((prevState) => ({
+      ...prevState,
       valid,
       visibleClue: match.focus && (!match.value || !valid),
-    });
-  }, [pwd, match]);
+    }));
+  }, [pwd.value, match.value, match.focus]);
 
   const pwdCurrentClue = (
     <p dangerouslySetInnerHTML={{ __html: UserInput.getRequiredClue() }} />

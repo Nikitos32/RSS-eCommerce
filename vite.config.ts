@@ -11,12 +11,11 @@ export default defineConfig({
   define: {
     global: {},
   },
-  base: '/RSS-eCommerce',
+  base: '',
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
-      stream:
-        'rollup-plugin-node-polyfills/polyfills/stream',
+      stream: 'rollup-plugin-node-polyfills/polyfills/stream',
     },
   },
   optimizeDeps: {
