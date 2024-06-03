@@ -4,30 +4,39 @@ import { useState } from 'react';
 import { IoCartOutline } from 'react-icons/io5';
 import { MdOutlineViewInAr } from 'react-icons/md';
 
-export const ProductPreviewItem = () => {
+interface ProductPreviewItemProps {
+  imgUrl: string;
+  productCategory: string;
+  productName: string;
+  productDescription: string;
+  productPrice: string;
+}
+
+export const ProductPreviewItem = ({
+  imgUrl,
+  productCategory,
+  productName,
+  productDescription,
+  productPrice,
+}: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
   return (
-    <div className="bg-slate-300 w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20">
+    <div className="transition duration-700 ease-in-out bg-slate-300 w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20 hover:shadow-[1px_1px_8px]">
       <div>
-        <img
-          src="../RSS-eCommerce/public/photos/bc-1.webp"
-          alt="photo"
-          className="size-44 rounded"
-        />
+        <img src={imgUrl} alt="photo" className="size-44 rounded" />
       </div>
       <div className="flex flex-col w-2/5 gap-5 pt-3">
         <div className="flex flex-col gap-1">
-          <p className="text-gray-500">Chairs</p>
-          <p className="font-semibold">Upholstered chair with wooden legs</p>
+          <p className="text-gray-500">{productCategory}</p>
+          <p className="font-semibold">{productName}</p>
         </div>
-        <p className="w-full text-gray-500">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta,
-          dolores?
+        <p className="w-full text-gray-500 line-clamp-3">
+          {productDescription}
         </p>
       </div>
       <div className="flex w-2/5 flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
-          <p className="font-semibold">$359.99</p>
+          <p className="font-semibold">{productPrice}</p>
           <Rating
             readOnly
             style={{ maxWidth: 100 }}
@@ -39,7 +48,7 @@ export const ProductPreviewItem = () => {
           <a className="cursor-pointer flex gap-1 justify-center items-center">
             View Details <MdOutlineViewInAr />
           </a>
-          <button className="flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950">
+          <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
             <IoCartOutline className="size-6" />
             Add to Cart
           </button>
