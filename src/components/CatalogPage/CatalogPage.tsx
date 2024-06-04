@@ -19,6 +19,7 @@ interface Products {
 }
 
 export const CatalogPage = () => {
+  // const [showFilter, setShowFilter] = useState(false);
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
@@ -98,12 +99,15 @@ export const CatalogPage = () => {
         <FilterSection
           currentRangeValue={currentRangeValue}
           handleRangeSlider={handleRangeSlider}
+          // showFilter={showFilter}
+          // setShowFilter={setShowFilter}
         />
       </div>
       <div className="flex gap-5 flex-col w-full p-5">
         <SortSection
           handleCurrentSearch={handleCurrentSearch}
           handleCurrentSort={handleCurrentSort}
+          // setShowFilter={setShowFilter}
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
