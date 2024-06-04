@@ -27,9 +27,9 @@ export const ProductPreviewItem = ({
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
   return (
-    <div className="transition duration-700 ease-in-out bg-slate-300 w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20 hover:shadow-[1px_1px_8px]">
+    <div className="transition duration-700 ease-in-out bg-slate-300 xl:w-4/5 rounded pl-3 pb-3 pt-3 flex gap-20 hover:shadow-[1px_1px_8px]">
       <div>
-        <img src={imgUrl} alt="photo" className="size-44 rounded" />
+        <img src={imgUrl} alt="photo" className="size-44 max-w-none rounded" />
       </div>
       <div className="flex flex-col w-2/5 gap-5 pt-3">
         <div className="flex flex-col gap-1">
@@ -70,7 +70,7 @@ export const ProductPreviewItem = ({
           >
             View Details <MdOutlineViewInAr />
           </Link>
-          <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
+          <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 min-w-44 px-1 text-nowrap justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
             <IoCartOutline className="size-6" />
             Add to Cart
           </button>
