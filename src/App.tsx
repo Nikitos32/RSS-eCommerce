@@ -23,6 +23,8 @@ import ProfileChangePassword from './pages/ProfileChangePassword';
 import Profile from './pages/Profile';
 import { ProductPage } from './components/ProductPage/ProductPage';
 import { AuthProvider } from './context/AuthProvider';
+import RequireAuth from './components/RequireAuth';
+import NotRequireAuth from './components/NotRequireAuth';
 
 export const IsLoginedContext = createContext([
   false,
@@ -38,37 +40,31 @@ export const IsLoadindContext = createContext([
 ]);
 
 function App() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [isLogined, setIsLogined] = useState<boolean>(false);
-
-  const handleIsLogined = (logined: boolean) => {
-    setIsLogined(logined);
-  };
-
-  const handleLoading = (loading: boolean) => {
-    setIsLoading(loading);
-  };
+  const [isLoading] = useState<boolean>(false);
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route
-        path="/"
-        element={
-          <IsLoginedContext.Provider value={[isLogined, handleIsLogined]}>
-            <IsLoadindContext.Provider value={[handleLoading]}>
-              <MainLayout />
-            </IsLoadindContext.Provider>
-          </IsLoginedContext.Provider>
-        }
-      >
+      <Route path="/" element={<MainLayout />}>
+        {/* public routes */}
         <Route index element={<MainPage />} />
-        <Route path="/catalog" element={<CatalogPage />} />
-        <Route path="/signin" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/profile" element={<Profile />} />
         <Route path="/product/:key" element={<ProductPage />} />
-        <Route path="/profile/changepwd" element={<ProfileChangePassword />} />
+        <Route path="/catalog" element={<CatalogPage />} />
+
+        {/*Only Not Authorized */}
+        <Route element={<NotRequireAuth />}>
+          <Route path="/signin" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+        </Route>
+
+        {/* Only Authorized */}
+        <Route element={<RequireAuth />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile/changepwd"
+            element={<ProfileChangePassword />}
+          />
+        </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
