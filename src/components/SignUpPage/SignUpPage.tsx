@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import { InputType, InputNames } from '../../type/enums/SignUpEnums';
@@ -16,17 +16,16 @@ import {
 import classes from './signUpPage.module.css';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
-import {
-  IsLoadindContext,
-  IsLoginedContext,
-  notifyError,
-  notifySuccess,
-} from '../../App';
+
+import { useAuth } from '../../hooks';
+import Spinner from '../Spinner';
+import { toast } from 'react-toastify';
 
 export const SignUpPage = () => {
-  const [handleLoading] = useContext(IsLoadindContext);
+  const [loading, setLoading] = useState(false);
 
-  const [isLogined, setIsLogined] = useContext(IsLoginedContext);
+  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
+    useAuth();
 
   async function SignUp() {
     const customerService = new CustomerService();
@@ -69,7 +68,7 @@ export const SignUpPage = () => {
           true
         );
 
-    handleLoading(true);
+    setLoading(true);
     const response: CTResponse = await customerService
       .signUp(newCustomerDraft)
       .then(() => {
@@ -79,15 +78,15 @@ export const SignUpPage = () => {
         );
       });
     if (response.ok) {
-      handleLoading(false);
-      notifySuccess('Success Registration!');
-      if (typeof setIsLogined !== 'boolean') {
-        setIsLogined(true);
+      setLoading(false);
+      toast.success('Success Registration!');
+      if (typeof setIsLoggedIn !== 'boolean') {
+        setIsLoggedIn(true);
       }
     } else {
-      handleLoading(false);
+      setLoading(false);
       if (response.message) {
-        notifyError(response.message);
+        toast.error(response.message);
       }
     }
   }
@@ -219,8 +218,8 @@ export const SignUpPage = () => {
     };
   };
 
-  return isLogined ? (
-    <Navigate to="/RSS-eCommerce" />
+  return isLoggedIn ? (
+    <Navigate to="/" />
   ) : (
     <article className={`${classes.signUp} font-Inter text-moonBlack`}>
       <form className={classes.signUp__form} onSubmit={handleSubmit}>
@@ -385,6 +384,7 @@ export const SignUpPage = () => {
           />
         </section>
       </form>
+      <Spinner isLoading={loading} />
     </article>
   );
 };
