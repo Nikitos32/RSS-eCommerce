@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext } from 'react';
+import { useLocalStorage } from '../hooks';
 
 type Props = {
   children?: ReactNode;
@@ -17,7 +18,8 @@ const initialValue = {
 const AuthContext = createContext<AuthContextType>(initialValue);
 
 const AuthProvider = ({ children }: Props) => {
-  const [authenticated, setAuthenticated] = useState(
+  const [authenticated, setAuthenticated] = useLocalStorage(
+    'authenticated',
     initialValue.authenticated
   );
   return (
