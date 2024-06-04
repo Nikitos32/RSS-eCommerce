@@ -22,6 +22,7 @@ import { CatalogPage } from './components/CatalogPage/CatalogPage';
 import ProfileChangePassword from './pages/ProfileChangePassword';
 import Profile from './pages/Profile';
 import { ProductPage } from './components/ProductPage/ProductPage';
+import { AuthProvider } from './context/AuthProvider';
 
 export const IsLoginedContext = createContext([
   false,
@@ -73,7 +74,7 @@ function App() {
     )
   );
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
       <ToastContainer
         position="bottom-right"
@@ -98,7 +99,7 @@ function App() {
           wrapperClass=""
         />
       </div>
-    </>
+    </AuthProvider>
   );
 }
 
