@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { IoCartOutline } from 'react-icons/io5';
 import { MdOutlineViewInAr } from 'react-icons/md';
 import { FaEuroSign } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 interface ProductPreviewItemProps {
   imgUrl: string;
@@ -12,6 +13,7 @@ interface ProductPreviewItemProps {
   productDescription: string;
   productPrice: string;
   productOldPrice: string;
+  id: string;
 }
 
 export const ProductPreviewItem = ({
@@ -21,6 +23,7 @@ export const ProductPreviewItem = ({
   productDescription,
   productPrice,
   productOldPrice,
+  id,
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
   return (
@@ -61,9 +64,12 @@ export const ProductPreviewItem = ({
           />
         </div>
         <div className="flex flex-col gap-2 items-center">
-          <a className="cursor-pointer flex gap-1 justify-center items-center">
+          <Link
+            to={`/product/${id}`}
+            className="cursor-pointer flex gap-1 justify-center items-center"
+          >
             View Details <MdOutlineViewInAr />
-          </a>
+          </Link>
           <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
             <IoCartOutline className="size-6" />
             Add to Cart

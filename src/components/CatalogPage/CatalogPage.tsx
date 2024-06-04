@@ -23,6 +23,14 @@ export const CatalogPage = () => {
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
   const [allProducts, setAllProducts] = useState<Products>();
+  const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
+    0, 1000,
+  ]);
+  const handleRangeSlider = (event: number | number[]) => {
+    if (typeof event !== 'number') {
+      setCurrentRangeValue(event);
+    }
+  };
 
   const handleCurrentSort = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
@@ -82,12 +90,15 @@ export const CatalogPage = () => {
         });
       }
     }
-  }, [currentSort, currentSearch]);
+  }, [currentSort, currentSearch, currentRangeValue]);
 
   return (
     <section className="flex">
       <div>
-        <FilterSection />
+        <FilterSection
+          currentRangeValue={currentRangeValue}
+          handleRangeSlider={handleRangeSlider}
+        />
       </div>
       <div className="flex gap-5 flex-col w-full p-5">
         <SortSection
@@ -110,6 +121,7 @@ export const CatalogPage = () => {
                 return (
                   <ProductPreviewItem
                     key={element.key}
+                    id={element.key ? element.key : ''}
                     imgUrl={
                       productData.masterVariant.images
                         ? `${productData.masterVariant.images[0].url}`
