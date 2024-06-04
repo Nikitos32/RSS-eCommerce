@@ -15,6 +15,9 @@ export const FilterSection = ({
 }: FilterSectionProps) => {
   return (
     <section className="flex w-80 flex-col pt-5 gap-5 border-r-2">
+      <div className="[block xl:hidden border-b-2 pb-3 pl-5 text-lg font-semibold cursor-pointer">
+        {'< Filter'}
+      </div>
       <FilterCategory />
       <FilterPrice
         currentRangeValue={currentRangeValue}
