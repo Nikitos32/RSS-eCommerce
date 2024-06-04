@@ -198,7 +198,7 @@ export class ProductService {
               categories {
                 id
                 name(locale:$locale)
-            }
+              }
               name(locale: $locale)
               masterVariant {
                 id
@@ -209,7 +209,26 @@ export class ProductService {
                 prices {
                   id
                   value {
+                    fractionDigits
+                    currencyCode
                     centAmount
+                  }
+                  discounted {
+                    value {
+                      centAmount
+                      fractionDigits
+                      currencyCode
+                    }
+                    discount {
+                      id
+                      name(locale: $locale)
+                      value {
+                        type
+                        ... on RelativeDiscountValue {
+                          permyriad
+                        }
+                      }
+                    }
                   }
                 }
                 attributesRaw {
