@@ -4,7 +4,6 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 function NotRequireAuth() {
   const { authenticated } = useAuth();
   const location = useLocation();
-  console.log({ authenticated });
   return !authenticated ? (
     <Outlet />
   ) : (

@@ -229,7 +229,6 @@ function Profile() {
   };
 
   const handleSubmitAddressForm = () => {
-    console.log(dataAddressForm);
     prepareAddressUpdate();
   };
 
@@ -237,7 +236,6 @@ function Profile() {
     if (showAddressForm) {
       return;
     }
-    console.log(customer);
     const updateAddress = customer?.addresses.filter(
       (item) => item.id === key
     )[0];
