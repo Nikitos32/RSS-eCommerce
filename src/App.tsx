@@ -26,13 +26,6 @@ import { AuthProvider } from './context/AuthProvider';
 import RequireAuth from './components/RequireAuth';
 import NotRequireAuth from './components/NotRequireAuth';
 
-export const IsLoginedContext = createContext([
-  false,
-  (logined: boolean) => {
-    console.log(logined);
-  },
-]);
-
 export const IsLoadindContext = createContext([
   (loading: boolean) => {
     console.log(loading);
