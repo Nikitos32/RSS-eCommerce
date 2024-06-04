@@ -13,9 +13,7 @@ import { SignUpPage } from './components/SignUpPage/SignUpPage';
 import { createContext, useState } from 'react';
 
 import { ToastContainer } from 'react-toastify';
-import { NotifyType } from './type/enums/NotifyTypes';
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
 import { Oval } from 'react-loader-spinner';
 import './App.css';
 import { CatalogPage } from './components/CatalogPage/CatalogPage';
@@ -93,35 +91,3 @@ function App() {
 }
 
 export default App;
-
-export const createNotify = (message?: string, type?: NotifyType) => {
-  switch (type) {
-    case NotifyType.INFO: {
-      toast.info(message);
-      break;
-    }
-    case NotifyType.SUCCESS: {
-      toast.success(message);
-      break;
-    }
-    case NotifyType.WARNING: {
-      toast.warning(message);
-      break;
-    }
-    case NotifyType.ERROR: {
-      toast.error(message);
-      break;
-    }
-    default: {
-      toast(message);
-    }
-  }
-};
-
-export const notifyError = (message: string) => {
-  createNotify(message, NotifyType.ERROR);
-};
-
-export const notifySuccess = (message: string) => {
-  createNotify(message, NotifyType.SUCCESS);
-};
