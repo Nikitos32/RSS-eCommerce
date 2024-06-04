@@ -53,7 +53,7 @@ export const ProductSwiper = ({ images }: ProductSwiperProps) => {
           watchSlidesProgress={true}
           centerInsufficientSlides={true}
           modules={[FreeMode, Thumbs, Navigation]}
-          className="productImg__footer-swiper"
+          className="productImg__footer-swiper mt-1"
         >
           {images.length > 1
             ? images.map((img, index) => (
