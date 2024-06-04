@@ -4,3 +4,4 @@ export { useApiSignIn } from './useApiSignIn';
 export { useApiGetCustomer } from './useApiGetCustomer';
 export { useApiUpdateProfile } from './useApiUpdateProfile';
 export { useApiGetProduct } from './useApiGetProduct';
+export { useAuth } from './useAuth';
