@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { LoginFieldsetEnterSection } from '../LoginFieldsetEnterSection/LoginFieldsetEnterSection';
 import { LoginFieldsetWithInputs } from '../LoginFieldsetWithInputs/LoginFieldsetWithInputs';
 import classes from './loginForm.module.css';
@@ -10,18 +10,17 @@ import {
 import { LoginFormTitle } from '../LoginFormTitle/LoginFormTitle';
 import { CTResponse } from '../../ct-client';
 import { Navigate } from 'react-router-dom';
-import {
-  IsLoadindContext,
-  IsLoginedContext,
-  notifyError,
-  notifySuccess,
-} from '../../App';
+
 import { useApiSignIn } from '../../hooks/useApiSignIn';
+import { useAuth } from '../../hooks';
+import Spinner from '../Spinner';
+import { toast } from 'react-toastify';
 
 export const LoginForm = () => {
-  const [handleLoading] = useContext(IsLoadindContext);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [isLogined, setIsLogined] = useContext(IsLoginedContext);
+  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
+    useAuth();
 
   const [emailInputValue, setEmailInputValue] = useState<string>('');
 
@@ -52,22 +51,21 @@ export const LoginForm = () => {
   };
 
   async function LogIn() {
-    handleLoading(true);
+    setIsLoading(true);
 
     const response: CTResponse = await signIn();
     if (response.ok) {
-      handleLoading(false);
-      notifySuccess('Success Authorization!');
+      setIsLoading(false);
+      toast.success('Success Authorization!');
 
       setPasswordInputValue('');
       setEmailInputValue('');
-      if (typeof setIsLogined !== 'boolean') {
-        setIsLogined(true);
-      }
+
+      setIsLoggedIn(true);
     } else {
-      handleLoading(false);
+      setIsLoading(false);
       if (response.message) {
-        notifyError(response.message);
+        toast.error(response.message);
       }
     }
   }
@@ -77,7 +75,7 @@ export const LoginForm = () => {
     LogIn();
   };
 
-  return isLogined ? (
+  return isLoggedIn ? (
     <Navigate to="/" />
   ) : (
     <>
@@ -89,6 +87,7 @@ export const LoginForm = () => {
           password={passwordInputValue}
         />
         <LoginFieldsetEnterSection />
+        <Spinner isLoading={isLoading} />
       </form>
     </>
   );
