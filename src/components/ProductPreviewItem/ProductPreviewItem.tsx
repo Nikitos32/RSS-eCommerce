@@ -3,6 +3,7 @@ import '@smastrom/react-rating/style.css';
 import { useState } from 'react';
 import { IoCartOutline } from 'react-icons/io5';
 import { MdOutlineViewInAr } from 'react-icons/md';
+import { FaEuroSign } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 interface ProductPreviewItemProps {
@@ -11,6 +12,7 @@ interface ProductPreviewItemProps {
   productName: string;
   productDescription: string;
   productPrice: string;
+  productOldPrice: string;
   id: string;
 }
 
@@ -20,6 +22,7 @@ export const ProductPreviewItem = ({
   productName,
   productDescription,
   productPrice,
+  productOldPrice,
   id,
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
@@ -39,7 +42,20 @@ export const ProductPreviewItem = ({
       </div>
       <div className="flex w-2/5 flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
-          <p className="font-semibold">{productPrice}</p>
+          <p className="font-semibold flex flex-nowrap">
+            <span
+              className={`flex items-center flex-nowrap ${productOldPrice ? 'text-moonBrown mr-4' : ''}`}
+            >
+              {productPrice}
+              <FaEuroSign />
+            </span>
+            <span
+              className={`text-moonNeutral-500 line-through flex items-center flex-nowrap ${productOldPrice ? '' : 'hidden'}`}
+            >
+              {productOldPrice}
+              <FaEuroSign />
+            </span>
+          </p>
           <Rating
             readOnly
             style={{ maxWidth: 100 }}

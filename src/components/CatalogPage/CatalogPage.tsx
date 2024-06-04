@@ -6,6 +6,7 @@ import { IsLoadindContext } from '../../App';
 import { ProductService } from '../../services';
 import { CTResponse } from '../../ct-client';
 import { Category, Product } from '@commercetools/platform-sdk';
+import { convertPrice } from '../../utils/convertPrice';
 
 interface ProductsData {
   products: Products;
@@ -109,19 +110,28 @@ export const CatalogPage = () => {
           <section className="flex flex-col gap-5 flex-wrap">
             {allProducts?.total !== 0 ? (
               allProducts?.results.map((element) => {
+                const productData = element?.masterData.current;
+                const price = productData?.masterVariant?.prices?.find(
+                  (priceEl) => priceEl.value.currencyCode === 'EUR'
+                );
+                const basePrice = convertPrice(
+                  price?.value.centAmount,
+                  price?.value.fractionDigits
+                );
                 return (
                   <ProductPreviewItem
                     key={element.key}
                     id={element.key ? element.key : ''}
                     imgUrl={
-                      element.masterData.current.masterVariant.images
-                        ? `${element.masterData.current.masterVariant.images[0].url}`
+                      productData.masterVariant.images
+                        ? `${productData.masterVariant.images[0].url}`
                         : ''
                     }
-                    productCategory={`${(element.masterData.current.categories[0] as unknown as Category).name}`}
-                    productDescription={`${element.masterData.current.description}`}
-                    productName={`${element.masterData.current.name}`}
-                    productPrice={`$${element.masterData.current.masterVariant.prices ? element.masterData.current.masterVariant.prices[0].value.centAmount : ''}`}
+                    productCategory={`${(productData.categories[0] as unknown as Category).name}`}
+                    productDescription={`${productData.description}`}
+                    productName={`${productData.name}`}
+                    productPrice={`${price?.discounted ? convertPrice(price.discounted.value.centAmount, price.discounted.value.fractionDigits) : basePrice}`}
+                    productOldPrice={price?.discounted ? basePrice : ''}
                   />
                 );
               })
