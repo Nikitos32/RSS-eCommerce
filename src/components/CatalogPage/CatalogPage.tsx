@@ -112,7 +112,7 @@ export const CatalogPage = () => {
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
-          <section className="flex flex-col gap-5 flex-wrap">
+          <section className="flex lg:flex-col gap-5 flex-wrap">
             {allProducts?.total !== 0 ? (
               allProducts?.results.map((element) => {
                 const productData = element?.masterData.current;
