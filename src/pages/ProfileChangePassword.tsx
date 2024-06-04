@@ -1,10 +1,10 @@
-import { FormEvent, useContext, useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import UserInputString from '../components/UserInputString';
 import { UserInput } from '../utils';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useApiChangePassword } from '../hooks';
-import { IsLoadindContext } from '../App';
+import Spinner from '../components/Spinner';
 
 function ChangePassword() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function ChangePassword() {
     readonly: false,
   };
 
-  const [handleLoading] = useContext(IsLoadindContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const pwdCurrentRef = useRef<HTMLInputElement>(null);
 
@@ -69,7 +69,7 @@ function ChangePassword() {
   );
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    handleLoading(true);
+    setIsLoading(true);
     const answer = await changePassword();
     if (answer.ok) {
       toast.success('Password Changed');
@@ -77,7 +77,7 @@ function ChangePassword() {
     } else {
       toast.error(answer.message);
     }
-    handleLoading(false);
+    setIsLoading(false);
   };
   const handleReset = async (e: FormEvent) => {
     e.preventDefault();
@@ -147,6 +147,7 @@ function ChangePassword() {
           </form>
         </div>
       </div>
+      <Spinner isLoading={isLoading} />
     </section>
   );
 }

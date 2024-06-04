@@ -1,19 +1,19 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
 import { HiOutlineUserAdd } from 'react-icons/hi';
 import { IoIosLogIn, IoIosLogOut } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
-import { IsLoginedContext, notifySuccess } from '../App';
+import { useAuth } from '../hooks';
+import { toast } from 'react-toastify';
 
 function Links() {
-  const [isLogined, setIsLogined] = useContext(IsLoginedContext);
+  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
+    useAuth();
 
   const handleSignOut = () => {
-    if (typeof setIsLogined !== 'boolean') {
-      setIsLogined(false);
-    }
+    setIsLoggedIn(false);
   };
 
   return (
@@ -30,31 +30,31 @@ function Links() {
       <Link to="./contact" className="hover:text-moonNeutral-600">
         Contact
       </Link>
-      {!isLogined && (
+      {!isLoggedIn && (
         <Link to="./signup" title="Registration">
           {' '}
           <HiOutlineUserAdd className="text-2xl hover:text-moonNeutral-600" />{' '}
         </Link>
       )}
-      {!isLogined && (
+      {!isLoggedIn && (
         <Link to="./signin" title="Login">
           {' '}
           <IoIosLogIn className="text-2xl hover:text-moonNeutral-600" />{' '}
         </Link>
       )}
-      {isLogined && (
+      {isLoggedIn && (
         <Link to="./profile" title="My Profile">
           {' '}
           <CgProfile className="text-2xl hover:text-moonNeutral-600" />{' '}
         </Link>
       )}
-      {isLogined && (
+      {isLoggedIn && (
         <Link
           to="./signin"
           title="Logout"
           onClick={() => {
             handleSignOut();
-            notifySuccess('Success Logout!');
+            toast.success('Success Logout!');
           }}
         >
           {' '}
