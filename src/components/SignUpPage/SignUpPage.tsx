@@ -69,25 +69,31 @@ export const SignUpPage = () => {
         );
 
     setLoading(true);
-    const response: CTResponse = await customerService
-      .signUp(newCustomerDraft)
-      .then(() => {
-        return customerService.signIn(
-          inputData.Email.value,
-          inputData.Password.value
-        );
-      });
+    const responseNewCustomer: CTResponse =
+      await customerService.signUp(newCustomerDraft);
+    if (responseNewCustomer.ok) {
+      toast.success('Success Registration!');
+    } else {
+      toast.error(responseNewCustomer.message || 'Registration Error');
+    }
+
+    if (!responseNewCustomer.ok) {
+      setLoading(false);
+      return;
+    }
+    const response: CTResponse = await customerService.signIn(
+      inputData.Email.value,
+      inputData.Password.value
+    );
+
     if (response.ok) {
       setLoading(false);
-      toast.success('Success Registration!');
-      if (typeof setIsLoggedIn !== 'boolean') {
-        setIsLoggedIn(true);
-      }
+      toast.success('Success Authorization!');
+
+      setIsLoggedIn(true);
     } else {
       setLoading(false);
-      if (response.message) {
-        toast.error(response.message);
-      }
+      toast.error(response.message || 'Authorization Error');
     }
   }
 
