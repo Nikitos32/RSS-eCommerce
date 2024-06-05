@@ -15,8 +15,8 @@ export const SortSection = ({
   setShowFilter,
 }: SortSectionProps) => {
   return (
-    <div className="flex justify-between alight-center items-center">
-      <div>
+    <div className="flex flex-wrap justify-center gap-4 lg:justify-between alight-center items-center">
+      <div className="w-full lg:w-min">
         <SearchInput handleCurrentSearch={handleCurrentSearch} />
       </div>
       <button
