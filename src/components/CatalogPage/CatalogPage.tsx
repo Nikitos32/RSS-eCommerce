@@ -39,6 +39,7 @@ export const CatalogPage = () => {
 
   const handleCurrentSort = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
+    console.log(target.value);
     setCurrentSort(target.value);
   };
 
@@ -50,9 +51,10 @@ export const CatalogPage = () => {
   useEffect(() => {
     handleLoading(true);
     const productService = new ProductService();
-    if (currentSearch) {
-      const data: Promise<CTResponse> = productService.searchProduct(
+    if (currentSort || currentSearch) {
+      const data: Promise<CTResponse> = productService.getProductsWithFilters(
         'EN-GB',
+        currentSort,
         currentSearch
       );
       data.then((response) => {
@@ -61,39 +63,14 @@ export const CatalogPage = () => {
           (response.data as CTResponse).data as ProductProjectionResponse
         );
       });
-      handleLoading(false);
     } else {
-      if (currentSort === 'a-z') {
-        const data: Promise<CTResponse> = productService.getProductsSortedByKey(
-          'EN-GB',
-          'asc'
+      const data: Promise<CTResponse> = productService.getProductsAll();
+      data.then((response) => {
+        handleLoading(false);
+        setSearchProducts(
+          (response.data as CTResponse).data as ProductProjectionResponse
         );
-        data.then((response) => {
-          handleLoading(false);
-          setSearchProducts(
-            (response.data as CTResponse).data as ProductProjectionResponse
-          );
-        });
-      } else if (currentSort === 'z-a') {
-        const data: Promise<CTResponse> = productService.getProductsSortedByKey(
-          'EN-GB',
-          'desc'
-        );
-        data.then((response) => {
-          handleLoading(false);
-          setSearchProducts(
-            (response.data as CTResponse).data as ProductProjectionResponse
-          );
-        });
-      } else {
-        const data: Promise<CTResponse> = productService.getProductsAll();
-        data.then((response) => {
-          handleLoading(false);
-          setSearchProducts(
-            (response.data as CTResponse).data as ProductProjectionResponse
-          );
-        });
-      }
+      });
     }
   }, [currentSort, currentSearch, currentRangeValue]);
 
