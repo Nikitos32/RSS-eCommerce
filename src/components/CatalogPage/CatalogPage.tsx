@@ -19,6 +19,7 @@ interface Products {
 }
 
 export const CatalogPage = () => {
+  const [showFilter, setShowFilter] = useState(false);
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
@@ -93,21 +94,25 @@ export const CatalogPage = () => {
   }, [currentSort, currentSearch, currentRangeValue]);
 
   return (
-    <section className="flex">
+    <section className="flex relative">
       <div>
         <FilterSection
           currentRangeValue={currentRangeValue}
           handleRangeSlider={handleRangeSlider}
+          showFilter={showFilter}
+          setShowFilter={setShowFilter}
         />
       </div>
       <div className="flex gap-5 flex-col w-full p-5">
         <SortSection
           handleCurrentSearch={handleCurrentSearch}
           handleCurrentSort={handleCurrentSort}
+          showFilter={showFilter}
+          setShowFilter={setShowFilter}
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
-          <section className="flex flex-col gap-5 flex-wrap">
+          <section className="flex lg:flex-col gap-5 flex-wrap">
             {allProducts?.total !== 0 ? (
               allProducts?.results.map((element) => {
                 const productData = element?.masterData.current;
