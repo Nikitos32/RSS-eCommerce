@@ -4,6 +4,7 @@ import { useLocalStorage } from './useLocalStorage';
 import { Customer, CustomerChangePassword } from '@commercetools/platform-sdk';
 import { CustomerService } from '../services/customer.service';
 import { CTResponse } from '../ct-client';
+import { useAuth } from '.';
 
 export function useApiChangePassword(
   currentPassword: string,
@@ -14,7 +15,7 @@ export function useApiChangePassword(
   const [errorMsg, setErrorMsg] = useState('');
   const [response, setResponse] = useState<CTResponse>();
 
-  const [id] = useLocalStorage('apiCustomerId', '');
+  const { customerId: id } = useAuth();
   const [version, setVersion] = useLocalStorage('apiCustomerVersion', 0);
 
   const customerService: CustomerService = new CustomerService();

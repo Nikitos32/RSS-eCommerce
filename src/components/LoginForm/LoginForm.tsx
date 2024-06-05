@@ -19,8 +19,7 @@ import { toast } from 'react-toastify';
 export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
-    useAuth();
+  const { authenticated: isLoggedIn } = useAuth();
 
   const [emailInputValue, setEmailInputValue] = useState<string>('');
 
@@ -60,8 +59,6 @@ export const LoginForm = () => {
 
       setPasswordInputValue('');
       setEmailInputValue('');
-
-      setIsLoggedIn(true);
     } else {
       setIsLoading(false);
       if (response.message) {
