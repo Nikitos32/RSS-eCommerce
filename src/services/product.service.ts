@@ -62,43 +62,32 @@ export class ProductService {
     sortParam: string = 'asc'
   ): Promise<CTResponse> {
     const query = `
-    query($locale: Locale) {
-      products (sort: "key ${sortParam}") {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-            }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    centAmount
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
+    query ($locale: Locale) {
+  productProjectionSearch (sorts: ["name.${locale} ${sortParam}"]) {
+    count
+    total
+    results {
+      id
+      key
+      description(locale: $locale)
+      name(locale: $locale)
+      categories {
+        name(locale: $locale)
+      }
+      masterVariant {
+        prices {
+          value {
+            centAmount
           }
         }
+        images {
+          url
+        }
+        key
       }
     }
+  }
+}
     `;
 
     const variables = { locale };
@@ -120,48 +109,39 @@ export class ProductService {
   }
 
   async searchProduct(
-    locale: string = 'en-US',
+    locale: string = 'EN_GB',
     searchValue: string = ''
   ): Promise<CTResponse> {
-    const modifiedSearchValue = searchValue.toLowerCase().split(' ').join('-');
     const query = `
-    query($locale: Locale) {
-      products (where: "key = \\"${modifiedSearchValue}\\"") {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-            }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    centAmount
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
+    query ($locale: Locale) {
+  productProjectionSearch(
+    text: "${searchValue}",
+    locale: $locale
+  ) {
+    count
+    total
+    results {
+      id
+      key
+      description(locale: $locale)
+      name(locale: $locale)
+      categories {
+        name(locale: $locale)
+      }
+      masterVariant {
+        prices {
+          value {
+            centAmount
           }
         }
+        images {
+          url
+        }
+        key
       }
     }
+  }
+}
     `;
 
     const variables = { locale };
@@ -245,45 +225,34 @@ export class ProductService {
     }
   }
 
-  async getProductsAll(locale: string = 'en-US'): Promise<CTResponse> {
+  async getProductsAll(locale: string = 'EN-GB'): Promise<CTResponse> {
     const query = `
-    query($locale: Locale) {
-      products {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-            }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    centAmount
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
+    query ($locale: Locale) {
+  productProjectionSearch {
+    count
+    total
+    results {
+      id
+      key
+      description(locale: $locale)
+      name(locale: $locale)
+      categories {
+        name(locale: $locale)
+      }
+      masterVariant {
+        prices {
+          value {
+            centAmount
           }
         }
+        images {
+          url
+        }
+        key
       }
     }
+  }
+}
     `;
 
     const variables = { locale };

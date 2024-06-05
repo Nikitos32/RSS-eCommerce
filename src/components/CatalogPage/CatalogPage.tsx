@@ -1,30 +1,36 @@
 import { FormEvent, useContext, useEffect, useState } from 'react';
 import { FilterSection } from '../FilterSection/FilterSection';
-import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 import { SortSection } from '../SortSection/SortSection';
 import { IsLoadindContext } from '../../App';
 import { ProductService } from '../../services';
 import { CTResponse } from '../../ct-client';
-import { Category, Product } from '@commercetools/platform-sdk';
+import {
+  Category,
+  ProductProjectionPagedQueryResponse,
+} from '@commercetools/platform-sdk';
+import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 
-interface ProductsData {
-  products: Products;
-}
-
-interface Products {
-  count: number;
-  results: Product[];
-  total: number;
+interface ProductProjectionResponse {
+  productProjectionSearch: ProductProjectionPagedQueryResponse;
 }
 
 export const CatalogPage = () => {
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
-  const [allProducts, setAllProducts] = useState<Products>();
+  const [searchProducts, setSearchProducts] =
+    useState<ProductProjectionResponse>({
+      productProjectionSearch: {
+        limit: 0,
+        count: 0,
+        offset: 0,
+        results: [],
+      },
+    });
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
     0, 1000,
   ]);
+
   const handleRangeSlider = (event: number | number[]) => {
     if (typeof event !== 'number') {
       setCurrentRangeValue(event);
@@ -46,45 +52,45 @@ export const CatalogPage = () => {
     const productService = new ProductService();
     if (currentSearch) {
       const data: Promise<CTResponse> = productService.searchProduct(
-        'en-US',
+        'EN-GB',
         currentSearch
       );
       data.then((response) => {
         handleLoading(false);
-        setAllProducts(
-          ((response.data as CTResponse).data as ProductsData).products
+        setSearchProducts(
+          (response.data as CTResponse).data as ProductProjectionResponse
         );
       });
       handleLoading(false);
     } else {
       if (currentSort === 'a-z') {
         const data: Promise<CTResponse> = productService.getProductsSortedByKey(
-          'en-US',
+          'EN-GB',
           'asc'
         );
         data.then((response) => {
           handleLoading(false);
-          setAllProducts(
-            ((response.data as CTResponse).data as ProductsData).products
+          setSearchProducts(
+            (response.data as CTResponse).data as ProductProjectionResponse
           );
         });
       } else if (currentSort === 'z-a') {
         const data: Promise<CTResponse> = productService.getProductsSortedByKey(
-          'en-US',
+          'EN-GB',
           'desc'
         );
         data.then((response) => {
           handleLoading(false);
-          setAllProducts(
-            ((response.data as CTResponse).data as ProductsData).products
+          setSearchProducts(
+            (response.data as CTResponse).data as ProductProjectionResponse
           );
         });
       } else {
         const data: Promise<CTResponse> = productService.getProductsAll();
         data.then((response) => {
           handleLoading(false);
-          setAllProducts(
-            ((response.data as CTResponse).data as ProductsData).products
+          setSearchProducts(
+            (response.data as CTResponse).data as ProductProjectionResponse
           );
         });
       }
@@ -107,27 +113,27 @@ export const CatalogPage = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
           <section className="flex flex-col gap-5 flex-wrap">
-            {allProducts?.total !== 0 ? (
-              allProducts?.results.map((element) => {
-                return (
-                  <ProductPreviewItem
-                    key={element.key}
-                    id={element.key ? element.key : ''}
-                    imgUrl={
-                      element.masterData.current.masterVariant.images
-                        ? `${element.masterData.current.masterVariant.images[0].url}`
-                        : ''
-                    }
-                    productCategory={`${(element.masterData.current.categories[0] as unknown as Category).name}`}
-                    productDescription={`${element.masterData.current.description}`}
-                    productName={`${element.masterData.current.name}`}
-                    productPrice={`$${element.masterData.current.masterVariant.prices ? element.masterData.current.masterVariant.prices[0].value.centAmount : ''}`}
-                  />
-                );
-              })
-            ) : (
-              <p>No Match</p>
-            )}
+            {searchProducts?.productProjectionSearch.results.map((element) => {
+              return (
+                <ProductPreviewItem
+                  key={element.key}
+                  id={element.key ? element.key : ''}
+                  imgUrl={
+                    element.masterVariant.images
+                      ? element.masterVariant.images[0].url
+                      : ''
+                  }
+                  productCategory={`${element.categories[0] ? (element.categories[0] as unknown as Category).name : 'no category'}`}
+                  productDescription={
+                    element.description
+                      ? element.description.name
+                      : 'no description'
+                  }
+                  productName={`${element.name ? element.name : ''}`}
+                  productPrice={`${element.masterVariant.prices ? element.masterVariant.prices[0].value.centAmount : 'no price'}`}
+                />
+              );
+            })}
           </section>
         </div>
       </div>
