@@ -110,33 +110,37 @@ export const CatalogPage = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
           <section className="flex flex-col gap-5 flex-wrap">
-            {products?.productProjectionSearch.results.map((element) => {
-              return (
-                <ProductPreviewItem
-                  key={element.key}
-                  id={element.key ? element.key : ''}
-                  imgUrl={
-                    element.masterVariant.images
-                      ? element.masterVariant.images[0].url
-                      : ''
-                  }
-                  productCategory={`${
-                    element.categories[0]
-                      ? element.categories.map((element) => {
-                          return ` ${(element as unknown as Category).name}`;
-                        })
-                      : 'no category'
-                  }`}
-                  productDescription={
-                    element.description
-                      ? `${element.description}`
-                      : 'no description'
-                  }
-                  productName={`${element.name ? element.name : ''}`}
-                  productPrice={`${element.masterVariant.price ? element.masterVariant.price.value.centAmount : 'no price'}`}
-                />
-              );
-            })}
+            {products.productProjectionSearch.results.length > 0 ? (
+              products?.productProjectionSearch.results.map((element) => {
+                return (
+                  <ProductPreviewItem
+                    key={element.key}
+                    id={element.key ? element.key : ''}
+                    imgUrl={
+                      element.masterVariant.images
+                        ? element.masterVariant.images[0].url
+                        : ''
+                    }
+                    productCategory={`${
+                      element.categories[0]
+                        ? element.categories.map((element) => {
+                            return ` ${(element as unknown as Category).name}`;
+                          })
+                        : 'no category'
+                    }`}
+                    productDescription={
+                      element.description
+                        ? `${element.description}`
+                        : 'no description'
+                    }
+                    productName={`${element.name ? element.name : ''}`}
+                    productPrice={`${element.masterVariant.price ? element.masterVariant.price.value.centAmount : 'no price'}`}
+                  />
+                );
+              })
+            ) : (
+              <p>no match</p>
+            )}
           </section>
         </div>
       </div>
