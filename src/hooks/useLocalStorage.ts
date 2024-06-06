@@ -4,7 +4,13 @@ const getLocalValue = <T>(key: string, initValue: T): T => {
   if (typeof window === 'undefined') {
     return initValue;
   }
-  const localValue: T = JSON.parse(<string>localStorage.getItem(key));
+  const itemValue = localStorage.getItem(key);
+
+  const localValue: T =
+    itemValue && itemValue !== 'undefined'
+      ? JSON.parse(itemValue as string)
+      : '';
+
   if (localValue) {
     return localValue;
   }
