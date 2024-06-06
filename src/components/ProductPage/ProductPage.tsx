@@ -3,23 +3,13 @@ import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import { useApiGetProduct } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import { ProductAPI } from '../../type/types/productPageType';
+import { convertPrice } from '../../utils/convertPrice';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import './productPage.css';
 import Spinner from '../Spinner';
-
-const convertPrice = function (
-  centAmount: number | undefined,
-  fractionDigits: number | undefined
-) {
-  if (!centAmount || !fractionDigits) return 'No price';
-  const floatAmount = centAmount / Math.pow(10, fractionDigits);
-  return Number.isInteger(floatAmount)
-    ? floatAmount.toFixed(0)
-    : floatAmount.toFixed(fractionDigits);
-};
 
 export const ProductPage = () => {
   const { key } = useParams();

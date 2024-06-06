@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react';
 import { CustomerService } from '../services';
 import { Customer } from '@commercetools/platform-sdk';
 import { useLocalStorage } from './useLocalStorage';
+import { useAuth } from '.';
 
 export function useApiGetCustomer() {
-  const [id] = useLocalStorage('apiCustomerId', '');
+  const { customerId } = useAuth();
+  const [, setVersion] = useLocalStorage('apiCustomerVersion', 0);
+
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
   const [ok, setOk] = useState(false);
@@ -15,16 +18,18 @@ export function useApiGetCustomer() {
 
     const getCustomer = async () => {
       setLoading(true);
-      const response = await customerService.getCustomerById(id);
+      const response = await customerService.getCustomerById(customerId);
       setOk(response.ok);
       setErrorMsg(response.message as string);
       if (response.ok) {
-        setCustomer(response.data as Customer);
+        const customer = response.data as Customer;
+        setCustomer(customer);
+        setVersion(customer.version);
       }
       setLoading(false);
     };
     getCustomer();
-  }, [id]);
+  }, [customerId, setVersion]);
   return {
     loading,
     ok,

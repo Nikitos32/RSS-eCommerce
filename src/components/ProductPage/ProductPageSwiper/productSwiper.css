@@ -6,6 +6,8 @@
 }
 .productImg__slide img{
   object-fit: contain;
+  max-height: 511px;
+  max-width: 100%;
 }
 
 .productImg__main-swiper{
@@ -27,9 +29,10 @@
 .productImg__footer-slide.swiper-slide-thumb-active{
   opacity: 1;
 }
-.productImg__footer-img{
+.productImg__slide .productImg__footer-img{
   position: relative;
-  height: 100%;
+  max-height: 100px;
+  max-width: 100%;
   cursor: pointer;
 }
 
