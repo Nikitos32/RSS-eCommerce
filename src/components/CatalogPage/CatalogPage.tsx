@@ -30,7 +30,7 @@ export const CatalogPage = () => {
   });
 
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
-    0, 1000,
+    0, 3100,
   ]);
 
   const handleRangeSlider = (event: number | number[]) => {
@@ -62,9 +62,16 @@ export const CatalogPage = () => {
   useEffect(() => {
     handleLoading(true);
     const productService = new ProductService();
-    if (currentSort || currentSearch || currentCategories.length > 0) {
+    if (
+      currentSort ||
+      currentSearch ||
+      currentCategories.length > 0 ||
+      currentRangeValue[0] !== 0 ||
+      currentRangeValue[1] !== 3100
+    ) {
       const data: Promise<CTResponse> = productService.getProductsWithFilters(
         'EN-GB',
+        currentRangeValue,
         currentSort,
         currentSearch,
         currentCategories
@@ -126,7 +133,7 @@ export const CatalogPage = () => {
                       : 'no description'
                   }
                   productName={`${element.name ? element.name : ''}`}
-                  productPrice={`${element.masterVariant.prices ? element.masterVariant.prices[0].value.centAmount : 'no price'}`}
+                  productPrice={`${element.masterVariant.price ? element.masterVariant.price.value.centAmount : 'no price'}`}
                 />
               );
             })}

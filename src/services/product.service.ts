@@ -59,19 +59,21 @@ export class ProductService {
 
   async getProductsWithFilters(
     locale: string = 'en-US',
+    priceFilter: number[],
     sortParam?: string,
     searchValue?: string,
     categoryFilter?: string[]
   ): Promise<CTResponse> {
-    console.log(categoryFilter);
     const query = `
     query ($locale: Locale) {
   productProjectionSearch (
     ${sortParam ? `sorts: ["name.${locale} ${sortParam}"],` : ''},
     ${searchValue ? `text: "${searchValue}", locale: $locale,` : ''}
-    ${
-      (categoryFilter ? categoryFilter.length > 0 : false)
-        ? `filters: {
+    filters: [
+      ${
+        (categoryFilter ? categoryFilter.length > 0 : false)
+          ? `
+          {
       model: {
         value: {
           path: "categories.id"
@@ -80,9 +82,19 @@ export class ProductService {
           })}]
         }
       }
-    }`
-        : ''
-    }
+    },
+      `
+          : ''
+      }
+      {
+         model: {
+        range: {
+            path: "variants.price.centAmount"
+            ranges: [{ from: "${priceFilter[0]}00", to: "${priceFilter[1]}00" }]
+          }
+        }
+      }
+    ]
   ) {
     count
     total
@@ -95,6 +107,11 @@ export class ProductService {
         name(locale: $locale)
       }
       masterVariant {
+        price(currency: "EUR" country:"DE") {
+          value {
+            centAmount
+          }
+        }
         prices {
           value {
             centAmount
@@ -143,6 +160,11 @@ export class ProductService {
         name(locale: $locale)
       }
       masterVariant {
+        price(currency: "EUR" country:"DE") {
+          value {
+            centAmount
+          }
+        }
         prices {
           value {
             centAmount
