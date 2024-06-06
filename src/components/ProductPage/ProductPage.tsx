@@ -10,10 +10,15 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import './productPage.css';
 import Spinner from '../Spinner';
+import NotFoundPage from '../../pages/NotFoundPage';
 
 export const ProductPage = () => {
   const { key } = useParams();
-  const { loading, product } = useApiGetProduct(key);
+  const { ok, loading, product } = useApiGetProduct(key);
+
+  if (!loading && !ok) {
+    return <NotFoundPage />;
+  }
 
   const productData = product?.data.product.masterData.current as ProductAPI;
   const price = productData?.masterVariant.prices.find(
