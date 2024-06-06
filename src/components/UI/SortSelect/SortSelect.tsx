@@ -11,8 +11,8 @@ export const SortSelect = ({ handleCurrentSort }: SortSelectProps) => {
       onChange={(event) => handleCurrentSort(event)}
     >
       <option value="">No sort</option>
-      <option value="a-z">a-z</option>
-      <option value="z-a">z-a</option>
+      <option value="ASC">a-z</option>
+      <option value="DESC">z-a</option>
     </select>
   );
 };

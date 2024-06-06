@@ -57,48 +57,82 @@ export class ProductService {
     }
   }
 
-  async getProductsSortedByKey(
+  async getProductsWithFilters(
     locale: string = 'en-US',
-    sortParam: string = 'asc'
+    priceFilter: number[],
+    sortParam?: string,
+    searchValue?: string,
+    categoryFilter?: string[]
   ): Promise<CTResponse> {
     const query = `
-    query($locale: Locale) {
-      products (sort: "key ${sortParam}") {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-            }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    centAmount
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
+    query ($locale: Locale) {
+  productProjectionSearch (
+    ${sortParam ? `sorts: ["name.${locale} ${sortParam}"],` : ''},
+    ${searchValue ? `text: "${searchValue}", locale: $locale,` : ''}
+    filters: [
+      ${
+        (categoryFilter ? categoryFilter.length > 0 : false)
+          ? `
+          {
+      model: {
+        value: {
+          path: "categories.id"
+          values: [${categoryFilter?.map((element) => {
+            return `"${element}"`;
+          })}]
+        }
+      }
+    },
+      `
+          : ''
+      }
+      {
+         model: {
+        range: {
+            path: "variants.price.centAmount"
+            ranges: [{ from: "${priceFilter[0]}00", to: "${priceFilter[1]}00" }]
           }
         }
       }
+    ]
+  ) {
+    count
+    total
+    results {
+      id
+      key
+      description(locale: $locale)
+      name(locale: $locale)
+      categories {
+        name(locale: $locale)
+      }
+      masterVariant {
+        price(currency: "EUR" country:"DE") {
+          value {
+          fractionDigits
+            centAmount
+          }
+        }
+        prices {
+        discounted {
+            value {
+              centAmount
+              fractionDigits
+            }
+          }
+          value {
+          fractionDigits
+            centAmount
+          }
+        }
+        images {
+          url
+        }
+        key
+      }
     }
+  }
+}
     `;
 
     const variables = { locale };
@@ -119,190 +153,46 @@ export class ProductService {
     }
   }
 
-  async searchProduct(
-    locale: string = 'en-US',
-    searchValue: string = ''
-  ): Promise<CTResponse> {
-    const modifiedSearchValue = searchValue.toLowerCase().split(' ').join('-');
+  async getProductsAll(locale: string = 'EN-GB'): Promise<CTResponse> {
     const query = `
-    query($locale: Locale) {
-      products (where: "key = \\"${modifiedSearchValue}\\"") {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-            }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    centAmount
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
+    query ($locale: Locale) {
+  productProjectionSearch {
+    count
+    total
+    results {
+      id
+      key
+      description(locale: $locale)
+      name(locale: $locale)
+      categories {
+        name(locale: $locale)
+      }
+      masterVariant {
+        price(currency: "EUR" country:"DE") {
+          value {
+            centAmount
           }
         }
+        prices {
+        discounted {
+            value {
+              centAmount
+              fractionDigits
+            }
+          }
+          value {
+          fractionDigits
+            centAmount
+          }
+        }
+        images {
+          url
+        }
+        key
       }
-    }
-    `;
-
-    const variables = { locale };
-
-    try {
-      const answer = await this.graphqlRequest.make({ query, variables });
-
-      if (answer.statusCode === HttpStatusCode.OK_200) {
-        return CTResponseHandler.makeSuccess(
-          answer.statusCode,
-          '',
-          answer.body
-        );
-      }
-      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
-    } catch (error) {
-      return CTResponseHandler.handleCatch(error as ClientResponse);
     }
   }
-
-  async filterProductByPrice(
-    locale: string = 'en-US',
-    filterValueMin: string = '',
-    filterValueMax: string = ''
-  ): Promise<CTResponse> {
-    const query = `
-    query($locale: Locale) {
-      products (where: "masterData(current(masterVariant(prices(value(centAmount > ${filterValueMin}00 and centAmount < ${filterValueMax}00)))))") {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-            }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    centAmount
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    `;
-
-    const variables = { locale };
-
-    try {
-      const answer = await this.graphqlRequest.make({ query, variables });
-
-      if (answer.statusCode === HttpStatusCode.OK_200) {
-        return CTResponseHandler.makeSuccess(
-          answer.statusCode,
-          '',
-          answer.body
-        );
-      }
-      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
-    } catch (error) {
-      return CTResponseHandler.handleCatch(error as ClientResponse);
-    }
-  }
-
-  async getProductsAll(locale: string = 'en-US'): Promise<CTResponse> {
-    const query = `
-    query($locale: Locale) {
-      products {
-        count
-        total
-        results {
-          id
-          key
-          skus
-          masterData {
-            current {
-              description(locale: $locale)
-              categories {
-                id
-                name(locale:$locale)
-              }
-              name(locale: $locale)
-              masterVariant {
-                id
-                images {
-                  url
-                  label
-                }
-                prices {
-                  id
-                  value {
-                    fractionDigits
-                    currencyCode
-                    centAmount
-                  }
-                  discounted {
-                    value {
-                      centAmount
-                      fractionDigits
-                      currencyCode
-                    }
-                    discount {
-                      id
-                      name(locale: $locale)
-                      value {
-                        type
-                        ... on RelativeDiscountValue {
-                          permyriad
-                        }
-                      }
-                    }
-                  }
-                }
-                attributesRaw {
-                  name
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+}
     `;
 
     const variables = { locale };
@@ -404,3 +294,6 @@ export class ProductService {
     }
   }
 }
+/*   266af93b-136f-456e-97c0-5d5ec9a922c6 - Home Decor*/
+/* 7bc4d2e8-a12a-44dc-92c7-a027ba7a6088 - Furniture*/
+/* 6ee0d40d-61c5-42ec-a33a-0baaf760330f - Kitchen */

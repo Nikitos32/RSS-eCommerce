@@ -2,6 +2,7 @@ import { FilterCategory } from '../FilterCategory/FilterCategory';
 import { FilterPrice } from '../FilterPrice/FilterPrice';
 interface FilterSectionProps {
   currentRangeValue: number[];
+  handleCategories: (event: React.ChangeEvent) => void;
   handleRangeSlider: (event: number | number[]) => void;
   showFilter: boolean;
   setShowFilter: (arg: boolean) => void;
@@ -12,6 +13,7 @@ export const FilterSection = ({
   handleRangeSlider,
   showFilter,
   setShowFilter,
+  handleCategories,
 }: FilterSectionProps) => {
   return (
     <section
@@ -23,7 +25,7 @@ export const FilterSection = ({
       >
         {'< Filter'}
       </div>
-      <FilterCategory />
+      <FilterCategory handleCategories={handleCategories} />
       <FilterPrice
         currentRangeValue={currentRangeValue}
         handleRangeSlider={handleRangeSlider}

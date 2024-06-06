@@ -1,21 +1,20 @@
 import { FormEvent, useContext, useEffect, useState } from 'react';
 import { FilterSection } from '../FilterSection/FilterSection';
-import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 import { SortSection } from '../SortSection/SortSection';
 import { IsLoadindContext } from '../../App';
 import { ProductService } from '../../services';
 import { CTResponse } from '../../ct-client';
-import { Category, Product } from '@commercetools/platform-sdk';
+import {
+  Category,
+  ProductProjectionPagedQueryResponse,
+} from '@commercetools/platform-sdk';
+import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 import { convertPrice } from '../../utils/convertPrice';
 
-interface ProductsData {
-  products: Products;
-}
+/* import { convertPrice } from '../../utils/convertPrice'; */
 
-interface Products {
-  count: number;
-  results: Product[];
-  total: number;
+interface ProductProjectionResponse {
+  productProjectionSearch: ProductProjectionPagedQueryResponse;
 }
 
 export const CatalogPage = () => {
@@ -23,13 +22,33 @@ export const CatalogPage = () => {
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
-  const [allProducts, setAllProducts] = useState<Products>();
+  const [currentCategories, setCurrentCategories] = useState<string[]>([]);
+
+  const [products, setProducts] = useState<ProductProjectionResponse>({
+    productProjectionSearch: {
+      limit: 0,
+      count: 0,
+      offset: 0,
+      results: [],
+    },
+  });
+
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
-    0, 1000,
+    0, 3100,
   ]);
   const handleRangeSlider = (event: number | number[]) => {
     if (typeof event !== 'number') {
       setCurrentRangeValue(event);
+    }
+  };
+
+  const handleCategories = (event: React.ChangeEvent) => {
+    const target = event.target as HTMLInputElement;
+    if (target.checked) {
+      setCurrentCategories([...currentCategories, target.value]);
+    } else {
+      currentCategories.splice(currentCategories.indexOf(target.value), 1);
+      setCurrentCategories([...currentCategories]);
     }
   };
 
@@ -46,57 +65,42 @@ export const CatalogPage = () => {
   useEffect(() => {
     handleLoading(true);
     const productService = new ProductService();
-    if (currentSearch) {
-      const data: Promise<CTResponse> = productService.searchProduct(
-        'en-US',
-        currentSearch
+    if (
+      currentSort ||
+      currentSearch ||
+      currentCategories.length > 0 ||
+      currentRangeValue[0] !== 0 ||
+      currentRangeValue[1] !== 3100
+    ) {
+      const data: Promise<CTResponse> = productService.getProductsWithFilters(
+        'EN-GB',
+        currentRangeValue,
+        currentSort,
+        currentSearch,
+        currentCategories
       );
       data.then((response) => {
         handleLoading(false);
-        setAllProducts(
-          ((response.data as CTResponse).data as ProductsData).products
+        setProducts(
+          (response.data as CTResponse).data as ProductProjectionResponse
         );
       });
-      handleLoading(false);
     } else {
-      if (currentSort === 'a-z') {
-        const data: Promise<CTResponse> = productService.getProductsSortedByKey(
-          'en-US',
-          'asc'
+      const data: Promise<CTResponse> = productService.getProductsAll();
+      data.then((response) => {
+        handleLoading(false);
+        setProducts(
+          (response.data as CTResponse).data as ProductProjectionResponse
         );
-        data.then((response) => {
-          handleLoading(false);
-          setAllProducts(
-            ((response.data as CTResponse).data as ProductsData).products
-          );
-        });
-      } else if (currentSort === 'z-a') {
-        const data: Promise<CTResponse> = productService.getProductsSortedByKey(
-          'en-US',
-          'desc'
-        );
-        data.then((response) => {
-          handleLoading(false);
-          setAllProducts(
-            ((response.data as CTResponse).data as ProductsData).products
-          );
-        });
-      } else {
-        const data: Promise<CTResponse> = productService.getProductsAll();
-        data.then((response) => {
-          handleLoading(false);
-          setAllProducts(
-            ((response.data as CTResponse).data as ProductsData).products
-          );
-        });
-      }
+      });
     }
-  }, [currentSort, currentSearch, currentRangeValue]);
+  }, [currentSort, currentSearch, currentRangeValue, currentCategories]);
 
   return (
     <section className="flex relative">
       <div>
         <FilterSection
+          handleCategories={handleCategories}
           currentRangeValue={currentRangeValue}
           handleRangeSlider={handleRangeSlider}
           showFilter={showFilter}
@@ -112,36 +116,71 @@ export const CatalogPage = () => {
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
-          <section className="flex lg:flex-col gap-5 flex-wrap">
-            {allProducts?.total !== 0 ? (
-              allProducts?.results.map((element) => {
-                const productData = element?.masterData.current;
-                const price = productData?.masterVariant?.prices?.find(
-                  (priceEl) => priceEl.value.currencyCode === 'EUR'
-                );
+          <section className="flex flex-col gap-5 flex-wrap">
+            {products.productProjectionSearch.results.length > 0 ? (
+              products?.productProjectionSearch.results.map((element) => {
                 const basePrice = convertPrice(
-                  price?.value.centAmount,
-                  price?.value.fractionDigits
+                  element?.masterVariant.prices
+                    ? element?.masterVariant.prices[0].value.centAmount
+                    : 0,
+                  element?.masterVariant.prices
+                    ? element?.masterVariant.prices[0].value.fractionDigits
+                    : 0
                 );
                 return (
                   <ProductPreviewItem
                     key={element.key}
                     id={element.key ? element.key : ''}
                     imgUrl={
-                      productData.masterVariant.images
-                        ? `${productData.masterVariant.images[0].url}`
+                      element.masterVariant.images
+                        ? element.masterVariant.images[0].url
                         : ''
                     }
-                    productCategory={`${(productData.categories[0] as unknown as Category).name}`}
-                    productDescription={`${productData.description}`}
-                    productName={`${productData.name}`}
-                    productPrice={`${price?.discounted ? convertPrice(price.discounted.value.centAmount, price.discounted.value.fractionDigits) : basePrice}`}
-                    productOldPrice={price?.discounted ? basePrice : ''}
+                    productCategory={`${
+                      element.categories[0]
+                        ? element.categories.map((element) => {
+                            return ` ${(element as unknown as Category).name}`;
+                          })
+                        : 'no category'
+                    }`}
+                    productDescription={
+                      element.description
+                        ? `${element.description}`
+                        : 'no description'
+                    }
+                    productName={`${element.name ? element.name : ''}`}
+                    productPrice={`${
+                      (
+                        element?.masterVariant.prices
+                          ? element?.masterVariant.prices[0].discounted
+                          : 0
+                      )
+                        ? convertPrice(
+                            element?.masterVariant.prices
+                              ? element?.masterVariant.prices[0].discounted
+                                  ?.value.centAmount
+                              : 0,
+                            element?.masterVariant.prices
+                              ? element?.masterVariant.prices[0].discounted
+                                  ?.value.fractionDigits
+                              : 0
+                          )
+                        : basePrice
+                    }`}
+                    productOldPrice={
+                      (
+                        element?.masterVariant.prices
+                          ? element?.masterVariant.prices[0]?.discounted
+                          : 0
+                      )
+                        ? basePrice
+                        : ''
+                    }
                   />
                 );
               })
             ) : (
-              <p>No Match</p>
+              <p>no match</p>
             )}
           </section>
         </div>
