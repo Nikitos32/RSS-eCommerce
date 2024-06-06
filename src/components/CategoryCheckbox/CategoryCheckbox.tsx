@@ -1,11 +1,15 @@
 interface CategoryCheckboxProps {
   category: string;
   amountItems: number;
+  value: string;
+  handleCategories: (event: React.ChangeEvent) => void;
 }
 
 export const CategoryCheckbox = ({
   category,
+  value,
   amountItems,
+  handleCategories,
 }: CategoryCheckboxProps) => {
   return (
     <div className="flex justify-between pr-4">
@@ -13,7 +17,8 @@ export const CategoryCheckbox = ({
         <input
           type="checkbox"
           id={category}
-          value="266af93b-136f-456e-97c0-5d5ec9a922c6"
+          value={value}
+          onChange={(event) => handleCategories(event)}
         />
         <label htmlFor={category}>{category}</label>
       </div>

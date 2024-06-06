@@ -18,6 +18,7 @@ export const CatalogPage = () => {
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
+  const [currentCategories, setCurrentCategories] = useState<string[]>([]);
 
   const [products, setProducts] = useState<ProductProjectionResponse>({
     productProjectionSearch: {
@@ -38,9 +39,18 @@ export const CatalogPage = () => {
     }
   };
 
+  const handleCategories = (event: React.ChangeEvent) => {
+    const target = event.target as HTMLInputElement;
+    if (target.checked) {
+      setCurrentCategories([...currentCategories, target.value]);
+    } else {
+      currentCategories.splice(currentCategories.indexOf(target.value), 1);
+      setCurrentCategories([...currentCategories]);
+    }
+  };
+
   const handleCurrentSort = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
-    console.log(target.value);
     setCurrentSort(target.value);
   };
 
@@ -52,11 +62,12 @@ export const CatalogPage = () => {
   useEffect(() => {
     handleLoading(true);
     const productService = new ProductService();
-    if (currentSort || currentSearch) {
+    if (currentSort || currentSearch || currentCategories.length > 0) {
       const data: Promise<CTResponse> = productService.getProductsWithFilters(
         'EN-GB',
         currentSort,
-        currentSearch
+        currentSearch,
+        currentCategories
       );
       data.then((response) => {
         handleLoading(false);
@@ -73,12 +84,13 @@ export const CatalogPage = () => {
         );
       });
     }
-  }, [currentSort, currentSearch, currentRangeValue]);
+  }, [currentSort, currentSearch, currentRangeValue, currentCategories]);
 
   return (
     <section className="flex">
       <div>
         <FilterSection
+          handleCategories={handleCategories}
           currentRangeValue={currentRangeValue}
           handleRangeSlider={handleRangeSlider}
         />

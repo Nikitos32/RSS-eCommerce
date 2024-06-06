@@ -63,18 +63,21 @@ export class ProductService {
     searchValue?: string,
     categoryFilter?: string[]
   ): Promise<CTResponse> {
+    console.log(categoryFilter);
     const query = `
     query ($locale: Locale) {
   productProjectionSearch (
-    ${sortParam ? `sorts: ["name.${locale} ${sortParam}"],` : ''}
+    ${sortParam ? `sorts: ["name.${locale} ${sortParam}"],` : ''},
     ${searchValue ? `text: "${searchValue}", locale: $locale,` : ''}
     ${
-      categoryFilter
+      (categoryFilter ? categoryFilter.length > 0 : false)
         ? `filters: {
       model: {
         value: {
           path: "categories.id"
-          values: ${categoryFilter}
+          values: [${categoryFilter?.map((element) => {
+            return `"${element}"`;
+          })}]
         }
       }
     }`
