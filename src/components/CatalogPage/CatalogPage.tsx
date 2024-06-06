@@ -9,6 +9,7 @@ import {
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
+import { convertPrice } from '../../utils/convertPrice';
 
 /* import { convertPrice } from '../../utils/convertPrice'; */
 
@@ -118,6 +119,14 @@ export const CatalogPage = () => {
           <section className="flex flex-col gap-5 flex-wrap">
             {products.productProjectionSearch.results.length > 0 ? (
               products?.productProjectionSearch.results.map((element) => {
+                const basePrice = convertPrice(
+                  element?.masterVariant.prices
+                    ? element?.masterVariant.prices[0].value.centAmount
+                    : 0,
+                  element?.masterVariant.prices
+                    ? element?.masterVariant.prices[0].value.fractionDigits
+                    : 0
+                );
                 return (
                   <ProductPreviewItem
                     key={element.key}
@@ -140,7 +149,33 @@ export const CatalogPage = () => {
                         : 'no description'
                     }
                     productName={`${element.name ? element.name : ''}`}
-                    productPrice={`${element.masterVariant.price ? element.masterVariant.price.value.centAmount : 'no price'}`}
+                    productPrice={`${
+                      (
+                        element?.masterVariant.prices
+                          ? element?.masterVariant.prices[0].discounted
+                          : 0
+                      )
+                        ? convertPrice(
+                            element?.masterVariant.prices
+                              ? element?.masterVariant.prices[0].discounted
+                                  ?.value.centAmount
+                              : 0,
+                            element?.masterVariant.prices
+                              ? element?.masterVariant.prices[0].discounted
+                                  ?.value.fractionDigits
+                              : 0
+                          )
+                        : basePrice
+                    }`}
+                    productOldPrice={
+                      (
+                        element?.masterVariant.prices
+                          ? element?.masterVariant.prices[0]?.discounted
+                          : 0
+                      )
+                        ? basePrice
+                        : ''
+                    }
                   />
                 );
               })

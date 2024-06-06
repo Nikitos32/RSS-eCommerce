@@ -109,11 +109,19 @@ export class ProductService {
       masterVariant {
         price(currency: "EUR" country:"DE") {
           value {
+          fractionDigits
             centAmount
           }
         }
         prices {
+        discounted {
+            value {
+              centAmount
+              fractionDigits
+            }
+          }
           value {
+          fractionDigits
             centAmount
           }
         }
@@ -166,7 +174,14 @@ export class ProductService {
           }
         }
         prices {
+        discounted {
+            value {
+              centAmount
+              fractionDigits
+            }
+          }
           value {
+          fractionDigits
             centAmount
           }
         }

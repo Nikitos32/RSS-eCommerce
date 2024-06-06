@@ -14,11 +14,11 @@ export const FilterPrice = ({
     <div className="flex flex-col gap-3 border-b-2 pb-9 pl-5">
       <p>Price:</p>
       <p>
-        Current Range: ${currentRangeValue[0]} - ${currentRangeValue[1]}
+        Current Range: €{currentRangeValue[0]} - €{currentRangeValue[1]}
       </p>
       <div className="w-36 pl-2">
         <Slider
-          marks={{ 0: '$0', 3100: '$3100' }}
+          marks={{ 0: `€0`, 3100: `€3100` }}
           range
           defaultValue={[0, 3100]}
           step={10}
