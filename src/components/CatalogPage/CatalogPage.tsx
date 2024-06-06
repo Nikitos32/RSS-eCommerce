@@ -18,15 +18,16 @@ export const CatalogPage = () => {
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
-  const [searchProducts, setSearchProducts] =
-    useState<ProductProjectionResponse>({
-      productProjectionSearch: {
-        limit: 0,
-        count: 0,
-        offset: 0,
-        results: [],
-      },
-    });
+
+  const [products, setProducts] = useState<ProductProjectionResponse>({
+    productProjectionSearch: {
+      limit: 0,
+      count: 0,
+      offset: 0,
+      results: [],
+    },
+  });
+
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
     0, 1000,
   ]);
@@ -59,7 +60,7 @@ export const CatalogPage = () => {
       );
       data.then((response) => {
         handleLoading(false);
-        setSearchProducts(
+        setProducts(
           (response.data as CTResponse).data as ProductProjectionResponse
         );
       });
@@ -67,7 +68,7 @@ export const CatalogPage = () => {
       const data: Promise<CTResponse> = productService.getProductsAll();
       data.then((response) => {
         handleLoading(false);
-        setSearchProducts(
+        setProducts(
           (response.data as CTResponse).data as ProductProjectionResponse
         );
       });
@@ -90,7 +91,7 @@ export const CatalogPage = () => {
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
           <section className="flex flex-col gap-5 flex-wrap">
-            {searchProducts?.productProjectionSearch.results.map((element) => {
+            {products?.productProjectionSearch.results.map((element) => {
               return (
                 <ProductPreviewItem
                   key={element.key}
@@ -100,10 +101,16 @@ export const CatalogPage = () => {
                       ? element.masterVariant.images[0].url
                       : ''
                   }
-                  productCategory={`${element.categories[0] ? (element.categories[0] as unknown as Category).name : 'no category'}`}
+                  productCategory={`${
+                    element.categories[0]
+                      ? element.categories.map((element) => {
+                          return ` ${(element as unknown as Category).name}`;
+                        })
+                      : 'no category'
+                  }`}
                   productDescription={
                     element.description
-                      ? element.description.name
+                      ? `${element.description}`
                       : 'no description'
                   }
                   productName={`${element.name ? element.name : ''}`}
