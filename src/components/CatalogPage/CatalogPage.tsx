@@ -10,7 +10,7 @@ import {
 } from '@commercetools/platform-sdk';
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 
-import { convertPrice } from '../../utils/convertPrice';
+/* import { convertPrice } from '../../utils/convertPrice'; */
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
