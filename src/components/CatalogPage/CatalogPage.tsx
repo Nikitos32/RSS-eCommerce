@@ -10,11 +10,14 @@ import {
 } from '@commercetools/platform-sdk';
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 
+import { convertPrice } from '../../utils/convertPrice';
+
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
 }
 
 export const CatalogPage = () => {
+  const [showFilter, setShowFilter] = useState(false);
   const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
@@ -32,7 +35,6 @@ export const CatalogPage = () => {
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
     0, 3100,
   ]);
-
   const handleRangeSlider = (event: number | number[]) => {
     if (typeof event !== 'number') {
       setCurrentRangeValue(event);
@@ -94,18 +96,22 @@ export const CatalogPage = () => {
   }, [currentSort, currentSearch, currentRangeValue, currentCategories]);
 
   return (
-    <section className="flex">
+    <section className="flex relative">
       <div>
         <FilterSection
           handleCategories={handleCategories}
           currentRangeValue={currentRangeValue}
           handleRangeSlider={handleRangeSlider}
+          showFilter={showFilter}
+          setShowFilter={setShowFilter}
         />
       </div>
       <div className="flex gap-5 flex-col w-full p-5">
         <SortSection
           handleCurrentSearch={handleCurrentSearch}
           handleCurrentSort={handleCurrentSort}
+          showFilter={showFilter}
+          setShowFilter={setShowFilter}
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>

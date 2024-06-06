@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { ButtonSignUp } from '../UI/ButtonSignUp/ButtonSignUp';
 import { InputType, InputNames } from '../../type/enums/SignUpEnums';
@@ -16,17 +16,16 @@ import {
 import classes from './signUpPage.module.css';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
-import {
-  IsLoadindContext,
-  IsLoginedContext,
-  notifyError,
-  notifySuccess,
-} from '../../App';
+
+import { useAuth } from '../../hooks';
+import Spinner from '../Spinner';
+import { toast } from 'react-toastify';
 
 export const SignUpPage = () => {
-  const [handleLoading] = useContext(IsLoadindContext);
+  const [loading, setLoading] = useState(false);
 
-  const [isLogined, setIsLogined] = useContext(IsLoginedContext);
+  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
+    useAuth();
 
   async function SignUp() {
     const customerService = new CustomerService();
@@ -69,26 +68,32 @@ export const SignUpPage = () => {
           true
         );
 
-    handleLoading(true);
-    const response: CTResponse = await customerService
-      .signUp(newCustomerDraft)
-      .then(() => {
-        return customerService.signIn(
-          inputData.Email.value,
-          inputData.Password.value
-        );
-      });
-    if (response.ok) {
-      handleLoading(false);
-      notifySuccess('Success Registration!');
-      if (typeof setIsLogined !== 'boolean') {
-        setIsLogined(true);
-      }
+    setLoading(true);
+    const responseNewCustomer: CTResponse =
+      await customerService.signUp(newCustomerDraft);
+    if (responseNewCustomer.ok) {
+      toast.success('Success Registration!');
     } else {
-      handleLoading(false);
-      if (response.message) {
-        notifyError(response.message);
-      }
+      toast.error(responseNewCustomer.message || 'Registration Error');
+    }
+
+    if (!responseNewCustomer.ok) {
+      setLoading(false);
+      return;
+    }
+    const response: CTResponse = await customerService.signIn(
+      inputData.Email.value,
+      inputData.Password.value
+    );
+
+    if (response.ok) {
+      setLoading(false);
+      toast.success('Success Authorization!');
+
+      setIsLoggedIn(true);
+    } else {
+      setLoading(false);
+      toast.error(response.message || 'Authorization Error');
     }
   }
 
@@ -219,8 +224,8 @@ export const SignUpPage = () => {
     };
   };
 
-  return isLogined ? (
-    <Navigate to="/RSS-eCommerce" />
+  return isLoggedIn ? (
+    <Navigate to="/" />
   ) : (
     <article className={`${classes.signUp} font-Inter text-moonBlack`}>
       <form className={classes.signUp__form} onSubmit={handleSubmit}>
@@ -385,6 +390,7 @@ export const SignUpPage = () => {
           />
         </section>
       </form>
+      <Spinner isLoading={loading} />
     </article>
   );
 };
