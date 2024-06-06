@@ -11,7 +11,7 @@ export default defineConfig({
   define: {
     global: {},
   },
-  base: '',
+  base: '/',
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
