@@ -6,6 +6,8 @@ import {
   AddressForProfile,
   UserInput,
   makeAddressesForProfile,
+  checkAddressBilling,
+  checkAddressShipping,
 } from '../utils';
 import { BsInfoCircle } from 'react-icons/bs';
 import { PiPasswordBold } from 'react-icons/pi';
@@ -42,6 +44,7 @@ function Profile() {
     message: messageUpdate,
     setProfileUpdates,
     setNewAddress,
+    setChangeAddress,
     customerAfterUpdate,
   } = useApiUpdateProfile();
 
@@ -229,6 +232,11 @@ function Profile() {
       region,
       postalCode,
       country,
+      // isShipping,
+      // isShippingDefault,
+      // isBilling,
+      // isBillingDefault,
+      addressId,
     } = data;
 
     if (!data.addressId) {
@@ -247,6 +255,23 @@ function Profile() {
           country,
         },
       }));
+    } else {
+      const {
+        id,
+        version,
+        // billingAddressIds,
+        // shippingAddressIds,
+        // defaultBillingAddressId,
+        // defaultShippingAddressId,
+        // addresses,
+      } = customer;
+
+      setChangeAddress(() => ({
+        id,
+        version,
+        addressId,
+        address: { country: '' },
+      }));
     }
   };
 
@@ -261,7 +286,7 @@ function Profile() {
       return;
     }
     const {
-      id,
+      id = '',
       firstName,
       lastName,
       apartment,
@@ -280,13 +305,8 @@ function Profile() {
       defaultShippingAddressId,
     } = customer;
 
-    const isBilling = billingAddressIds
-      ? billingAddressIds?.findIndex((item) => item === id) > -1
-      : false;
-
-    const isShipping = shippingAddressIds
-      ? shippingAddressIds?.findIndex((item) => item === id) > -1
-      : false;
+    const isBilling = checkAddressBilling(id, billingAddressIds);
+    const isShipping = checkAddressShipping(id, shippingAddressIds);
 
     setShowAddressForm(true);
     setDataAddressForm(() => ({

@@ -19,7 +19,7 @@ type AddressNew = {
 type AddressChange = {
   id: string;
   version: number;
-  addressId: string;
+  addressId?: string;
   address?: BaseAddress;
   isShipping?: boolean;
   isShippingDefault?: boolean;
