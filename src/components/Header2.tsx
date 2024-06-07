@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 function Links() {
   const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
     useAuth();
-  const count = '4';
+  const count = 9;
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
@@ -35,7 +35,7 @@ function Links() {
         <CgShoppingCart className="text-2xl hover:text-moonNeutral-600" />
         {count && (
           <span className="absolute -top-2 left-3 rounded-full bg-moonBrown p-0.5 px-2 text-sm text-moonNeutral-200">
-            {count}
+            {count > 9 ? '∞' : count}
           </span>
         )}
       </Link>
