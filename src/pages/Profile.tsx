@@ -12,10 +12,10 @@ import { PiPasswordBold } from 'react-icons/pi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { CiCirclePlus, CiEdit } from 'react-icons/ci';
 import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
-import { Customer } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
 import AddressEdit, { AddressEditData } from '../components/AddressEdit';
 import AddressLine from '../components/AddressLine';
+import { Customer } from '@commercetools/platform-sdk';
 
 function Profile() {
   const [customer, setCustomer] = useState<Customer>();
@@ -39,8 +39,9 @@ function Profile() {
   const {
     ok: okUpdate,
     loading: isUpdatingProfile,
-    errorMsg: errorMsgUpdate,
+    message: messageUpdate,
     setProfileUpdates,
+    setNewAddress,
     customerAfterUpdate,
   } = useApiUpdateProfile();
 
@@ -106,18 +107,6 @@ function Profile() {
     }));
   };
 
-  const prepareAddressUpdate = () => {
-    if (!customer) return;
-    setProfileUpdates(() => ({
-      id: customer.id,
-      version: customer.version,
-      email: customer.email !== email.value ? email.value : '',
-      firstName: customer.firstName !== firstName.value ? firstName.value : '',
-      lastName: customer.lastName !== lastName.value ? lastName.value : '',
-      dateOfBirth: customer.dateOfBirth !== dob ? dob : '',
-    }));
-  };
-
   useEffect(() => {
     fillProfile(customer);
     setAddresses([...makeAddressesForProfile(customer as Customer)]);
@@ -131,15 +120,15 @@ function Profile() {
 
   useEffect(() => {
     if (okUpdate) {
-      toast.success('Profile Updated');
+      toast.success(messageUpdate);
       setCustomer(customerAfterUpdate);
       setEditProfile(false);
     }
-    if (!okUpdate && errorMsgUpdate) {
+    if (!okUpdate && messageUpdate) {
       firstNameRef.current?.focus();
-      toast.error(errorMsgUpdate);
+      toast.error(messageUpdate);
     }
-  }, [okUpdate, customerAfterUpdate, errorMsgUpdate]);
+  }, [okUpdate, customerAfterUpdate, messageUpdate]);
 
   useEffect(() => {
     const valid =
@@ -222,14 +211,43 @@ function Profile() {
     }
   };
 
-  const handleResetAddressForm = (e: FormEvent) => {
-    e.preventDefault();
+  const handleResetFromAddressForm = () => {
     setShowAddressForm(false);
     setAddAddress(false);
   };
 
-  const handleSubmitAddressForm = () => {
-    prepareAddressUpdate();
+  const handleSubmitFromAddressForm = (data: AddressEditData) => {
+    if (!customer) return;
+
+    const {
+      firstName,
+      lastName,
+      apartment,
+      streetNumber,
+      streetName,
+      city,
+      region,
+      postalCode,
+      country,
+    } = data;
+
+    if (!data.addressId) {
+      setNewAddress(() => ({
+        id: customer.id,
+        version: customer.version,
+        address: {
+          firstName,
+          lastName,
+          apartment,
+          streetNumber,
+          streetName,
+          city,
+          region,
+          postalCode,
+          country,
+        },
+      }));
+    }
   };
 
   const handleClickEditAddress = (key: string) => {
@@ -429,10 +447,9 @@ function Profile() {
           </div>
           {showAddressForm && (
             <AddressEdit
-              data={dataAddressForm}
-              setData={setDataAddressForm}
-              onReset={handleResetAddressForm}
-              onSubmit={handleSubmitAddressForm}
+              startingData={dataAddressForm}
+              sendResetToParent={handleResetFromAddressForm}
+              sendDataToParent={handleSubmitFromAddressForm}
             />
           )}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
