@@ -23,6 +23,7 @@ import { ProductPage } from './components/ProductPage/ProductPage';
 import { AuthProvider } from './context/AuthProvider';
 import RequireAuth from './components/RequireAuth';
 import NotRequireAuth from './components/NotRequireAuth';
+import Cart from './pages/Cart';
 
 export const IsLoadindContext = createContext([
   (loading: boolean) => {
@@ -40,6 +41,7 @@ function App() {
         <Route index element={<MainPage />} />
         <Route path="/product/:key" element={<ProductPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/cart" element={<Cart />} />
 
         {/*Only Not Authorized */}
         <Route element={<NotRequireAuth />}>
