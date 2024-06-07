@@ -3,10 +3,17 @@ import {
   ClientResponse,
   Customer,
   CustomerAddAddressAction,
+  CustomerAddBillingAddressIdAction,
+  CustomerAddShippingAddressIdAction,
+  CustomerChangeAddressAction,
   CustomerChangeEmailAction,
   CustomerChangePassword,
   CustomerDraft,
+  CustomerRemoveBillingAddressIdAction,
+  CustomerRemoveShippingAddressIdAction,
   CustomerSetDateOfBirthAction,
+  CustomerSetDefaultBillingAddressAction,
+  CustomerSetDefaultShippingAddressAction,
   CustomerSetFirstNameAction,
   CustomerSetLastNameAction,
   CustomerSignInResult,
@@ -199,6 +206,100 @@ export class CustomerService {
         address,
         action: 'addAddress',
       } as CustomerAddAddressAction);
+    }
+
+    if (!customerUpdate.actions.length) {
+      return CTResponseHandler.makeError(
+        HttpStatusCode.NO_CONTENT_204,
+        'No changes to update',
+        undefined
+      );
+    }
+
+    try {
+      const answer = await this.customerRequests.updateCustomer(
+        id,
+        customerUpdate
+      );
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body as Customer
+        );
+      } else {
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
+  async updateCustomerChangeAddress(
+    id: string,
+    version: number,
+    addressId: string,
+    address?: BaseAddress,
+    isShipping?: boolean,
+    isShippingDefault?: boolean,
+    isBilling?: boolean,
+    isBillingDefault?: boolean
+  ): Promise<CTResponse> {
+    const customerUpdate: CustomerUpdate = { version, actions: [] };
+
+    if (address) {
+      customerUpdate.actions.push({
+        addressId,
+        address,
+        action: 'changeAddress',
+      } as CustomerChangeAddressAction);
+    }
+
+    if (isShipping !== undefined) {
+      const action:
+        | CustomerAddShippingAddressIdAction
+        | CustomerRemoveShippingAddressIdAction = isShipping
+        ? ({
+            addressId,
+            action: 'addShippingAddressId',
+          } as CustomerAddShippingAddressIdAction)
+        : ({
+            addressId,
+            action: 'removeShippingAddressId',
+          } as CustomerRemoveShippingAddressIdAction);
+
+      customerUpdate.actions.push(action);
+    }
+
+    if (isShippingDefault !== undefined && isShippingDefault) {
+      customerUpdate.actions.push({
+        addressId,
+        action: 'setDefaultShippingAddress',
+      } as CustomerSetDefaultShippingAddressAction);
+    }
+
+    if (isBilling !== undefined) {
+      const action:
+        | CustomerAddBillingAddressIdAction
+        | CustomerRemoveBillingAddressIdAction = isBilling
+        ? ({
+            addressId,
+            action: 'addBillingAddressId',
+          } as CustomerAddBillingAddressIdAction)
+        : ({
+            addressId,
+            action: 'removeBillingAddressId',
+          } as CustomerRemoveBillingAddressIdAction);
+
+      customerUpdate.actions.push(action);
+    }
+
+    if (isBillingDefault !== undefined && isBillingDefault) {
+      customerUpdate.actions.push({
+        addressId,
+        action: 'setDefaultBillingAddress',
+      } as CustomerSetDefaultBillingAddressAction);
     }
 
     if (!customerUpdate.actions.length) {
