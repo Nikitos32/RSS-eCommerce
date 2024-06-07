@@ -24,7 +24,7 @@ const initAddressNew: AddressNew = {
 export function useApiUpdateProfile() {
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [message, setMessage] = useState('');
   const [profileUpdates, setProfileUpdates] = useState(initProfileUpdates);
   const [newAddress, setNewAddress] = useState(initAddressNew);
   const [customerAfterUpdate, setCustomerAfterUpdate] = useState<Customer>();
@@ -49,9 +49,12 @@ export function useApiUpdateProfile() {
         dateOfBirth
       );
       setOk(response.ok);
-      setErrorMsg(response.message as string);
+
       if (response.ok) {
         setCustomerAfterUpdate(response.data as Customer);
+        setMessage('Profile Updated');
+      } else {
+        setMessage(response.message as string);
       }
       setLoading(false);
     };
@@ -74,9 +77,12 @@ export function useApiUpdateProfile() {
         address
       );
       setOk(response.ok);
-      setErrorMsg(response.message as string);
+      setMessage(response.message as string);
       if (response.ok) {
         setCustomerAfterUpdate(response.data as Customer);
+        setMessage('New Address Added');
+      } else {
+        setMessage(response.message as string);
       }
       setLoading(false);
     };
@@ -87,7 +93,7 @@ export function useApiUpdateProfile() {
   return {
     loading,
     ok,
-    errorMsg,
+    message,
     setProfileUpdates,
     setNewAddress,
     customerAfterUpdate,
