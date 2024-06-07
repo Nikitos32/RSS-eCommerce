@@ -1,4 +1,4 @@
-import { FormEvent, FormEventHandler, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import UserInputString from './UserInputString';
 import { BaseAddress } from '@commercetools/platform-sdk';
 import { UserInput } from '../utils';
@@ -22,10 +22,9 @@ export interface AddressEditData extends BaseAddress {
 }
 
 type AddressEditProps = {
-  data: AddressEditData;
-  setData: React.Dispatch<React.SetStateAction<AddressEditData>>;
-  onReset: FormEventHandler<HTMLFormElement>;
-  onSubmit: () => void;
+  startingData: AddressEditData;
+  sendResetToParent: () => void;
+  sendDataToParent: (data: AddressEditData) => void;
 };
 
 function AddressEdit(props: AddressEditProps) {
@@ -56,7 +55,7 @@ function AddressEdit(props: AddressEditProps) {
   );
 
   useEffect(() => {
-    if (!props.data) {
+    if (!props.startingData) {
       return;
     }
     const {
@@ -74,7 +73,7 @@ function AddressEdit(props: AddressEditProps) {
       isBilling = false,
       isBillingDefault = false,
       addressId = '',
-    } = props.data as AddressEditData;
+    } = props.startingData as AddressEditData;
     setFirstName((prevState) => ({
       ...prevState,
       value: firstName,
@@ -116,7 +115,7 @@ function AddressEdit(props: AddressEditProps) {
     setBilling(isBilling);
     setBillingDefault(isBillingDefault);
     setAdd(addressId === '');
-  }, [props.data]);
+  }, [props.startingData]);
 
   useEffect(() => {
     const valid = !UserInput.checkInputEmpty(firstName.value);
@@ -186,7 +185,7 @@ function AddressEdit(props: AddressEditProps) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    props.setData(() => ({
+    props.sendDataToParent({
       firstName: firstName.value,
       lastName: lastName.value,
       apartment: apartment.value,
@@ -196,13 +195,21 @@ function AddressEdit(props: AddressEditProps) {
       region: region.value,
       postalCode: postalCode.value,
       country: country.value,
-    }));
-    props.onSubmit();
+      isShipping: shipping,
+      isShippingDefault: shippingDefault,
+      isBilling: billing,
+      isBillingDefault: billingDefault,
+      addressId: props.startingData.addressId,
+    });
+  };
+  const handleReset = (e: FormEvent) => {
+    e.preventDefault();
+    props.sendResetToParent();
   };
 
   return (
     <form
-      onReset={props.onReset}
+      onReset={handleReset}
       onSubmit={handleSubmit}
       className="flex flex-col items-center justify-start gap-3 md:flex-row"
     >
