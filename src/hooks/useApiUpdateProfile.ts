@@ -16,10 +16,32 @@ type AddressNew = {
   address?: BaseAddress;
 };
 
+type AddressChange = {
+  id: string;
+  version: number;
+  addressId: string;
+  address?: BaseAddress;
+  isShipping?: boolean;
+  isShippingDefault?: boolean;
+  isBilling?: boolean;
+  isBillingDefault?: boolean;
+};
+
 const initAddressNew: AddressNew = {
   id: '',
   version: 0,
   address: undefined,
+};
+
+const initAddressChange: AddressChange = {
+  id: '',
+  version: 0,
+  addressId: '',
+  address: undefined,
+  isShipping: undefined,
+  isShippingDefault: undefined,
+  isBilling: undefined,
+  isBillingDefault: undefined,
 };
 export function useApiUpdateProfile() {
   const [ok, setOk] = useState(false);
@@ -27,6 +49,7 @@ export function useApiUpdateProfile() {
   const [message, setMessage] = useState('');
   const [profileUpdates, setProfileUpdates] = useState(initProfileUpdates);
   const [newAddress, setNewAddress] = useState(initAddressNew);
+  const [changeAddress, setChangeAddress] = useState(initAddressChange);
   const [customerAfterUpdate, setCustomerAfterUpdate] = useState<Customer>();
 
   useEffect(() => {
@@ -90,12 +113,55 @@ export function useApiUpdateProfile() {
     addAddress();
   }, [newAddress]);
 
+  useEffect(() => {
+    const {
+      id,
+      version,
+      addressId,
+      address,
+      isShipping,
+      isBilling,
+      isShippingDefault,
+      isBillingDefault,
+    } = changeAddress;
+
+    if (!id || !addressId) {
+      return;
+    }
+
+    const updateAddress = async () => {
+      const customerService = new CustomerService();
+      setLoading(true);
+      const response = await customerService.updateCustomerChangeAddress(
+        id,
+        version,
+        addressId,
+        address,
+        isShipping,
+        isShippingDefault,
+        isBilling,
+        isBillingDefault
+      );
+      setOk(response.ok);
+      setMessage(response.message as string);
+      if (response.ok) {
+        setCustomerAfterUpdate(response.data as Customer);
+        setMessage('Address Updated');
+      } else {
+        setMessage(response.message as string);
+      }
+      setLoading(false);
+    };
+
+    updateAddress();
+  }, [changeAddress]);
   return {
     loading,
     ok,
     message,
     setProfileUpdates,
     setNewAddress,
+    setChangeAddress,
     customerAfterUpdate,
   };
 }
