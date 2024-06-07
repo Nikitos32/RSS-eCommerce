@@ -18,6 +18,7 @@ export const ButtonSignUp = ({
       className={` 
         ${classes.signUp__button}
         ${classes[customClass]}
+        ${customClass}
         bg-moonBlack
         text-lg
       `}

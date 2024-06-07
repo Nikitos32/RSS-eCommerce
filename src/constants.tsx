@@ -25,8 +25,7 @@ export const REGEX_FOR_EMAIL_INPUT: string =
 export const REGEX_FOR_PASSWORD_INPUT: string =
   '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).*$';
 
-export const STYLE_FOR_PASSWORD_INPUT: string =
-  'resetAllStyle';
+export const STYLE_FOR_PASSWORD_INPUT: string = 'resetAllStyle';
 
 export const EMAIL_INVALID_INPUT_MESSAGE =
   'Email должен быть в данном формате example@example.com';

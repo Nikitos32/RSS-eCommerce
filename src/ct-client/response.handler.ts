@@ -1,14 +1,14 @@
 import {
   ClientResponse,
+  Customer,
   CustomerSignInResult,
   ErrorObject,
   ErrorResponse,
+  GraphQLResponse,
 } from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
 
-type Data =
-  | CustomerSignInResult
-  | ErrorObject[];
+type Data = Customer | GraphQLResponse | CustomerSignInResult | ErrorObject[];
 
 /**
  * @interface CTResponse
@@ -17,7 +17,7 @@ type Data =
  * @typedef {object} CTResponse
  * @property {boolean} ok Result of Request Success - true, Error - false
  * @property {string} message message from Response for Errors
- * @property {CustomerSignInResult | ErrorObject[]} data
+ * @property {Customer | GraphQLResponse | CustomerSignInResult | ErrorObject[]} data
  */
 export interface CTResponse {
   ok: boolean;
@@ -45,6 +45,8 @@ export class CTResponseHandler {
     statusCode: HttpStatusCode,
     message: string,
     data:
+      | Customer
+      | GraphQLResponse
       | CustomerSignInResult
       | ErrorObject[]
       | undefined
@@ -104,24 +106,17 @@ export class CTResponseHandler {
    *
    * @return CTResponse
    */
-  static handleCatch(
-    error: ClientResponse
-  ): CTResponse {
-    const result =
-      error.body as ErrorResponse;
+  static handleCatch(error: ClientResponse): CTResponse {
+    const result = error.body as ErrorResponse;
 
     return CTResponseHandler.makeError(
-      result.statusCode ||
-        error.statusCode ||
-        0,
+      result.statusCode || error.statusCode || 0,
       result.message,
       result.errors
     );
   }
 
-  static handleUnexpectedStatus(
-    statusCode: number | undefined
-  ): CTResponse {
+  static handleUnexpectedStatus(statusCode: number | undefined): CTResponse {
     return CTResponseHandler.makeError(
       statusCode || 0,
       `Status Code ${statusCode} is not expected`,

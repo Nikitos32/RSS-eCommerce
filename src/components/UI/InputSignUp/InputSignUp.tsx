@@ -7,9 +7,7 @@ type InputProps = {
   customClass: string;
   placeholder: string;
   value: string;
-  valueChange: (
-    newValue: string
-  ) => void;
+  valueChange: (newValue: string) => void;
 };
 
 export const InputSignUp = ({
@@ -25,9 +23,7 @@ export const InputSignUp = ({
       className={`${classes.input} ${classes[customClass]}`}
       placeholder={placeholder}
       value={value}
-      onChange={(
-        event: ChangeEvent<HTMLInputElement>
-      ) =>
+      onChange={(event: ChangeEvent<HTMLInputElement>) =>
         valueChange(event.target.value)
       }
     />
