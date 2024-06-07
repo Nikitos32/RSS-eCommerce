@@ -34,7 +34,7 @@ function AddressLine(props: AddressLineProps) {
           <CiMoneyCheck1 title="Billing Address" />
         )}
       </div>
-      <p>{props.address.strAddress}</p>
+      <p className="odd:bg-moonNeutral-200">{props.address.strAddress}</p>
       <div className="flex flex-row gap-4 text-2xl">
         {props.showEdit && (
           <a
@@ -46,7 +46,7 @@ function AddressLine(props: AddressLineProps) {
             <CiEdit />
           </a>
         )}
-        {!props.address.isDefault && (
+        {props.address.isDeletable && props.showEdit && (
           <a href="" title="Delete" className=" hover:text-moonNeutral-600">
             <CiTrash />
           </a>
