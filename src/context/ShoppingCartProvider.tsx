@@ -32,7 +32,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
   function increaseProductQuantity(key: string) {
     setCartItems((currentItems) => {
-      if (currentItems.find((item) => item.key === key) === null) {
+      if (currentItems.find((item) => item.key === key) === undefined) {
         return [...currentItems, { key, quantity: 1 }];
       } else {
         return currentItems.map((item) => {
