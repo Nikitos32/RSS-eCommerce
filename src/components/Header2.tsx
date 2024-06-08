@@ -4,13 +4,14 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
 import { HiOutlineUserAdd } from 'react-icons/hi';
 import { IoIosLogIn, IoIosLogOut } from 'react-icons/io';
-import { CgProfile } from 'react-icons/cg';
+import { CgProfile, CgShoppingCart } from 'react-icons/cg';
 import { useAuth } from '../hooks';
 import { toast } from 'react-toastify';
 
 function Links() {
   const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
     useAuth();
+  const count = 9;
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
@@ -29,6 +30,14 @@ function Links() {
       </Link>
       <Link to="./contact" className="hover:text-moonNeutral-600">
         Contact
+      </Link>
+      <Link to="./cart" title="Shopping Cart" className="relative mx-2">
+        <CgShoppingCart className="text-2xl hover:text-moonNeutral-600" />
+        {count && (
+          <span className="absolute -top-2 left-3 rounded-full bg-moonBrown p-0.5 px-2 text-sm text-moonNeutral-200">
+            {count > 9 ? '∞' : count}
+          </span>
+        )}
       </Link>
       {!isLoggedIn && (
         <Link to="./signup" title="Registration">
