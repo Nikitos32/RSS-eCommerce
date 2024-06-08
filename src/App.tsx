@@ -25,6 +25,7 @@ import RequireAuth from './components/RequireAuth';
 import NotRequireAuth from './components/NotRequireAuth';
 import Cart from './pages/Cart';
 import About from './pages/About';
+import { ShoppingCartProvider } from './context/ShoppingCartProvider';
 
 export const IsLoadindContext = createContext([
   (loading: boolean) => {
@@ -66,7 +67,9 @@ function App() {
   );
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ShoppingCartProvider>
+        <RouterProvider router={router} />
+      </ShoppingCartProvider>
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
