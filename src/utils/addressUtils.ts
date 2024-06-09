@@ -1,4 +1,6 @@
-import { Address, Customer } from '@commercetools/platform-sdk';
+import { Address, BaseAddress, Customer } from '@commercetools/platform-sdk';
+import { AddressEditData } from '../components/AddressEdit';
+import { AddressChange } from '../hooks/useApiUpdateProfile';
 
 export type AddressForProfile = {
   id: string;
@@ -135,4 +137,89 @@ export const makeAddressesForProfile = (
   });
 
   return result;
+};
+
+const checkAddressFieldsChange = (
+  editAddress: BaseAddress,
+  initAddress: BaseAddress
+): boolean => {
+  if (!initAddress || !editAddress) {
+    return false;
+  }
+
+  return (
+    editAddress.firstName !== initAddress.firstName ||
+    editAddress.lastName !== initAddress.lastName ||
+    editAddress.apartment !== initAddress.apartment ||
+    editAddress.streetNumber !== initAddress.streetNumber ||
+    editAddress.streetName !== initAddress.streetName ||
+    editAddress.city !== initAddress.city ||
+    editAddress.region !== initAddress.region ||
+    editAddress.postalCode !== initAddress.postalCode ||
+    editAddress.country !== initAddress.country
+  );
+};
+
+/**
+ *
+ * @describe prepare data for setChangeAddress
+ * @returns AddressChange
+ */
+export const getAddressChange = (
+  data: AddressEditData,
+  customer: Customer
+): AddressChange => {
+  const addressId = data.addressId || '';
+  const initAddress = customer?.addresses.filter(
+    (item) => item.id === addressId
+  )[0];
+
+  const editAddress = {
+    firstName: data.firstName,
+    lastName: data.lastName,
+    apartment: data.apartment,
+    streetNumber: data.streetNumber,
+    streetName: data.streetName,
+    city: data.city,
+    region: data.region,
+    postalCode: data.postalCode,
+    country: data.country,
+  };
+
+  const {
+    shippingAddressIds = [],
+    billingAddressIds = [],
+    defaultBillingAddressId = '',
+    defaultShippingAddressId = '',
+  } = customer;
+
+  const isShipping =
+    data.isShipping !== checkAddressShipping(addressId, shippingAddressIds)
+      ? data.isShipping
+      : undefined;
+  const isBilling =
+    data.isBilling !== checkAddressBilling(addressId, billingAddressIds)
+      ? data.isBilling
+      : undefined;
+  const isShippingDefault =
+    data.isShippingDefault && addressId !== defaultShippingAddressId
+      ? true
+      : undefined;
+  const isBillingDefault =
+    data.isBillingDefault && addressId !== defaultBillingAddressId
+      ? true
+      : undefined;
+
+  return {
+    id: customer.id,
+    version: customer.version,
+    addressId,
+    address: checkAddressFieldsChange(editAddress, initAddress)
+      ? editAddress
+      : undefined,
+    isShipping,
+    isShippingDefault,
+    isBilling,
+    isBillingDefault,
+  };
 };

@@ -5,5 +5,6 @@ export {
   makeAddressesForProfile,
   checkAddressBilling,
   checkAddressShipping,
+  getAddressChange,
 } from './addressUtils';
 export type { AddressForProfile } from './addressUtils';

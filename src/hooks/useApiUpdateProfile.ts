@@ -16,7 +16,7 @@ type AddressNew = {
   address?: BaseAddress;
 };
 
-type AddressChange = {
+export type AddressChange = {
   id: string;
   version: number;
   addressId?: string;
