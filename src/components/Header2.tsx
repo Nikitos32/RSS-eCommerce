@@ -5,13 +5,14 @@ import { Link } from 'react-router-dom';
 import { HiOutlineUserAdd } from 'react-icons/hi';
 import { IoIosLogIn, IoIosLogOut } from 'react-icons/io';
 import { CgProfile, CgShoppingCart } from 'react-icons/cg';
-import { useAuth } from '../hooks';
+import { useAuth, useShoppingCart } from '../hooks';
 import { toast } from 'react-toastify';
 
 function Links() {
   const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
     useAuth();
-  const count = 9;
+
+  const { total } = useShoppingCart();
 
   const handleSignOut = () => {
     setIsLoggedIn(false);
@@ -33,9 +34,9 @@ function Links() {
       </Link>
       <Link to="./cart" title="Shopping Cart" className="relative mx-2">
         <CgShoppingCart className="text-2xl hover:text-moonNeutral-600" />
-        {count && (
+        {total > 0 && (
           <span className="absolute -top-2 left-3 rounded-full bg-moonBrown p-0.5 px-2 text-sm text-moonNeutral-200">
-            {count > 9 ? '∞' : count}
+            {total > 9 ? '∞' : total}
           </span>
         )}
       </Link>
