@@ -20,7 +20,9 @@ function AddressLine(props: AddressLineProps) {
   return (
     <>
       <div className="flex flex-row justify-end gap-1 text-2xl">
-        {props.address.isDefault && <CiBookmarkCheck title="Default" />}
+        {props.address.isDefault && (
+          <CiBookmarkCheck title="Default" className="text-moonBrown" />
+        )}
         {props.address.isDefault && props.address.isShipping && (
           <CiDeliveryTruck title="Shipping Address" />
         )}
