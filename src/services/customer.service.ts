@@ -222,7 +222,6 @@ export class CustomerService {
         id,
         customerUpdate
       );
-
       if (answer.statusCode === HttpStatusCode.OK_200) {
         return CTResponseHandler.makeSuccess(
           answer.statusCode,
@@ -349,7 +348,6 @@ export class CustomerService {
       return CTResponseHandler.makeError(
         HttpStatusCode.NO_CONTENT_204,
         'No address to delete',
-        undefined
       );
     }
 

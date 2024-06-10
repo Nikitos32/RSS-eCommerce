@@ -23,6 +23,9 @@ import { ProductPage } from './components/ProductPage/ProductPage';
 import { AuthProvider } from './context/AuthProvider';
 import RequireAuth from './components/RequireAuth';
 import NotRequireAuth from './components/NotRequireAuth';
+import Cart from './pages/Cart';
+import About from './pages/About';
+import { ShoppingCartProvider } from './context/ShoppingCartProvider';
 
 export const IsLoadindContext = createContext([
   (loading: boolean) => {
@@ -40,6 +43,8 @@ function App() {
         <Route index element={<MainPage />} />
         <Route path="/product/:key" element={<ProductPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/about" element={<About />} />
 
         {/*Only Not Authorized */}
         <Route element={<NotRequireAuth />}>
@@ -62,7 +67,9 @@ function App() {
   );
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ShoppingCartProvider>
+        <RouterProvider router={router} />
+      </ShoppingCartProvider>
       <ToastContainer
         position="bottom-right"
         autoClose={3000}

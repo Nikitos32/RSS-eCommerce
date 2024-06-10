@@ -293,7 +293,6 @@ function Profile() {
 
     const isBilling = checkAddressBilling(id, billingAddressIds);
     const isShipping = checkAddressShipping(id, shippingAddressIds);
-
     setShowAddressForm(true);
     setDataAddressForm(() => ({
       addressId: id,

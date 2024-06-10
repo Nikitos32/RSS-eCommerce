@@ -74,6 +74,7 @@ function AddressEdit(props: AddressEditProps) {
       isBillingDefault = false,
       addressId = '',
     } = props.startingData as AddressEditData;
+
     setFirstName((prevState) => ({
       ...prevState,
       value: firstName,
@@ -205,6 +206,7 @@ function AddressEdit(props: AddressEditProps) {
   const handleReset = (e: FormEvent) => {
     e.preventDefault();
     props.sendResetToParent();
+
   };
 
   return (

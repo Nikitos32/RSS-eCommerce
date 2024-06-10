@@ -73,7 +73,6 @@ export function useApiUpdateProfile() {
         dateOfBirth
       );
       setOk(response.ok);
-
       if (response.ok) {
         setCustomerAfterUpdate(response.data as Customer);
         setMessage('Profile Updated');
