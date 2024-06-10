@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 function Links() {
   const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
     useAuth();
-
   const { total } = useShoppingCart();
 
   const handleSignOut = () => {
