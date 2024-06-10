@@ -1,4 +1,4 @@
-import { ReactNode, createContext } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 import { useLocalStorage } from '../hooks';
 
 type ShoppingCartProviderProps = {
@@ -16,6 +16,8 @@ type ShoppingCartContextType = {
   decreaseProductQuantity: (key: string) => void;
   removeProduct: (key: string) => void;
   total: number;
+  setCartId: (activeCartId: string) => void;
+  cartId: string;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -27,6 +29,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     'mockCartItems',
     []
   );
+
+  const [activeCartId, setActiveCartId] = useState('');
 
   function getProductQuantity(key: string) {
     return cartItems.find((item) => item.key === key)?.quantity || 0;
@@ -74,6 +78,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     0
   );
 
+  function setCartId(activeCartId: string) {
+    setActiveCartId(activeCartId);
+  }
+
+  const cartId = activeCartId;
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -82,6 +92,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         decreaseProductQuantity,
         removeProduct,
         total,
+        cartId,
+        setCartId,
       }}
     >
       {' '}
