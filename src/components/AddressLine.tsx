@@ -11,11 +11,17 @@ type AddressLineProps = {
   address: AddressForProfile;
   showEdit: boolean;
   onEdit: (key: string) => void;
+  onDelete: (key: string) => void;
 };
 function AddressLine(props: AddressLineProps) {
   const handleClickEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     props.onEdit(props.address.id);
+  };
+
+  const handleClickDelete = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    props.onDelete(props.address.id);
   };
   return (
     <>
@@ -58,7 +64,12 @@ function AddressLine(props: AddressLineProps) {
           </a>
         )}
         {props.address.isDeletable && props.showEdit && (
-          <a href="" title="Delete" className=" hover:text-moonNeutral-600">
+          <a
+            href=""
+            onClick={handleClickDelete}
+            title="Delete"
+            className=" hover:text-moonNeutral-600"
+          >
             <CiTrash />
           </a>
         )}
