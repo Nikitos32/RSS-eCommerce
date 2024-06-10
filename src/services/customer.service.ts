@@ -9,6 +9,7 @@ import {
   CustomerChangeEmailAction,
   CustomerChangePassword,
   CustomerDraft,
+  CustomerRemoveAddressAction,
   CustomerRemoveBillingAddressIdAction,
   CustomerRemoveShippingAddressIdAction,
   CustomerSetDateOfBirthAction,
@@ -306,6 +307,48 @@ export class CustomerService {
       return CTResponseHandler.makeError(
         HttpStatusCode.NO_CONTENT_204,
         'No changes to update',
+        undefined
+      );
+    }
+
+    try {
+      const answer = await this.customerRequests.updateCustomer(
+        id,
+        customerUpdate
+      );
+
+      if (answer.statusCode === HttpStatusCode.OK_200) {
+        return CTResponseHandler.makeSuccess(
+          answer.statusCode,
+          '',
+          answer.body as Customer
+        );
+      } else {
+        return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      }
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error as ClientResponse);
+    }
+  }
+
+  async updateCustomerDeleteAddress(
+    id: string,
+    version: number,
+    addressId: string
+  ): Promise<CTResponse> {
+    const customerUpdate: CustomerUpdate = { version, actions: [] };
+
+    if (addressId) {
+      customerUpdate.actions.push({
+        addressId,
+        action: 'removeAddress',
+      } as CustomerRemoveAddressAction);
+    }
+
+    if (!customerUpdate.actions.length) {
+      return CTResponseHandler.makeError(
+        HttpStatusCode.NO_CONTENT_204,
+        'No address to delete',
         undefined
       );
     }
