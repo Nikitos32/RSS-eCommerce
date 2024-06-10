@@ -108,23 +108,22 @@ export const makeAddressesForProfile = (
     const id = item.id as string;
     const isDefaultBilling = id === defaultBillingAddressId;
     const isDefaultShipping = id === defaultShippingAddressId;
-    if (isDefaultBilling && isDefaultShipping) {
-      return;
-    }
+    // if (isDefaultBilling && isDefaultShipping) {
+    //   return;
+    // }
 
     const isBilling = checkAddressBilling(id, billingAddressIds);
     const isShipping = checkAddressShipping(id, shippingAddressIds);
 
-    if (isBilling && isDefaultBilling) {
-      return;
-    }
+    // if (!isShipping && isDefaultBilling) {
+    //   return;
+    // }
 
-    if (isShipping && isDefaultShipping) {
-      return;
-    }
+    // if (!isBilling && isDefaultShipping) {
+    //   return;
+    // }
 
-    const isDeletable =
-      id !== defaultBillingAddressId || id !== defaultShippingAddressId;
+    const isDeletable = !isDefaultBilling && !isDefaultShipping;
 
     const address = makeAddress(
       item,

@@ -24,10 +24,13 @@ function AddressLine(props: AddressLineProps) {
           <CiBookmarkCheck title="Default" className="text-moonBrown" />
         )}
         {props.address.isDefault && props.address.isShipping && (
-          <CiDeliveryTruck title="Shipping Address" />
+          <CiDeliveryTruck
+            title="Shipping Address"
+            className="text-moonBrown"
+          />
         )}
         {props.address.isDefault && props.address.isBilling && (
-          <CiMoneyCheck1 title="Billing Address" />
+          <CiMoneyCheck1 title="Billing Address" className="text-moonBrown" />
         )}
         {!props.address.isDefault && props.address.isShipping && (
           <CiDeliveryTruck title="Shipping Address" />
@@ -36,9 +39,15 @@ function AddressLine(props: AddressLineProps) {
           <CiMoneyCheck1 title="Billing Address" />
         )}
       </div>
-      <p className="odd:bg-moonNeutral-200">{props.address.strAddress}</p>
+      <p
+        className={
+          props.address.isDefault ? `text-moonBrown` : `even:bg-moonNeutral-200`
+        }
+      >
+        {props.address.strAddress}
+      </p>
       <div className="flex flex-row gap-4 text-2xl">
-        {props.showEdit && (
+        {!props.address.isDefault && props.showEdit && (
           <a
             href=""
             onClick={handleClickEdit}
