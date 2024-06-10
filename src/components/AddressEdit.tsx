@@ -235,11 +235,11 @@ function AddressEdit(props: AddressEditProps) {
             Default
           </span>
           <label
-            className={`relative inline-flex items-center ${add ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`relative inline-flex items-center ${add || props.startingData.isShippingDefault ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <input
               type="checkbox"
-              disabled={add}
+              disabled={add || props.startingData.isShippingDefault}
               value=""
               checked={shippingDefault}
               onChange={(e) => setShippingDefault(e.target.checked)}
@@ -269,11 +269,11 @@ function AddressEdit(props: AddressEditProps) {
             Default
           </span>
           <label
-            className={`relative inline-flex items-center ${add ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`relative inline-flex items-center ${add || props.startingData.isBillingDefault ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
             <input
               type="checkbox"
-              disabled={add}
+              disabled={add || props.startingData.isBillingDefault}
               value=""
               checked={billingDefault}
               onChange={(e) => setBillingDefault(e.target.checked)}
