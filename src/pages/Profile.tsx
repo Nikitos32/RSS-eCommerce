@@ -46,6 +46,7 @@ function Profile() {
     setProfileUpdates,
     setNewAddress,
     setChangeAddress,
+    setRemoveAddress,
     customerAfterUpdate,
   } = useApiUpdateProfile();
 
@@ -312,6 +313,16 @@ function Profile() {
     }));
   };
 
+  const handleClickRemoveAddress = (key: string) => {
+    if (!customer) return;
+
+    setRemoveAddress({
+      id: customer.id,
+      version: customer.version,
+      addressId: key,
+    });
+  };
+
   return (
     <>
       <section
@@ -464,6 +475,7 @@ function Profile() {
                 address={address}
                 showEdit={!showAddressForm}
                 onEdit={handleClickEditAddress}
+                onDelete={handleClickRemoveAddress}
               />
             ))}
           </div>
