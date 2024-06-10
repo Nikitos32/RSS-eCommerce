@@ -50,6 +50,7 @@ export function useApiUpdateProfile() {
   const [profileUpdates, setProfileUpdates] = useState(initProfileUpdates);
   const [newAddress, setNewAddress] = useState(initAddressNew);
   const [changeAddress, setChangeAddress] = useState(initAddressChange);
+  const [removeAddress, setRemoveAddress] = useState(initAddressChange);
   const [customerAfterUpdate, setCustomerAfterUpdate] = useState<Customer>();
 
   useEffect(() => {
@@ -155,6 +156,33 @@ export function useApiUpdateProfile() {
 
     updateAddress();
   }, [changeAddress]);
+
+  useEffect(() => {
+    const { id, version, addressId = '' } = removeAddress;
+    if (!id) {
+      return;
+    }
+    const deleteAddress = async () => {
+      const customerService = new CustomerService();
+      setLoading(true);
+      const response = await customerService.updateCustomerDeleteAddress(
+        id,
+        version,
+        addressId
+      );
+      setOk(response.ok);
+      setMessage(response.message as string);
+      if (response.ok) {
+        setCustomerAfterUpdate(response.data as Customer);
+        setMessage('Address Deleted');
+      } else {
+        setMessage(response.message as string);
+      }
+      setLoading(false);
+    };
+
+    deleteAddress();
+  }, [removeAddress]);
   return {
     loading,
     ok,
@@ -162,6 +190,7 @@ export function useApiUpdateProfile() {
     setProfileUpdates,
     setNewAddress,
     setChangeAddress,
+    setRemoveAddress,
     customerAfterUpdate,
   };
 }
