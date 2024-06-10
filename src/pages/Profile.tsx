@@ -8,6 +8,7 @@ import {
   makeAddressesForProfile,
   checkAddressBilling,
   checkAddressShipping,
+  getAddressChange,
 } from '../utils';
 import { BsInfoCircle } from 'react-icons/bs';
 import { PiPasswordBold } from 'react-icons/pi';
@@ -112,7 +113,8 @@ function Profile() {
 
   useEffect(() => {
     fillProfile(customer);
-    setAddresses([...makeAddressesForProfile(customer as Customer)]);
+    const addressForProfile = makeAddressesForProfile(customer as Customer);
+    setAddresses([...addressForProfile]);
   }, [customer]);
 
   useEffect(() => {
@@ -126,6 +128,7 @@ function Profile() {
       toast.success(messageUpdate);
       setCustomer(customerAfterUpdate);
       setEditProfile(false);
+      setShowAddressForm(false);
     }
     if (!okUpdate && messageUpdate) {
       firstNameRef.current?.focus();
@@ -232,14 +235,10 @@ function Profile() {
       region,
       postalCode,
       country,
-      // isShipping,
-      // isShippingDefault,
-      // isBilling,
-      // isBillingDefault,
       addressId,
     } = data;
 
-    if (!data.addressId) {
+    if (!addressId) {
       setNewAddress(() => ({
         id: customer.id,
         version: customer.version,
@@ -256,22 +255,8 @@ function Profile() {
         },
       }));
     } else {
-      const {
-        id,
-        version,
-        // billingAddressIds,
-        // shippingAddressIds,
-        // defaultBillingAddressId,
-        // defaultShippingAddressId,
-        // addresses,
-      } = customer;
-
-      setChangeAddress(() => ({
-        id,
-        version,
-        addressId,
-        address: { country: '' },
-      }));
+      const addressChange = getAddressChange(data, customer);
+      setChangeAddress(() => addressChange);
     }
   };
 
