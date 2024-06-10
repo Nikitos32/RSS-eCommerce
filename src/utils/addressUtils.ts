@@ -84,6 +84,7 @@ export const makeAddressesForProfile = (
         true,
         false
       );
+      address.id = `${address.id}-default`;
       result.push(address);
     }
   }
@@ -100,6 +101,7 @@ export const makeAddressesForProfile = (
         true,
         false
       );
+      address.id = `${address.id}-default`;
       result.push(address);
     }
   }
@@ -108,20 +110,9 @@ export const makeAddressesForProfile = (
     const id = item.id as string;
     const isDefaultBilling = id === defaultBillingAddressId;
     const isDefaultShipping = id === defaultShippingAddressId;
-    // if (isDefaultBilling && isDefaultShipping) {
-    //   return;
-    // }
 
     const isBilling = checkAddressBilling(id, billingAddressIds);
     const isShipping = checkAddressShipping(id, shippingAddressIds);
-
-    // if (!isShipping && isDefaultBilling) {
-    //   return;
-    // }
-
-    // if (!isBilling && isDefaultShipping) {
-    //   return;
-    // }
 
     const isDeletable = !isDefaultBilling && !isDefaultShipping;
 
