@@ -1,9 +1,9 @@
-import { CartDraft, ClientResponse } from '@commercetools/platform-sdk';
+import { CartDraft } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
 const {
-  VITE_CTP_LOCALE = 'en-US',
+  VITE_CTP_LOCALE = 'en-GB',
   VITE_CTP_CURRENCY = 'EUR',
   VITE_CTP_COUNTRY = 'DE',
 } = import.meta.env;
@@ -51,7 +51,7 @@ export class ShoppingCartService {
 
       return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
     } catch (error) {
-      return CTResponseHandler.handleCatch(error as ClientResponse);
+      return CTResponseHandler.handleCatch(error);
     }
   }
 
@@ -69,17 +69,9 @@ export class ShoppingCartService {
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
 
-      if (answer.statusCode === HttpStatusCode.OK_200) {
-        return CTResponseHandler.makeSuccess(
-          answer.statusCode,
-          '',
-          answer.body.data
-        );
-      }
-
-      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+      return CTResponseHandler.handleGraphql(answer);
     } catch (error) {
-      return CTResponseHandler.handleCatch(error as ClientResponse);
+      return CTResponseHandler.handleCatch(error);
     }
   }
 
