@@ -33,6 +33,7 @@
     "react-loader-spinner": "^6.1.6",
     "react-rating": "^2.0.5",
     "react-router-dom": "^6.23.1",
+    "react-scroll": "^1.9.0",
     "react-toastify": "^10.0.5",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "swiper": "^11.1.3",
