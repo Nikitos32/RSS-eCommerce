@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext } from 'react';
 import { useLocalStorage } from '../hooks';
 
 type ShoppingCartProviderProps = {
@@ -30,7 +30,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     []
   );
 
-  const [activeCartId, setActiveCartId] = useState('');
+  const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
 
   function getProductQuantity(key: string) {
     return cartItems.find((item) => item.key === key)?.quantity || 0;
