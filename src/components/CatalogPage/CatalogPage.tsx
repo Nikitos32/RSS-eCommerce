@@ -11,6 +11,8 @@ import {
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 import { convertPrice } from '../../utils/convertPrice';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { IoIosArrowUp } from 'react-icons/io';
+import { animateScroll as scroll } from 'react-scroll';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
@@ -23,6 +25,7 @@ export const CatalogPage = () => {
   const [currentSearch, setcurrentSearch] = useState<string>();
   const [currentCategories, setCurrentCategories] = useState<string[]>([]);
   const [currentLimit, setCurrentLimit] = useState<number>(13);
+  const [currentScroll, setCurrentScroll] = useState<number>(0);
 
   const [products, setProducts] = useState<ProductProjectionResponse>({
     productProjectionSearch: {
@@ -33,6 +36,10 @@ export const CatalogPage = () => {
       results: [],
     },
   });
+
+  window.onscroll = () => {
+    setCurrentScroll(window.scrollY);
+  };
 
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
     0, 3100,
@@ -113,11 +120,10 @@ export const CatalogPage = () => {
     currentCategories,
     currentLimit,
   ]);
-  console.log(currentLimit);
 
   return (
     <section className="flex relative">
-      <div>
+      <div id="pageHead">
         <FilterSection
           handleCategories={handleCategories}
           currentRangeValue={currentRangeValue}
@@ -214,6 +220,22 @@ export const CatalogPage = () => {
                 );
               })}
             </InfiniteScroll>
+            {currentScroll > 1000 ? (
+              <button
+                onClick={() =>
+                  scroll.scrollToTop({
+                    duration: 1500,
+                    delay: 100,
+                    smooth: 'easeInOutQuint',
+                  })
+                }
+                className="fixed right-5 bottom-12 z-50 border-2 p-3 rounded-full bg-orange-400 text-white"
+              >
+                <IoIosArrowUp />
+              </button>
+            ) : (
+              <></>
+            )}
           </section>
         </div>
       </div>
