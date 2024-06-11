@@ -80,7 +80,7 @@ export class CTResponseHandler {
   static makeError(
     statusCode: HttpStatusCode,
     message: string,
-    data: ErrorObject[] | undefined
+    data: GraphQLResponse | ErrorObject[] | undefined
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,
@@ -110,7 +110,7 @@ export class CTResponseHandler {
     const result = error.body as ErrorResponse;
 
     return CTResponseHandler.makeError(
-      result.statusCode || error.statusCode || 0,
+      result?.statusCode || error?.statusCode || 0,
       result.message,
       result.errors
     );
@@ -121,6 +121,36 @@ export class CTResponseHandler {
       statusCode || 0,
       `Status Code ${statusCode} is not expected`,
       undefined
+    );
+  }
+
+  /**
+   *
+   * @description method to handle graphql responses
+   *
+   * @param answer ClientResponse
+   *
+   * @return CTResponse data: GraphQLResponse
+   */
+  static handleGraphql(answer: ClientResponse): CTResponse {
+    const { errors } = answer.body as GraphQLResponse;
+
+    if (answer.statusCode !== HttpStatusCode.OK_200) {
+      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+    }
+
+    if (errors?.length) {
+      return CTResponseHandler.makeError(
+        answer.statusCode,
+        errors[0].message, // first error
+        answer.body as GraphQLResponse
+      );
+    }
+
+    return CTResponseHandler.makeSuccess(
+      answer.statusCode,
+      '',
+      answer.body as GraphQLResponse
     );
   }
 }
