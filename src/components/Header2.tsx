@@ -9,13 +9,12 @@ import { useAuth, useShoppingCart } from '../hooks';
 import { toast } from 'react-toastify';
 
 function Links() {
-  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
-    useAuth();
+  const { authenticated: isLoggedIn, setLoggedOut } = useAuth();
 
   const { total } = useShoppingCart();
 
   const handleSignOut = () => {
-    setIsLoggedIn(false);
+    setLoggedOut();
   };
 
   return (
