@@ -21,7 +21,7 @@ type Data = Customer | GraphQLResponse | CustomerSignInResult | ErrorObject[];
 export interface CTResponse {
   ok: boolean;
   status: HttpStatusCode;
-  message?: string;
+  message: string;
   data?: Data;
 }
 /**
@@ -52,6 +52,7 @@ export class CTResponseHandler {
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,
+      message: 'Success',
       ok: true,
     };
 
@@ -84,6 +85,7 @@ export class CTResponseHandler {
     const response: CTResponse = {
       status: statusCode,
       ok: false,
+      message: 'Error',
     };
 
     if (message !== '') {
