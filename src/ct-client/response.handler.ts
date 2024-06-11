@@ -3,7 +3,6 @@ import {
   Customer,
   CustomerSignInResult,
   ErrorObject,
-  ErrorResponse,
   GraphQLResponse,
 } from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
@@ -102,17 +101,17 @@ export class CTResponseHandler {
    *
    * @description method to handle error in catch block
    *
-   * @param error ClientResponse
+   * @param error unknown
    *
    * @return CTResponse
    */
-  static handleCatch(error: ClientResponse): CTResponse {
-    const result = error.body as ErrorResponse;
+  static handleCatch(error: unknown): CTResponse {
+    const result = error as Error;
 
     return CTResponseHandler.makeError(
-      result?.statusCode || error?.statusCode || 0,
+      HttpStatusCode.INTERNAL_SERVER_ERROR_500,
       result.message,
-      result.errors
+      undefined
     );
   }
 
