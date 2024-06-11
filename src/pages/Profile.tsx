@@ -6,16 +6,19 @@ import {
   AddressForProfile,
   UserInput,
   makeAddressesForProfile,
+  checkAddressBilling,
+  checkAddressShipping,
+  getAddressChange,
 } from '../utils';
 import { BsInfoCircle } from 'react-icons/bs';
 import { PiPasswordBold } from 'react-icons/pi';
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { CiCirclePlus, CiEdit } from 'react-icons/ci';
 import { useApiGetCustomer, useApiUpdateProfile } from '../hooks';
-import { Customer } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
 import AddressEdit, { AddressEditData } from '../components/AddressEdit';
 import AddressLine from '../components/AddressLine';
+import { Customer } from '@commercetools/platform-sdk';
 
 function Profile() {
   const [customer, setCustomer] = useState<Customer>();
@@ -39,8 +42,11 @@ function Profile() {
   const {
     ok: okUpdate,
     loading: isUpdatingProfile,
-    errorMsg: errorMsgUpdate,
+    message: messageUpdate,
     setProfileUpdates,
+    setNewAddress,
+    setChangeAddress,
+    setRemoveAddress,
     customerAfterUpdate,
   } = useApiUpdateProfile();
 
@@ -106,21 +112,10 @@ function Profile() {
     }));
   };
 
-  const prepareAddressUpdate = () => {
-    if (!customer) return;
-    setProfileUpdates(() => ({
-      id: customer.id,
-      version: customer.version,
-      email: customer.email !== email.value ? email.value : '',
-      firstName: customer.firstName !== firstName.value ? firstName.value : '',
-      lastName: customer.lastName !== lastName.value ? lastName.value : '',
-      dateOfBirth: customer.dateOfBirth !== dob ? dob : '',
-    }));
-  };
-
   useEffect(() => {
     fillProfile(customer);
-    setAddresses([...makeAddressesForProfile(customer as Customer)]);
+    const addressForProfile = makeAddressesForProfile(customer as Customer);
+    setAddresses([...addressForProfile]);
   }, [customer]);
 
   useEffect(() => {
@@ -131,15 +126,16 @@ function Profile() {
 
   useEffect(() => {
     if (okUpdate) {
-      toast.success('Profile Updated');
+      toast.success(messageUpdate);
       setCustomer(customerAfterUpdate);
       setEditProfile(false);
+      setShowAddressForm(false);
     }
-    if (!okUpdate && errorMsgUpdate) {
+    if (!okUpdate && messageUpdate) {
       firstNameRef.current?.focus();
-      toast.error(errorMsgUpdate);
+      toast.error(messageUpdate);
     }
-  }, [okUpdate, customerAfterUpdate, errorMsgUpdate]);
+  }, [okUpdate, customerAfterUpdate, messageUpdate]);
 
   useEffect(() => {
     const valid =
@@ -222,14 +218,47 @@ function Profile() {
     }
   };
 
-  const handleResetAddressForm = (e: FormEvent) => {
-    e.preventDefault();
+  const handleResetFromAddressForm = () => {
     setShowAddressForm(false);
     setAddAddress(false);
   };
 
-  const handleSubmitAddressForm = () => {
-    prepareAddressUpdate();
+  const handleSubmitFromAddressForm = (data: AddressEditData) => {
+    if (!customer) return;
+
+    const {
+      firstName,
+      lastName,
+      apartment,
+      streetNumber,
+      streetName,
+      city,
+      region,
+      postalCode,
+      country,
+      addressId,
+    } = data;
+
+    if (!addressId) {
+      setNewAddress(() => ({
+        id: customer.id,
+        version: customer.version,
+        address: {
+          firstName,
+          lastName,
+          apartment,
+          streetNumber,
+          streetName,
+          city,
+          region,
+          postalCode,
+          country,
+        },
+      }));
+    } else {
+      const addressChange = getAddressChange(data, customer);
+      setChangeAddress(() => addressChange);
+    }
   };
 
   const handleClickEditAddress = (key: string) => {
@@ -243,7 +272,7 @@ function Profile() {
       return;
     }
     const {
-      id,
+      id = '',
       firstName,
       lastName,
       apartment,
@@ -262,14 +291,8 @@ function Profile() {
       defaultShippingAddressId,
     } = customer;
 
-    const isBilling = billingAddressIds
-      ? billingAddressIds?.findIndex((item) => item === id) > -1
-      : false;
-
-    const isShipping = shippingAddressIds
-      ? shippingAddressIds?.findIndex((item) => item === id) > -1
-      : false;
-
+    const isBilling = checkAddressBilling(id, billingAddressIds);
+    const isShipping = checkAddressShipping(id, shippingAddressIds);
     setShowAddressForm(true);
     setDataAddressForm(() => ({
       addressId: id,
@@ -287,6 +310,16 @@ function Profile() {
       isShipping,
       isShippingDefault: id === defaultShippingAddressId,
     }));
+  };
+
+  const handleClickRemoveAddress = (key: string) => {
+    if (!customer) return;
+
+    setRemoveAddress({
+      id: customer.id,
+      version: customer.version,
+      addressId: key,
+    });
   };
 
   return (
@@ -429,10 +462,9 @@ function Profile() {
           </div>
           {showAddressForm && (
             <AddressEdit
-              data={dataAddressForm}
-              setData={setDataAddressForm}
-              onReset={handleResetAddressForm}
-              onSubmit={handleSubmitAddressForm}
+              startingData={dataAddressForm}
+              sendResetToParent={handleResetFromAddressForm}
+              sendDataToParent={handleSubmitFromAddressForm}
             />
           )}
           <div className="container m-auto grid grid-cols-[min-content_1fr_min-content] gap-3 items-center">
@@ -442,6 +474,7 @@ function Profile() {
                 address={address}
                 showEdit={!showAddressForm}
                 onEdit={handleClickEditAddress}
+                onDelete={handleClickRemoveAddress}
               />
             ))}
           </div>

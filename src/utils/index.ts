@@ -1,5 +1,11 @@
 export { ProductsSet } from './ProductsSet';
 export { makeIdFromLabel } from './MakeIdFromLabel';
 export { UserInput } from './UserInput';
-export { makeAddressesForProfile } from './MakeAddressesForProfile';
-export type { AddressForProfile } from './MakeAddressesForProfile';
+export {
+  makeAddressesForProfile,
+  checkAddressBilling,
+  checkAddressShipping,
+  getAddressChange,
+} from './addressUtils';
+export type { AddressForProfile } from './addressUtils';
+
