@@ -1,6 +1,11 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ShoppingCartContext } from '../context/ShoppingCartProvider';
 import { ShoppingCartService } from '../services';
+import {
+  CustomerSignInResult,
+  GraphQLResponse,
+} from '@commercetools/platform-sdk';
+import { useAuth } from '.';
 
 export const useShoppingCart = () => {
   const {
@@ -11,31 +16,49 @@ export const useShoppingCart = () => {
     total,
   } = useContext(ShoppingCartContext);
 
-  const [loading, setLoadingCart] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(true);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [message, setMessage] = useState('');
 
-  const loadCart = async (customerId: string) => {
+  const { customerId } = useAuth();
+
+  useEffect(() => {
+    if (!customerId) {
+      setCartId('');
+    }
+  }, [customerId, setCartId]);
+
+  const setCart = async (data: CustomerSignInResult) => {
+    if (data.cart) {
+      setCartId(data.cart.id);
+      return;
+    }
+
     const shoppingCartService = new ShoppingCartService();
 
-    setLoadingCart(true);
-    const responseActive =
-      await shoppingCartService.getActiveCartId(customerId);
-    setOk(responseActive.ok);
-    setErrorMsg(responseActive.message as string);
-    if (responseActive.ok) {
-      setCartId(responseActive.data as string);
+    setLoading(true);
+
+    const responseNewCart = await shoppingCartService.createCartForCustomer(
+      data.customer.id
+    );
+    setOk(responseNewCart.ok);
+    if (responseNewCart.ok) {
+      const newCart = responseNewCart.data as GraphQLResponse;
+      setCartId(newCart.data.createCart.id);
     }
-    setLoadingCart(false);
+    setMessage(responseNewCart.message);
+
+    setLoading(false);
   };
+
   return {
     getProductQuantity,
     increaseProductQuantity,
     decreaseProductQuantity,
     total,
-    loadCart,
+    setCart,
     ok,
     loading,
-    errorMsg,
+    errorMsg: message,
   };
 };

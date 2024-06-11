@@ -5,8 +5,8 @@ import { useAuth } from './useAuth';
 import { useShoppingCart } from './useShoppingCart';
 
 export function useApiSignIn(email: string, password: string) {
-  const { setCustomerId, setAuthenticated } = useAuth();
-  const { loadCart } = useShoppingCart();
+  const { setLoggedIn, setLoggedOut } = useAuth();
+  const { setCart } = useShoppingCart();
 
   const customerService = new CustomerService();
 
@@ -15,12 +15,11 @@ export function useApiSignIn(email: string, password: string) {
 
     const data = response.data as CustomerSignInResult;
 
-    setAuthenticated(response.ok);
     if (response.ok) {
-      setCustomerId(data.customer.id);
-      loadCart(data.customer.id);
+      setLoggedIn(data.customer.id);
+      setCart(data);
     } else {
-      setCustomerId('');
+      setLoggedOut();
     }
 
     return response;
