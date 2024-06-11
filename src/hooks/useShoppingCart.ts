@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ShoppingCartContext } from '../context/ShoppingCartProvider';
 import { ShoppingCartService } from '../services';
 import {
   CustomerSignInResult,
   GraphQLResponse,
 } from '@commercetools/platform-sdk';
-import { useAuth } from '.';
 
 export const useShoppingCart = () => {
   const {
@@ -19,14 +18,6 @@ export const useShoppingCart = () => {
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(true);
   const [message, setMessage] = useState('');
-
-  const { customerId } = useAuth();
-
-  useEffect(() => {
-    if (!customerId) {
-      setCartId('');
-    }
-  }, [customerId, setCartId]);
 
   const setCart = async (data: CustomerSignInResult) => {
     if (data.cart) {
@@ -51,14 +42,19 @@ export const useShoppingCart = () => {
     setLoading(false);
   };
 
+  const unsetCart = () => {
+    setCartId('');
+  };
+
   return {
     getProductQuantity,
     increaseProductQuantity,
     decreaseProductQuantity,
     total,
     setCart,
+    unsetCart,
     ok,
     loading,
-    errorMsg: message,
+    message,
   };
 };
