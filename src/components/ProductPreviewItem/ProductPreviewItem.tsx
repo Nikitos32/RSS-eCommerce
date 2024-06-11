@@ -30,6 +30,7 @@ export const ProductPreviewItem = ({
     <div className="transition duration-700 ease-in-out bg-slate-300 max-w-72 md:max-w-none md:w-full xl:w-4/5 m-auto lg:m-0 rounded p-3 flex flex-col md:flex-row gap-4 md:gap-20 hover:shadow-[1px_1px_8px]">
       <div>
         <img
+          loading="lazy"
           src={imgUrl}
           alt="photo"
           className="size-64 md:size-44 m-auto max-w-none rounded"
