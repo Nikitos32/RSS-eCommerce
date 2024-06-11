@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthProvider';
+import { useShoppingCart } from './useShoppingCart';
 
 export const useAuth = () => {
   const { authenticated, setAuthenticated, customerId, setCustomerId } =
@@ -9,9 +10,12 @@ export const useAuth = () => {
     setAuthenticated(true);
   };
 
+  const { unsetCart } = useShoppingCart();
+
   const setLoggedOut = () => {
     setCustomerId('');
     setAuthenticated(false);
+    unsetCart();
   };
   return { authenticated, customerId, setLoggedIn, setLoggedOut };
 };
