@@ -1,4 +1,4 @@
-import { CartDraft } from '@commercetools/platform-sdk';
+import { CartDraft, LineItemDraft } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
@@ -84,5 +84,33 @@ export class ShoppingCartService {
     };
 
     return await this.createCart(cartDraft);
+  }
+
+  private async addLineItem(
+    cartId: string,
+    cartVersion: string,
+    lineItemDraft: LineItemDraft
+  ): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!, $lineItemDraft: LineItemDraft) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{addLineItem: $lineItemDraft}]) {
+          version
+          lineItems {
+            id
+            quantity
+          }
+        }
+      }
+    `;
+
+    const variables = { cartId, cartVersion, lineItemDraft };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
   }
 }
