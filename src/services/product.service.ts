@@ -62,11 +62,13 @@ export class ProductService {
     priceFilter: number[],
     sortParam?: string,
     searchValue?: string,
-    categoryFilter?: string[]
+    categoryFilter?: string[],
+    limit: number = 10
   ): Promise<CTResponse> {
     const query = `
     query ($locale: Locale) {
   productProjectionSearch (
+  limit: ${limit},
     ${sortParam ? `sorts: ["name.${locale} ${sortParam}"],` : ''},
     ${searchValue ? `text: "${searchValue}", locale: $locale,` : ''}
     filters: [
@@ -153,10 +155,13 @@ export class ProductService {
     }
   }
 
-  async getProductsAll(locale: string = 'EN-GB'): Promise<CTResponse> {
+  async getProductsAll(
+    limit: number = 10,
+    locale: string = 'EN-GB'
+  ): Promise<CTResponse> {
     const query = `
     query ($locale: Locale) {
-  productProjectionSearch {
+  productProjectionSearch (limit: ${limit}) {
     count
     total
     results {

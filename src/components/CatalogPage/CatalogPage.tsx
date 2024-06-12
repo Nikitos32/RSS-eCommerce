@@ -10,8 +10,9 @@ import {
 } from '@commercetools/platform-sdk';
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 import { convertPrice } from '../../utils/convertPrice';
-
-/* import { convertPrice } from '../../utils/convertPrice'; */
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { IoIosArrowUp } from 'react-icons/io';
+import { animateScroll as scroll } from 'react-scroll';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
@@ -23,22 +24,35 @@ export const CatalogPage = () => {
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
   const [currentCategories, setCurrentCategories] = useState<string[]>([]);
+  const [currentLimit, setCurrentLimit] = useState<number>(13);
+  const [currentScroll, setCurrentScroll] = useState<number>(0);
 
   const [products, setProducts] = useState<ProductProjectionResponse>({
     productProjectionSearch: {
       limit: 0,
+      total: 0,
       count: 0,
       offset: 0,
       results: [],
     },
   });
 
+  window.onscroll = () => {
+    setCurrentScroll(window.scrollY);
+  };
+
   const [currentRangeValue, setCurrentRangeValue] = useState<number[]>([
     0, 3100,
   ]);
+
+  const handleCurrentLimit = () => {
+    setCurrentLimit((prevState) => prevState + 13);
+  };
+
   const handleRangeSlider = (event: number | number[]) => {
     if (typeof event !== 'number') {
       setCurrentRangeValue(event);
+      setCurrentLimit(13);
     }
   };
 
@@ -50,16 +64,19 @@ export const CatalogPage = () => {
       currentCategories.splice(currentCategories.indexOf(target.value), 1);
       setCurrentCategories([...currentCategories]);
     }
+    setCurrentLimit(13);
   };
 
   const handleCurrentSort = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
     setCurrentSort(target.value);
+    setCurrentLimit(13);
   };
 
   const handleCurrentSearch = (event: FormEvent) => {
     const target = event.target as HTMLInputElement;
     setcurrentSearch(target.value);
+    setCurrentLimit(13);
   };
 
   useEffect(() => {
@@ -77,7 +94,8 @@ export const CatalogPage = () => {
         currentRangeValue,
         currentSort,
         currentSearch,
-        currentCategories
+        currentCategories,
+        currentLimit
       );
       data.then((response) => {
         handleLoading(false);
@@ -86,7 +104,8 @@ export const CatalogPage = () => {
         );
       });
     } else {
-      const data: Promise<CTResponse> = productService.getProductsAll();
+      const data: Promise<CTResponse> =
+        productService.getProductsAll(currentLimit);
       data.then((response) => {
         handleLoading(false);
         setProducts(
@@ -94,11 +113,17 @@ export const CatalogPage = () => {
         );
       });
     }
-  }, [currentSort, currentSearch, currentRangeValue, currentCategories]);
+  }, [
+    currentSort,
+    currentSearch,
+    currentRangeValue,
+    currentCategories,
+    currentLimit,
+  ]);
 
   return (
     <section className="flex relative">
-      <div>
+      <div id="pageHead">
         <FilterSection
           handleCategories={handleCategories}
           currentRangeValue={currentRangeValue}
@@ -116,9 +141,24 @@ export const CatalogPage = () => {
         />
         <div className="flex flex-col gap-3">
           <h1 className="text-2xl">Products</h1>
-          <section className="flex flex-col gap-5 flex-wrap">
-            {products.productProjectionSearch.results.length > 0 ? (
-              products?.productProjectionSearch.results.map((element) => {
+          <section>
+            <InfiniteScroll
+              className="flex flex-col gap-5 flex-wrap"
+              dataLength={currentLimit}
+              next={() => handleCurrentLimit()}
+              hasMore={
+                products.productProjectionSearch.count !==
+                products.productProjectionSearch.total
+              }
+              scrollThreshold={1}
+              loader={<p>Loading...</p>}
+              endMessage={
+                <p style={{ textAlign: 'center' }}>
+                  <b>No more products!</b>
+                </p>
+              }
+            >
+              {products?.productProjectionSearch.results.map((element) => {
                 const basePrice = convertPrice(
                   element?.masterVariant.prices
                     ? element?.masterVariant.prices[0].value.centAmount
@@ -178,9 +218,23 @@ export const CatalogPage = () => {
                     }
                   />
                 );
-              })
+              })}
+            </InfiniteScroll>
+            {currentScroll > 1000 ? (
+              <button
+                onClick={() =>
+                  scroll.scrollToTop({
+                    duration: 1500,
+                    delay: 100,
+                    smooth: 'easeInOutQuint',
+                  })
+                }
+                className="fixed right-5 bottom-12 z-50 border-2 p-3 rounded-full bg-orange-400 text-white"
+              >
+                <IoIosArrowUp />
+              </button>
             ) : (
-              <p>no match</p>
+              <></>
             )}
           </section>
         </div>
