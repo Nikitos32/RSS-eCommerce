@@ -13,6 +13,7 @@ export const useShoppingCart = () => {
     increaseProductQuantity,
     decreaseProductQuantity,
     total,
+    removeProduct,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ export const useShoppingCart = () => {
     getProductQuantity,
     increaseProductQuantity,
     decreaseProductQuantity,
+    removeProduct,
     total,
     setCart,
     unsetCart,

@@ -57,7 +57,7 @@ export const ProductPage = () => {
               </div>
             </div>
             <div>
-              <CartControl productKey={key || ''} />
+              <CartControl productId={product?.data.product.id || ''} />
             </div>
             <div className="productinfo">
               <h3 className="productinfo__title">Details</h3>

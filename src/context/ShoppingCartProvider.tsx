@@ -6,15 +6,15 @@ type ShoppingCartProviderProps = {
 };
 
 type CartItem = {
-  key: string;
+  productId: string;
   quantity: number;
 };
 
 type ShoppingCartContextType = {
-  getProductQuantity: (key: string) => number;
-  increaseProductQuantity: (key: string) => void;
-  decreaseProductQuantity: (key: string) => void;
-  removeProduct: (key: string) => void;
+  getProductQuantity: (productId: string) => number;
+  increaseProductQuantity: (productId: string) => void;
+  decreaseProductQuantity: (productId: string) => void;
+  removeProduct: (productId: string) => void;
   total: number;
   setCartId: (activeCartId: string) => void;
   cartId: string;
@@ -32,16 +32,20 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
 
-  function getProductQuantity(key: string) {
-    return cartItems.find((item) => item.key === key)?.quantity || 0;
+  function getProductQuantity(productId: string) {
+    return (
+      cartItems.find((item) => item.productId === productId)?.quantity || 0
+    );
   }
-  function increaseProductQuantity(key: string) {
+  function increaseProductQuantity(productId: string) {
     setCartItems((currentItems) => {
-      if (currentItems.find((item) => item.key === key) === undefined) {
-        return [...currentItems, { key, quantity: 1 }];
+      if (
+        currentItems.find((item) => item.productId === productId) === undefined
+      ) {
+        return [...currentItems, { productId: productId, quantity: 1 }];
       } else {
         return currentItems.map((item) => {
-          if (item.key === key) {
+          if (item.productId === productId) {
             return { ...item, quantity: item.quantity + 1 };
           } else {
             return item;
@@ -51,13 +55,16 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
-  function decreaseProductQuantity(key: string) {
+  function decreaseProductQuantity(productId: string) {
     setCartItems((currentItems) => {
-      if (currentItems.find((item) => item.key === key)?.quantity === 1) {
-        return currentItems.filter((item) => item.key !== key);
+      if (
+        currentItems.find((item) => item.productId === productId)?.quantity ===
+        1
+      ) {
+        return currentItems.filter((item) => item.productId !== productId);
       } else {
         return currentItems.map((item) => {
-          if (item.key === key) {
+          if (item.productId === productId) {
             return { ...item, quantity: item.quantity - 1 };
           } else {
             return item;
@@ -67,9 +74,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     });
   }
 
-  function removeProduct(key: string) {
+  function removeProduct(productId: string) {
     setCartItems((currentItems) => {
-      return currentItems.filter((item) => item.key !== key);
+      return currentItems.filter((item) => item.productId !== productId);
     });
   }
 
