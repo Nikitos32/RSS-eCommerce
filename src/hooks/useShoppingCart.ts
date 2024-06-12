@@ -9,6 +9,8 @@ import {
 export const useShoppingCart = () => {
   const {
     setCartId,
+    cartId,
+    setCartVersion,
     getProductQuantity,
     increaseProductQuantity,
     decreaseProductQuantity,
@@ -23,6 +25,7 @@ export const useShoppingCart = () => {
   const setCart = async (data: CustomerSignInResult) => {
     if (data.cart) {
       setCartId(data.cart.id);
+      setCartVersion(data.cart.version);
       return;
     }
 
@@ -37,6 +40,7 @@ export const useShoppingCart = () => {
     if (responseNewCart.ok) {
       const newCart = responseNewCart.data as GraphQLResponse;
       setCartId(newCart.data.createCart.id);
+      setCartVersion(newCart.data.cart.version);
     }
     setMessage(responseNewCart.message);
 
@@ -45,6 +49,7 @@ export const useShoppingCart = () => {
 
   const unsetCart = () => {
     setCartId('');
+    setCartVersion(0);
   };
 
   return {
@@ -55,6 +60,7 @@ export const useShoppingCart = () => {
     total,
     setCart,
     unsetCart,
+    cartId,
     ok,
     loading,
     message,

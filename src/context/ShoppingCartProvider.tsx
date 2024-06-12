@@ -1,4 +1,4 @@
-import { ReactNode, createContext } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 import { useLocalStorage } from '../hooks';
 
 type ShoppingCartProviderProps = {
@@ -18,6 +18,8 @@ type ShoppingCartContextType = {
   total: number;
   setCartId: (activeCartId: string) => void;
   cartId: string;
+  cartVersion: number;
+  setCartVersion: (cartVersion: number) => void;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -31,6 +33,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   );
 
   const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
+  const [activeCartVersion, setActiveCartVersion] = useState(0);
 
   function getProductQuantity(productId: string) {
     return (
@@ -89,7 +92,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setActiveCartId(activeCartId);
   }
 
+  function setCartVersion(cartVersion: number) {
+    setActiveCartVersion(cartVersion);
+  }
+
   const cartId = activeCartId;
+  const cartVersion = activeCartVersion;
 
   return (
     <ShoppingCartContext.Provider
@@ -101,6 +109,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         total,
         cartId,
         setCartId,
+        cartVersion,
+        setCartVersion,
       }}
     >
       {' '}
