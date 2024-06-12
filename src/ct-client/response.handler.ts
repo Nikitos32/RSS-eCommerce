@@ -3,7 +3,6 @@ import {
   Customer,
   CustomerSignInResult,
   ErrorObject,
-  ErrorResponse,
   GraphQLResponse,
 } from '@commercetools/platform-sdk';
 import { HttpStatusCode } from './http.status.code';
@@ -22,7 +21,7 @@ type Data = Customer | GraphQLResponse | CustomerSignInResult | ErrorObject[];
 export interface CTResponse {
   ok: boolean;
   status: HttpStatusCode;
-  message?: string;
+  message: string;
   data?: Data;
 }
 /**
@@ -53,6 +52,7 @@ export class CTResponseHandler {
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,
+      message: 'Success',
       ok: true,
     };
 
@@ -80,11 +80,12 @@ export class CTResponseHandler {
   static makeError(
     statusCode: HttpStatusCode,
     message: string,
-    data: ErrorObject[] | undefined
+    data: GraphQLResponse | ErrorObject[] | undefined
   ): CTResponse {
     const response: CTResponse = {
       status: statusCode,
       ok: false,
+      message: 'Error',
     };
 
     if (message !== '') {
@@ -102,17 +103,17 @@ export class CTResponseHandler {
    *
    * @description method to handle error in catch block
    *
-   * @param error ClientResponse
+   * @param error unknown
    *
    * @return CTResponse
    */
-  static handleCatch(error: ClientResponse): CTResponse {
-    const result = error.body as ErrorResponse;
+  static handleCatch(error: unknown): CTResponse {
+    const result = error as Error;
 
     return CTResponseHandler.makeError(
-      result.statusCode || error.statusCode || 0,
+      HttpStatusCode.INTERNAL_SERVER_ERROR_500,
       result.message,
-      result.errors
+      undefined
     );
   }
 
@@ -121,6 +122,36 @@ export class CTResponseHandler {
       statusCode || 0,
       `Status Code ${statusCode} is not expected`,
       undefined
+    );
+  }
+
+  /**
+   *
+   * @description method to handle graphql responses
+   *
+   * @param answer ClientResponse
+   *
+   * @return CTResponse data: GraphQLResponse
+   */
+  static handleGraphql(answer: ClientResponse): CTResponse {
+    const { errors } = answer.body as GraphQLResponse;
+
+    if (answer.statusCode !== HttpStatusCode.OK_200) {
+      return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
+    }
+
+    if (errors?.length) {
+      return CTResponseHandler.makeError(
+        answer.statusCode,
+        errors[0].message, // first error
+        answer.body as GraphQLResponse
+      );
+    }
+
+    return CTResponseHandler.makeSuccess(
+      answer.statusCode,
+      '',
+      answer.body as GraphQLResponse
     );
   }
 }

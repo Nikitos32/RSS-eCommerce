@@ -1,6 +1,12 @@
-import { ClientResponse } from '@commercetools/platform-sdk';
+import { CartDraft } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
+
+const {
+  VITE_CTP_LOCALE = 'en-GB',
+  VITE_CTP_CURRENCY = 'EUR',
+  VITE_CTP_COUNTRY = 'DE',
+} = import.meta.env;
 
 export class ShoppingCartService {
   graphqlRequest = new GraphqlRequest();
@@ -45,7 +51,38 @@ export class ShoppingCartService {
 
       return CTResponseHandler.handleUnexpectedStatus(answer.statusCode);
     } catch (error) {
-      return CTResponseHandler.handleCatch(error as ClientResponse);
+      return CTResponseHandler.handleCatch(error);
     }
+  }
+
+  private async createCart(cartDraft: CartDraft): Promise<CTResponse> {
+    const query = `
+      mutation ($cartDraft: CartDraft!) {
+        createCart(draft: $cartDraft) {
+          id
+        }
+      }
+    `;
+
+    const variables = { cartDraft };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
+
+  async createCartForCustomer(customerId: string): Promise<CTResponse> {
+    const cartDraft: CartDraft = {
+      currency: VITE_CTP_CURRENCY,
+      country: VITE_CTP_COUNTRY,
+      locale: VITE_CTP_LOCALE,
+      customerId,
+    };
+
+    return await this.createCart(cartDraft);
   }
 }
