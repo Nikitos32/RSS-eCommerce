@@ -228,6 +228,7 @@ export class ProductService {
     query ($key: String, $locale: Locale) {
       product(key: $key) {
         key
+        id
         masterData {
           current {
             skus
