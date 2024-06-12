@@ -86,7 +86,7 @@ export class ShoppingCartService {
     return await this.createCart(cartDraft);
   }
 
-  private async addLineItem(
+  async increaseProductQuantity(
     cartId: string,
     cartVersion: number,
     productId: string
@@ -113,16 +113,5 @@ export class ShoppingCartService {
     } catch (error) {
       return CTResponseHandler.handleCatch(error);
     }
-  }
-
-  async increaseProductQuantity(
-    cartId: string,
-    cartVersion: number,
-    productId: string
-  ): Promise<CTResponse> {
-    const answer = await this.addLineItem(cartId, cartVersion, productId);
-    console.log(answer);
-
-    return answer;
   }
 }
