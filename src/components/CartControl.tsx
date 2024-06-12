@@ -1,4 +1,5 @@
 import { useShoppingCart } from '../hooks';
+import Spinner from './Spinner';
 
 type CartControlProps = {
   productId: string;
@@ -9,12 +10,12 @@ function CartControl({ productId }: CartControlProps) {
     increaseProductQuantity,
     decreaseProductQuantity,
     removeProduct,
+    loading,
   } = useShoppingCart();
 
   const quantity = getProductQuantity(productId);
-
   return (
-    <div className="flex flex-row gap-2 justify-center">
+    <div className="absolute flex flex-row gap-2 justify-center">
       {quantity > 0 && (
         <div className="flex items-center border-moonNeutral-300">
           <span
@@ -54,6 +55,7 @@ function CartControl({ productId }: CartControlProps) {
           Remove From Cart
         </button>
       )}
+      <Spinner isLoading={loading} />
     </div>
   );
 }
