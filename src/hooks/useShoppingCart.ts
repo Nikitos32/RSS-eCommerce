@@ -5,11 +5,13 @@ import {
   CustomerSignInResult,
   GraphQLResponse,
 } from '@commercetools/platform-sdk';
+import { toast } from 'react-toastify';
 
 export const useShoppingCart = () => {
   const {
     setCartId,
     cartId,
+    cartVersion,
     setCartVersion,
     getProductQuantity,
     increaseProductQuantity,
@@ -21,6 +23,8 @@ export const useShoppingCart = () => {
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(true);
   const [message, setMessage] = useState('');
+
+  const shoppingCartService = new ShoppingCartService();
 
   const setCart = async (data: CustomerSignInResult) => {
     if (data.cart) {
@@ -52,9 +56,29 @@ export const useShoppingCart = () => {
     setCartVersion(0);
   };
 
+  const increaseProductQuantityCT = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await shoppingCartService.increaseProductQuantity(
+      cartId,
+      cartVersion,
+      productId
+    );
+    setOk(answer.ok);
+    setMessage(answer.message);
+    if (answer.ok) {
+      const response = answer.data as GraphQLResponse;
+      setCartVersion(response.data.updateCart.version);
+      increaseProductQuantity(productId);
+    } else {
+      toast.error(answer.message);
+    }
+    setLoading(false);
+  };
+
   return {
     getProductQuantity,
-    increaseProductQuantity,
+    increaseProductQuantity: increaseProductQuantityCT,
     decreaseProductQuantity,
     removeProduct,
     total,

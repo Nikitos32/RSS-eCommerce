@@ -1,4 +1,4 @@
-import { CartDraft, LineItemDraft } from '@commercetools/platform-sdk';
+import { CartDraft } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
@@ -88,12 +88,13 @@ export class ShoppingCartService {
 
   private async addLineItem(
     cartId: string,
-    cartVersion: string,
-    lineItemDraft: LineItemDraft
+    cartVersion: number,
+    productId: string
   ): Promise<CTResponse> {
     const query = `
-      mutation ($cartId: String, $cartVersion: Long!, $lineItemDraft: LineItemDraft) {
-        updateCart(id: $cartId, version: $cartVersion, actions: [{addLineItem: $lineItemDraft}]) {
+      mutation ($cartId: String, $cartVersion: Long!, $productId:String) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{addLineItem: {productId: $productId}}]) {
+          id
           version
           lineItems {
             id
@@ -103,7 +104,7 @@ export class ShoppingCartService {
       }
     `;
 
-    const variables = { cartId, cartVersion, lineItemDraft };
+    const variables = { cartId, cartVersion, productId };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
@@ -112,5 +113,16 @@ export class ShoppingCartService {
     } catch (error) {
       return CTResponseHandler.handleCatch(error);
     }
+  }
+
+  async increaseProductQuantity(
+    cartId: string,
+    cartVersion: number,
+    productId: string
+  ): Promise<CTResponse> {
+    const answer = await this.addLineItem(cartId, cartVersion, productId);
+    console.log(answer);
+
+    return answer;
   }
 }
