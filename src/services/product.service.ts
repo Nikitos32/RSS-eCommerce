@@ -2,12 +2,14 @@ import { ClientResponse } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
+const { VITE_CTP_LOCALE = 'en-GB' } = import.meta.env;
+
 export class ProductService {
   graphqlRequest = new GraphqlRequest();
 
   async getProductById(
     id: string,
-    locale: string = 'en-US'
+    locale: string = VITE_CTP_LOCALE
   ): Promise<CTResponse> {
     const query = `
     query($id: String, $locale: Locale) {
@@ -220,19 +222,19 @@ export class ProductService {
 
   async getProductByKey(
     key: string,
-    locale: string = 'en-US'
+    locale: string = VITE_CTP_LOCALE
   ): Promise<CTResponse> {
     const query = `
     query ($key: String, $locale: Locale) {
       product(key: $key) {
         key
+        id
         masterData {
           current {
             skus
             name(locale: $locale)
             description(locale: $locale)
             categories {
-              id
               name(locale: $locale)
             }
             masterVariant {

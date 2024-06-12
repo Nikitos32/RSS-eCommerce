@@ -1,24 +1,25 @@
 import { useShoppingCart } from '../hooks';
+import Spinner from './Spinner';
 
 type CartControlProps = {
-  productKey: string;
+  productId: string;
 };
-function CartControl({ productKey }: CartControlProps) {
+function CartControl({ productId }: CartControlProps) {
   const {
     getProductQuantity,
     increaseProductQuantity,
     decreaseProductQuantity,
     removeProduct,
+    loading,
   } = useShoppingCart();
 
-  const quantity = getProductQuantity(productKey);
-
+  const quantity = getProductQuantity(productId);
   return (
-    <div className="flex flex-row gap-2 justify-center">
+    <div className="absolute flex flex-row gap-2 justify-center">
       {quantity > 0 && (
         <div className="flex items-center border-moonNeutral-300">
           <span
-            onClick={() => decreaseProductQuantity(productKey)}
+            onClick={() => decreaseProductQuantity(productId)}
             className="cursor-pointer rounded-l bg-moonNeutral-300 py-1 px-3.5 duration-100 hover:bg-moonBlack hover:text-blue-50"
           >
             {' '}
@@ -28,7 +29,7 @@ function CartControl({ productKey }: CartControlProps) {
             {quantity}
           </span>
           <span
-            onClick={() => increaseProductQuantity(productKey)}
+            onClick={() => increaseProductQuantity(productId)}
             className="cursor-pointer rounded-r bg-moonNeutral-300 py-1 px-3 duration-100 hover:bg-moonBlack hover:text-blue-50"
           >
             {' '}
@@ -40,7 +41,7 @@ function CartControl({ productKey }: CartControlProps) {
         <button
           className="bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
           type="button"
-          onClick={() => increaseProductQuantity(productKey)}
+          onClick={() => increaseProductQuantity(productId)}
         >
           Add To Cart
         </button>
@@ -49,11 +50,12 @@ function CartControl({ productKey }: CartControlProps) {
         <button
           className="bg-moonNeutral-700 text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
           type="button"
-          onClick={() => removeProduct(productKey)}
+          onClick={() => removeProduct(productId)}
         >
           Remove From Cart
         </button>
       )}
+      <Spinner isLoading={loading} />
     </div>
   );
 }

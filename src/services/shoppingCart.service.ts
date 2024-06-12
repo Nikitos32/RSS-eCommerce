@@ -85,4 +85,33 @@ export class ShoppingCartService {
 
     return await this.createCart(cartDraft);
   }
+
+  async increaseProductQuantity(
+    cartId: string,
+    cartVersion: number,
+    productId: string
+  ): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!, $productId:String) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{addLineItem: {productId: $productId}}]) {
+          id
+          version
+          lineItems {
+            id
+            quantity
+          }
+        }
+      }
+    `;
+
+    const variables = { cartId, cartVersion, productId };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
 }
