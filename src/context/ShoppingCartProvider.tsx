@@ -55,9 +55,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const cartVersion = shoppingCart?.version || 0;
 
   function getProductQuantity(productId: string) {
-    return (
-      cartItems.find((item) => item.productId === productId)?.quantity || 0
-    );
+    console.log(cartItems); //to remove
+    return shoppingCart?.products[productId].quantity || 0;
   }
 
   function updateShoppingCart(response: GraphQLResponse) {
