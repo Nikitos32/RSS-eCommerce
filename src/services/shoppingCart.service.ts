@@ -140,7 +140,7 @@ export class ShoppingCartService {
     return await this.createCart(cartDraft);
   }
 
-  async increaseProductQuantity(
+  async addLineItem(
     cartId: string,
     cartVersion: number,
     productId: string
