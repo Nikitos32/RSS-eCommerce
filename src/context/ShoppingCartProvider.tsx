@@ -33,6 +33,7 @@ type ShoppingCartContextType = {
   cartVersion: number;
   setCartAfterSignIn: (data: CustomerSignInResult) => Promise<CTResponse>;
   unsetCart: () => void;
+  getShoppingCart: () => Promise<CTResponse>;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -205,6 +206,20 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setShoppingCart(undefined);
   };
 
+  const getShoppingCart = async (): Promise<CTResponse> => {
+    if (!cartId) {
+      return new Promise((resolve) =>
+        resolve({ ok: false, status: 404, message: 'No Cart ID' })
+      );
+    }
+    const cartResponse = await shoppingCartService.getCart(cartId);
+    if (cartResponse.ok) {
+      const response = cartResponse.data as GraphQLResponse;
+      updateShoppingCart(response);
+    }
+    return cartResponse;
+  };
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -218,6 +233,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartVersion,
         setCartAfterSignIn,
         unsetCart,
+        getShoppingCart,
       }}
     >
       {' '}

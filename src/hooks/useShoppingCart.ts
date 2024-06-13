@@ -14,6 +14,7 @@ export const useShoppingCart = () => {
     removeProduct,
     setCartAfterSignIn,
     unsetCart,
+    getShoppingCart,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -35,10 +36,28 @@ export const useShoppingCart = () => {
 
     const answer = await increaseProductQuantity(productId);
     setOk(answer.ok);
+
     setMessage(answer.message);
+
     if (!answer.ok) {
       toast.error(answer.message);
     }
+
+    setLoading(false);
+  };
+
+  const refreshShoppingCart = async () => {
+    setLoading(true);
+
+    const answer = await getShoppingCart();
+    setOk(answer.ok);
+
+    setMessage(answer.message as string);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
     setLoading(false);
   };
 
@@ -55,5 +74,6 @@ export const useShoppingCart = () => {
     ok,
     loading,
     message,
+    refreshShoppingCart,
   };
 };
