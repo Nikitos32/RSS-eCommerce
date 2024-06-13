@@ -1,76 +1,42 @@
 import { useContext, useState } from 'react';
 import { ShoppingCartContext } from '../context/ShoppingCartProvider';
-import { ShoppingCartService } from '../services';
-import {
-  CustomerSignInResult,
-  GraphQLResponse,
-} from '@commercetools/platform-sdk';
+import { CustomerSignInResult } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
 
 export const useShoppingCart = () => {
   const {
-    setCartId,
     cartId,
     cartVersion,
-    setCartVersion,
     getProductQuantity,
     increaseProductQuantity,
     decreaseProductQuantity,
     total,
     removeProduct,
+    setCartAfterSignIn,
+    unsetCart,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState(true);
   const [message, setMessage] = useState('');
 
-  const shoppingCartService = new ShoppingCartService();
-
-  const setCart = async (data: CustomerSignInResult) => {
-    if (data.cart) {
-      setCartId(data.cart.id);
-      setCartVersion(data.cart.version);
-      return;
-    }
-
-    const shoppingCartService = new ShoppingCartService();
-
+  const setCartAfterSignInHook = async (data: CustomerSignInResult) => {
     setLoading(true);
 
-    const responseNewCart = await shoppingCartService.createCartForCustomer(
-      data.customer.id
-    );
+    const responseNewCart = await setCartAfterSignIn(data);
     setOk(responseNewCart.ok);
-    if (responseNewCart.ok) {
-      const newCart = responseNewCart.data as GraphQLResponse;
-      setCartId(newCart.data.createCart.id);
-      setCartVersion(newCart.data.cart.version);
-    }
     setMessage(responseNewCart.message);
 
     setLoading(false);
   };
 
-  const unsetCart = () => {
-    setCartId('');
-    setCartVersion(0);
-  };
-
-  const increaseProductQuantityCT = async (productId: string) => {
+  const increaseProductQuantityHook = async (productId: string) => {
     setLoading(true);
 
-    const answer = await shoppingCartService.increaseProductQuantity(
-      cartId,
-      cartVersion,
-      productId
-    );
+    const answer = await increaseProductQuantity(productId);
     setOk(answer.ok);
     setMessage(answer.message);
-    if (answer.ok) {
-      const response = answer.data as GraphQLResponse;
-      setCartVersion(response.data.updateCart.version);
-      increaseProductQuantity(productId);
-    } else {
+    if (!answer.ok) {
       toast.error(answer.message);
     }
     setLoading(false);
@@ -78,12 +44,13 @@ export const useShoppingCart = () => {
 
   return {
     getProductQuantity,
-    increaseProductQuantity: increaseProductQuantityCT,
+    increaseProductQuantity: increaseProductQuantityHook,
     decreaseProductQuantity,
     removeProduct,
     total,
-    setCart,
+    setCartAfterSignIn: setCartAfterSignInHook,
     unsetCart,
+    cartVersion,
     cartId,
     ok,
     loading,

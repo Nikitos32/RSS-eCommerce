@@ -84,7 +84,7 @@ export const makeAddressesForProfile = (
         true,
         false
       );
-      address.id = `${address.id}-default`;
+      address.id = `${address.id}-default-shipping`;
       result.push(address);
     }
   }
@@ -101,7 +101,7 @@ export const makeAddressesForProfile = (
         true,
         false
       );
-      address.id = `${address.id}-default`;
+      address.id = `${address.id}-default-billing`;
       result.push(address);
     }
   }

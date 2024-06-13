@@ -4,20 +4,23 @@ import { CustomerService } from '../services/customer.service';
 import { useAuth } from './useAuth';
 import { useShoppingCart } from './useShoppingCart';
 
-export function useApiSignIn(email: string, password: string) {
+export function useApiSignIn() {
   const { setLoggedIn, setLoggedOut } = useAuth();
-  const { setCart } = useShoppingCart();
+  const { setCartAfterSignIn } = useShoppingCart();
 
   const customerService = new CustomerService();
 
-  const signIn = async (): Promise<CTResponse> => {
+  const signIn = async (
+    email: string,
+    password: string
+  ): Promise<CTResponse> => {
     const response: CTResponse = await customerService.signIn(email, password);
 
     const data = response.data as CustomerSignInResult;
 
     if (response.ok) {
       setLoggedIn(data.customer.id);
-      setCart(data);
+      setCartAfterSignIn(data);
     } else {
       setLoggedOut();
     }

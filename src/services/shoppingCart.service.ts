@@ -60,6 +60,7 @@ export class ShoppingCartService {
       mutation ($cartDraft: CartDraft!) {
         createCart(draft: $cartDraft) {
           id
+          version
         }
       }
     `;
