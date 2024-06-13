@@ -1,5 +1,5 @@
 import { ProductSwiper } from './ProductPageSwiper/ProductSwiper';
-import { useApiGetProduct } from '../../hooks';
+import { useApiGetProduct, useShoppingCart } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import { ProductAPI } from '../../type/types/productPageType';
 import { convertPrice } from '../../utils/convertPrice';
@@ -11,10 +11,16 @@ import './productPage.css';
 import Spinner from '../Spinner';
 import NotFoundPage from '../../pages/NotFoundPage';
 import CartControl from '../CartControl';
+import { useEffect } from 'react';
 
 export const ProductPage = () => {
   const { key } = useParams();
   const { ok, loading, product } = useApiGetProduct(key);
+
+  const { refreshShoppingCart } = useShoppingCart();
+  useEffect(() => {
+    refreshShoppingCart();
+  }, []); //  will only run on mount
 
   if (!loading && !ok) {
     return <NotFoundPage />;
