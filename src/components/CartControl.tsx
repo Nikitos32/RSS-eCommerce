@@ -15,7 +15,7 @@ function CartControl({ productId }: CartControlProps) {
 
   const quantity = getProductQuantity(productId);
   return (
-    <div className="absolute flex flex-row gap-2 justify-center">
+    <div className="relative flex flex-row gap-2 justify-center">
       {quantity > 0 && (
         <div className="flex items-center border-moonNeutral-300">
           <span
