@@ -8,6 +8,40 @@ const {
   VITE_CTP_COUNTRY = 'DE',
 } = import.meta.env;
 
+const CART_DATA_TO_RECEIVE = `
+  id
+  version
+  totalLineItemQuantity
+  totalPrice {
+    centAmount
+    fractionDigits
+  }
+  lineItems {
+    productId
+    name(locale: $locale)
+    quantity
+    variant {
+      images {
+        url
+        label
+      }
+    }
+    price {
+      discounted {
+        value {
+          centAmount
+          fractionDigits
+        }
+      }
+      value {
+        centAmount
+        fractionDigits
+        currencyCode
+      }
+    }
+  }
+`;
+
 export class ShoppingCartService {
   graphqlRequest = new GraphqlRequest();
   /**
@@ -93,19 +127,19 @@ export class ShoppingCartService {
     productId: string
   ): Promise<CTResponse> {
     const query = `
-      mutation ($cartId: String, $cartVersion: Long!, $productId:String) {
+      mutation ($cartId: String, $cartVersion: Long!, $productId:String, $locale: Locale) {
         updateCart(id: $cartId, version: $cartVersion, actions: [{addLineItem: {productId: $productId}}]) {
-          id
-          version
-          lineItems {
-            id
-            quantity
-          }
+          ${CART_DATA_TO_RECEIVE}
         }
       }
     `;
 
-    const variables = { cartId, cartVersion, productId };
+    const variables = {
+      cartId,
+      cartVersion,
+      productId,
+      locale: VITE_CTP_LOCALE,
+    };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
