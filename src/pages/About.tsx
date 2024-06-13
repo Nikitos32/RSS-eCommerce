@@ -1,28 +1,31 @@
 const persons = [
   {
     name: 'Vlad',
-    role: '',
-    description: 'A few words about your contribution to the project',
+    role: 'Frontend developer',
+    description:
+      'Participated in the creation of the registration page, beautiful interfaces, the detailed product page, developed a shopping cart page, and also worked with the commercetools api',
     photo: 'https://picsum.photos/100/',
-    github: 'https://github.com/Nikitos32',
+    github: 'https://github.com/Barvinko',
     twitter: '',
     facebook: '',
     web: '',
   },
   {
     name: 'Dima Usov',
-    role: '',
-    description: 'A few words about your contribution to the project',
+    role: 'Frontend developer',
+    description:
+      "Participated in the creation of the user's page, site navigation, developed interfaces for the main page, and also developed the shopping cart page using the commercetools api",
     photo: 'https://picsum.photos/102/',
-    github: 'https://github.com/Nikitos32',
+    github: 'https://github.com/DmirtyUsov',
     twitter: '',
     facebook: '',
     web: '',
   },
   {
     name: 'Nikita',
-    role: '',
-    description: 'A few words about your contribution to the project',
+    role: 'Frontend developer',
+    description:
+      'Participated in the creation of the login page, the catalog, developed interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
     photo: 'https://picsum.photos/101/',
     github: 'https://github.com/Nikitos32',
     twitter: '',
@@ -40,11 +43,15 @@ function About() {
             Our Team
           </h2>
           <p className="font-light text-moonNeutral-600 lg:mb-16 sm:text-xl dark:text-gray-400">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Pellentesque iaculis ultricies augue non eleifend. In hac habitasse
-            platea dictumst. Aliquam dui nibh, porta et maximus et, consequat
-            sed dui. Pellentesque consequat aliquet varius. Curabitur commodo
-            pulvinar purus, nec pretium nisl tincidunt sit amet.
+            Using advanced technologies and best web development practices, our
+            team creates an intuitive, visually appealing and functionally
+            complete online furniture store. Thoughtful architecture, ergonomic
+            design make it possible to ensure smooth operation of the site,
+            customer convenience and effective product management. Our
+            well-coordinated interaction allows us to effectively distribute
+            responsibilities and synchronize our work at all stages of
+            development - from architecture and user interface design to the
+            implementation of reliable product and user management systems.
           </p>
         </div>
         <ul role="list" className="grid gap-8 mb-6 lg:mb-16 md:grid-cols-3">
