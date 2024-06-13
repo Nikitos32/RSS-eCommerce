@@ -1,4 +1,4 @@
-import { CartDraft } from '@commercetools/platform-sdk';
+import { CartDraft, Money } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
@@ -41,6 +41,24 @@ const CART_DATA_TO_RECEIVE = `
     }
   }
 `;
+
+export interface ProductInShoppingCart {
+  [productId: string]: {
+    name: string;
+    quantity: number;
+    imageUrl: string;
+    imageLabel: string;
+    price: Money;
+  };
+}
+
+export interface ShoppingCart {
+  id: string;
+  version: number;
+  totalLineItemQuantity: number;
+  totalPrice: Money;
+  products: ProductInShoppingCart;
+}
 
 export class ShoppingCartService {
   graphqlRequest = new GraphqlRequest();
@@ -140,6 +158,26 @@ export class ShoppingCartService {
       productId,
       locale: VITE_CTP_LOCALE,
     };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
+
+  async getCart(cartId: string): Promise<CTResponse> {
+    const query = `
+      query ($cartId: String!, $locale: Locale!) {
+        cart(id: $cartId) {
+         ${CART_DATA_TO_RECEIVE}
+        }
+      }
+    `;
+
+    const variables = { cartId, locale: VITE_CTP_LOCALE };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
