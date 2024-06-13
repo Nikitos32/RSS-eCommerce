@@ -111,13 +111,12 @@ export class ShoppingCartService {
     const query = `
       mutation ($cartDraft: CartDraft!) {
         createCart(draft: $cartDraft) {
-          id
-          version
+          ${CART_DATA_TO_RECEIVE}
         }
       }
     `;
 
-    const variables = { cartDraft };
+    const variables = { cartDraft, locale: VITE_CTP_LOCALE };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
