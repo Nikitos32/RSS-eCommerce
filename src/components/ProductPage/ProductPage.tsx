@@ -36,7 +36,15 @@ export const ProductPage = () => {
           <div className="product__component productData">
             <div className="productData__title">
               <div className="text-2xl font-bold">{productData.name}</div>
-              {price ? <PriceProduct {...price} /> : ''}
+              {price ? (
+                <PriceProduct
+                  initialPrice={price?.value}
+                  discountPrice={price?.discounted?.value}
+                  discountValue={price?.discounted?.discount.value.permyriad}
+                />
+              ) : (
+                ''
+              )}
             </div>
             <div>
               <CartControl productId={product?.data.product.id || ''} />

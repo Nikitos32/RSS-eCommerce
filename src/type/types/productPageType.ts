@@ -2,12 +2,14 @@ export type ImagesProduct = {
   url: string;
 };
 
+export type ValuePrice = {
+  fractionDigits: number;
+  centAmount: number;
+  currencyCode?: string;
+};
+
 export type ProductPrice = {
-  value: {
-    fractionDigits: number;
-    centAmount: number;
-    currencyCode: string;
-  };
+  value: ValuePrice;
   discounted: {
     discount: {
       id: string;
@@ -17,11 +19,7 @@ export type ProductPrice = {
         permyriad: number;
       };
     };
-    value: {
-      centAmount: number;
-      currencyCode: string;
-      fractionDigits: number;
-    };
+    value: ValuePrice;
   } | null;
 };
 

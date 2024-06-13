@@ -1,27 +1,35 @@
-import { ProductPrice } from '../../type/types/productPageType';
+import { ValuePrice } from '../../type/types/productPageType';
 import { convertPrice } from '../../utils/convertPrice';
 import './priceProduct.css';
 
-export const PriceProduct = (price: ProductPrice) => {
+interface ProductPriceProps {
+  initialPrice: ValuePrice;
+  discountPrice?: ValuePrice | undefined;
+  discountValue?: number | undefined;
+}
+
+export const PriceProduct = ({
+  initialPrice,
+  discountPrice = undefined,
+  discountValue = undefined,
+}: ProductPriceProps) => {
   return (
     <div className="productData__pricesContainer text-xl font-medium">
       <span className="productData__discount">
         <span
-          className={`${price.discounted ? 'productData__valueDiscount text-base' : ''}`}
+          className={`${discountValue ? 'productData__valueDiscount text-base' : ''}`}
         >
-          {price.discounted
-            ? `-${price.discounted.discount.value.permyriad / 100}%`
-            : ''}
+          {discountValue ? `-${discountValue / 100}%` : ''}
         </span>
         <span className="text-moonBrown">
-          {price.discounted
-            ? `${convertPrice(price.discounted.value.centAmount, price.discounted.value.fractionDigits)}€`
+          {discountPrice
+            ? `${convertPrice(discountPrice.centAmount, discountPrice.fractionDigits)}€`
             : ''}
         </span>
       </span>
       <span
-        className={`${price.discounted ? `text-moonNeutral-500 ml-7` : ''}`}
-      >{`${convertPrice(price.value.centAmount, price.value.fractionDigits)}€`}</span>
+        className={`${discountPrice ? `text-moonNeutral-500 ml-7` : ''}`}
+      >{`${convertPrice(initialPrice.centAmount, initialPrice.fractionDigits)}€`}</span>
     </div>
   );
 };
