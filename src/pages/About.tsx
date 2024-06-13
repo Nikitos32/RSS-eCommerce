@@ -33,10 +33,10 @@ const persons = [
 
 function About() {
   return (
-    <article className="flex flex-col justify-between bg-white dark:bg-gray-900">
-      <section className="flex-1">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 ">
-          <div className="mx-auto max-w-screen-xl text-center mb-8 lg:mb-16">
+    <article className="containerMain flex flex-col pt-8 pb-4 px-4 lg:pt-16 lg:px-6 bg-white dark:bg-gray-900">
+      <section className="flex-1 flex items-center">
+        <div className="mx-auto max-w-screen-xl">
+          <div className="mx-auto max-w-screen-xl text-center mb-8">
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-moonBlack dark:text-white">
               Our Team
             </h2>
@@ -49,7 +49,7 @@ function About() {
               amet.
             </p>
           </div>
-          <ul role="list" className="grid gap-8 mb-6 lg:mb-16 md:grid-cols-3">
+          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-3">
             {persons.map((person) => (
               <li key={person.name}>
                 <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
@@ -161,7 +161,7 @@ function About() {
           </ul>
         </div>
       </section>
-      <section>
+      <section className="mt-4">
         <a
           className="flex flex-col w-min m-auto items-start text-5xl font-bold text-moonBlack cursor-pointer select-none transition-colors hover:no-underline hover:text-white"
           href="https://rs.school/"
