@@ -188,4 +188,35 @@ export class ShoppingCartService {
       return CTResponseHandler.handleCatch(error);
     }
   }
+
+  async changeLineItemQuantity(
+    cartId: string,
+    cartVersion: number,
+    lineItemId: string,
+    quantity: number
+  ): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!, $locale: Locale, $lineItemId: String, $quantity: Long!) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{changeLineItemQuantity: {lineItemId: $lineItemId, quantity: $quantity}}]) {
+          ${CART_DATA_TO_RECEIVE}
+        }
+      }
+    `;
+
+    const variables = {
+      cartId,
+      cartVersion,
+      locale: VITE_CTP_LOCALE,
+      lineItemId,
+      quantity,
+    };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
 }
