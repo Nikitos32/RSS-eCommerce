@@ -76,6 +76,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       lineItems.forEach((item: LineItem) => {
         const {
           productId = '',
+          id = '',
           name = '',
           quantity = 0,
           variant,
@@ -91,6 +92,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
         products[productId] = {
           name: productName,
+          lineItemId: id,
           quantity,
           price,
           imageUrl,

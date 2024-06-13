@@ -17,6 +17,7 @@ const CART_DATA_TO_RECEIVE = `
     fractionDigits
   }
   lineItems {
+    id
     productId
     name(locale: $locale)
     quantity
@@ -44,6 +45,7 @@ const CART_DATA_TO_RECEIVE = `
 
 export interface ProductInShoppingCart {
   [productId: string]: {
+    lineItemId: string;
     name: string;
     quantity: number;
     imageUrl: string;
