@@ -46,6 +46,35 @@ export const useShoppingCart = () => {
     setLoading(false);
   };
 
+  const decreaseProductQuantityHook = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await decreaseProductQuantity(productId);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+  const removeProductHook = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await removeProduct(productId);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+
   const refreshShoppingCart = async () => {
     setLoading(true);
 
@@ -64,8 +93,8 @@ export const useShoppingCart = () => {
   return {
     getProductQuantity,
     increaseProductQuantity: increaseProductQuantityHook,
-    decreaseProductQuantity,
-    removeProduct,
+    decreaseProductQuantity: decreaseProductQuantityHook,
+    removeProduct: removeProductHook,
     total,
     setCartAfterSignIn: setCartAfterSignInHook,
     unsetCart,

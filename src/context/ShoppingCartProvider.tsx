@@ -17,16 +17,11 @@ type ShoppingCartProviderProps = {
   children?: ReactNode;
 };
 
-type CartItem = {
-  productId: string;
-  quantity: number;
-};
-
 type ShoppingCartContextType = {
   getProductQuantity: (productId: string) => number;
   increaseProductQuantity: (productId: string) => Promise<CTResponse>;
-  decreaseProductQuantity: (productId: string) => void;
-  removeProduct: (productId: string) => void;
+  decreaseProductQuantity: (productId: string) => Promise<CTResponse>;
+  removeProduct: (productId: string) => Promise<CTResponse>;
   total: number;
   setCartId: (activeCartId: string) => void;
   cartId: string;
@@ -41,10 +36,6 @@ export const ShoppingCartContext = createContext<ShoppingCartContextType>(
 );
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
-  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
-    'mockCartItems',
-    []
-  );
   const shoppingCartService = new ShoppingCartService();
 
   const [shoppingCart, setShoppingCart] = useState<ShoppingCart>();
@@ -55,8 +46,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const cartVersion = shoppingCart?.version || 0;
 
   function getProductQuantity(productId: string) {
-    console.log(cartItems); //to remove
-    return shoppingCart?.products[productId].quantity || 0;
+    const product = shoppingCart?.products[productId];
+    return product ? product.quantity : 0;
   }
 
   function updateShoppingCart(response: GraphQLResponse) {
@@ -107,18 +98,19 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       totalLineItemQuantity,
       products,
     };
-    console.log('updateShoppingCart', shoppingCartUpdate);
 
     setShoppingCart(shoppingCartUpdate);
   }
 
-  async function increaseProductQuantity(
-    productId: string
+  async function changeLineItemQuantity(
+    lineItemId: string,
+    quantity: number
   ): Promise<CTResponse> {
-    const answer = await shoppingCartService.increaseProductQuantity(
+    const answer = await shoppingCartService.changeLineItemQuantity(
       cartId,
       cartVersion,
-      productId
+      lineItemId,
+      quantity > 0 ? quantity : 0
     );
 
     if (!answer.ok) {
@@ -127,48 +119,62 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     const response = answer.data as GraphQLResponse;
     updateShoppingCart(response);
 
-    setCartItems((currentItems) => {
-      if (
-        currentItems.find((item) => item.productId === productId) === undefined
-      ) {
-        return [...currentItems, { productId: productId, quantity: 1 }];
-      } else {
-        return currentItems.map((item) => {
-          if (item.productId === productId) {
-            return { ...item, quantity: item.quantity + 1 };
-          } else {
-            return item;
-          }
-        });
+    return answer;
+  }
+
+  async function increaseProductQuantity(
+    productId: string
+  ): Promise<CTResponse> {
+    const productInCart = shoppingCart?.products[productId];
+    if (!productInCart) {
+      const answer = await shoppingCartService.addLineItem(
+        cartId,
+        cartVersion,
+        productId
+      );
+
+      if (!answer.ok) {
+        return answer;
       }
-    });
+      const response = answer.data as GraphQLResponse;
+      updateShoppingCart(response);
+      return answer;
+    }
+
+    const { lineItemId, quantity } = productInCart;
+    const answer = changeLineItemQuantity(lineItemId, quantity + 1);
 
     return answer;
   }
 
-  function decreaseProductQuantity(productId: string) {
-    setCartItems((currentItems) => {
-      if (
-        currentItems.find((item) => item.productId === productId)?.quantity ===
-        1
-      ) {
-        return currentItems.filter((item) => item.productId !== productId);
-      } else {
-        return currentItems.map((item) => {
-          if (item.productId === productId) {
-            return { ...item, quantity: item.quantity - 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
+  async function decreaseProductQuantity(
+    productId: string
+  ): Promise<CTResponse> {
+    const productInCart = shoppingCart?.products[productId];
+    if (!productInCart) {
+      return new Promise((resolve) =>
+        resolve({ ok: false, status: 404, message: 'Wrong productID' })
+      );
+    }
+
+    const { lineItemId, quantity } = productInCart;
+    const answer = changeLineItemQuantity(lineItemId, quantity - 1);
+
+    return answer;
   }
 
-  function removeProduct(productId: string) {
-    setCartItems((currentItems) => {
-      return currentItems.filter((item) => item.productId !== productId);
-    });
+  async function removeProduct(productId: string): Promise<CTResponse> {
+    const productInCart = shoppingCart?.products[productId];
+    if (!productInCart) {
+      return new Promise((resolve) =>
+        resolve({ ok: false, status: 404, message: 'Wrong productID' })
+      );
+    }
+
+    const { lineItemId } = productInCart;
+    const answer = changeLineItemQuantity(lineItemId, 0);
+
+    return answer;
   }
 
   const total = shoppingCart?.totalLineItemQuantity || 0;
