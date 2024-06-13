@@ -38,12 +38,12 @@ export const ProductPage = () => {
               <div className="text-2xl font-bold">{productData.name}</div>
               {price ? (
                 <PriceProduct
-                  initialPrice={price?.value}
-                  discountPrice={price?.discounted?.value}
-                  discountValue={price?.discounted?.discount.value.permyriad}
+                  initialPrice={price.value}
+                  discountPrice={price.discounted?.value}
+                  discountValue={price.discounted?.discount.value.permyriad}
                 />
               ) : (
-                ''
+                'Unavailable'
               )}
             </div>
             <div>

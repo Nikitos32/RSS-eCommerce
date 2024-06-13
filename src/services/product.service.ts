@@ -113,19 +113,30 @@ export class ProductService {
       masterVariant {
         price(currency: "EUR" country:"DE") {
           value {
-          fractionDigits
+            fractionDigits
             centAmount
           }
         }
         prices {
-        discounted {
+          discounted {
             value {
               centAmount
               fractionDigits
+              currencyCode
+            }
+            discount {
+              id
+              name(locale: $locale)
+              value {
+                type
+                ... on RelativeDiscountValue {
+                  permyriad
+                }
+              }
             }
           }
           value {
-          fractionDigits
+            fractionDigits
             centAmount
           }
         }
@@ -162,44 +173,56 @@ export class ProductService {
     locale: string = 'EN-GB'
   ): Promise<CTResponse> {
     const query = `
-    query ($locale: Locale) {
-  productProjectionSearch (limit: ${limit}) {
-    count
-    total
-    results {
-      id
-      key
-      description(locale: $locale)
-      name(locale: $locale)
-      categories {
+  query ($locale: Locale) {
+    productProjectionSearch (limit: ${limit}) {
+      count
+      total
+      results {
+        id
+        key
+        description(locale: $locale)
         name(locale: $locale)
-      }
-      masterVariant {
-        price(currency: "EUR" country:"DE") {
-          value {
-            centAmount
-          }
+        categories {
+          name(locale: $locale)
         }
-        prices {
-        discounted {
+        masterVariant {
+          price(currency: "EUR", country: "DE") {
             value {
-              centAmount
               fractionDigits
+              centAmount
             }
           }
-          value {
-          fractionDigits
-            centAmount
+          prices {
+            discounted {
+              value {
+                centAmount
+                fractionDigits
+                currencyCode
+              }
+              discount {
+                id
+                name(locale: $locale)
+                value {
+                  type
+                  ... on RelativeDiscountValue {
+                    permyriad
+                  }
+                }
+              }
+            }
+            value {
+              fractionDigits
+              centAmount
+            }
           }
+          images {
+            url
+          }
+          key
         }
-        images {
-          url
-        }
-        key
       }
     }
   }
-}
     `;
 
     const variables = { locale };
