@@ -31,7 +31,6 @@ type ShoppingCartContextType = {
   setCartId: (activeCartId: string) => void;
   cartId: string;
   cartVersion: number;
-  setCartVersion: (cartVersion: number) => void;
   setCartAfterSignIn: (data: CustomerSignInResult) => Promise<CTResponse>;
   unsetCart: () => void;
 };
@@ -50,10 +49,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [shoppingCart, setShoppingCart] = useState<ShoppingCart>();
 
   const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
-  const [activeCartVersion, setActiveCartVersion] = useState(0);
 
   const cartId = activeCartId;
-  const cartVersion = activeCartVersion;
+  const cartVersion = shoppingCart?.version || 0;
 
   function getProductQuantity(productId: string) {
     return (
@@ -126,7 +124,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     }
     const response = answer.data as GraphQLResponse;
     updateShoppingCart(response);
-    setCartVersion(response.data.updateCart.version);
 
     setCartItems((currentItems) => {
       if (
@@ -178,10 +175,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setActiveCartId(activeCartId);
   }
 
-  function setCartVersion(cartVersion: number) {
-    setActiveCartVersion(cartVersion);
-  }
-
   const setCartAfterSignIn = async (
     data: CustomerSignInResult
   ): Promise<CTResponse> => {
@@ -192,7 +185,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         updateShoppingCart(response);
       }
       setCartId(data.cart.id);
-      setCartVersion(data.cart.version);
       return cartResponse;
     }
 
@@ -203,7 +195,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       const newCart = newCartResponse.data as GraphQLResponse;
       updateShoppingCart(newCart);
       setCartId(newCart.data.createCart.id);
-      setCartVersion(newCart.data.cart.version);
     }
 
     return newCartResponse;
@@ -211,7 +202,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   const unsetCart = () => {
     setCartId('');
-    setCartVersion(0);
+    setShoppingCart(undefined);
   };
 
   return (
@@ -225,7 +216,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartId,
         setCartId,
         cartVersion,
-        setCartVersion,
         setCartAfterSignIn,
         unsetCart,
       }}
