@@ -68,7 +68,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       totalLineItemQuantity = 0,
       totalPrice = null,
       lineItems = [],
-    } = response.data.updateCart;
+    } = response.data.updateCart ||
+    response.data.createCart ||
+    response.data.cart;
 
     const products: ProductInShoppingCart = {};
 
@@ -105,7 +107,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       totalLineItemQuantity,
       products,
     };
-    console.log('Update', shoppingCartUpdate);
+    console.log('updateShoppingCart', shoppingCartUpdate);
 
     setShoppingCart(shoppingCartUpdate);
   }
@@ -125,7 +127,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     const response = answer.data as GraphQLResponse;
     updateShoppingCart(response);
     setCartVersion(response.data.updateCart.version);
-    console.log('shoppingCart', shoppingCart);
 
     setCartItems((currentItems) => {
       if (
@@ -172,10 +173,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   }
 
   const total = shoppingCart?.totalLineItemQuantity || 0;
-  // cartItems.reduce(
-  //   (quantity, item) => item.quantity + quantity,
-  //   0
-  // );
 
   function setCartId(activeCartId: string) {
     setActiveCartId(activeCartId);
@@ -189,23 +186,27 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     data: CustomerSignInResult
   ): Promise<CTResponse> => {
     if (data.cart) {
+      const cartResponse = await shoppingCartService.getCart(data.cart.id);
+      if (cartResponse.ok) {
+        const response = cartResponse.data as GraphQLResponse;
+        updateShoppingCart(response);
+      }
       setCartId(data.cart.id);
       setCartVersion(data.cart.version);
-      return new Promise((resolve) =>
-        resolve({ ok: true, message: '', data, status: 200 })
-      );
+      return cartResponse;
     }
 
-    const responseNewCart = await shoppingCartService.createCartForCustomer(
+    const newCartResponse = await shoppingCartService.createCartForCustomer(
       data.customer.id
     );
-    if (responseNewCart.ok) {
-      const newCart = responseNewCart.data as GraphQLResponse;
+    if (newCartResponse.ok) {
+      const newCart = newCartResponse.data as GraphQLResponse;
+      updateShoppingCart(newCart);
       setCartId(newCart.data.createCart.id);
       setCartVersion(newCart.data.cart.version);
     }
 
-    return responseNewCart;
+    return newCartResponse;
   };
 
   const unsetCart = () => {
