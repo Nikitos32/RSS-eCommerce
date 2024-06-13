@@ -6,7 +6,7 @@ import { useShoppingCart } from './useShoppingCart';
 
 export function useApiSignIn() {
   const { setLoggedIn, setLoggedOut } = useAuth();
-  const { setCart } = useShoppingCart();
+  const { setCartAfterSignIn } = useShoppingCart();
 
   const customerService = new CustomerService();
 
@@ -20,7 +20,7 @@ export function useApiSignIn() {
 
     if (response.ok) {
       setLoggedIn(data.customer.id);
-      setCart(data);
+      setCartAfterSignIn(data);
     } else {
       setLoggedOut();
     }
