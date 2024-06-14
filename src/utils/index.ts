@@ -8,5 +8,5 @@ export {
   getAddressChange,
 } from './addressUtils';
 export type { AddressForProfile } from './addressUtils';
-export { countProductSum } from './countProductSum';
+export { countMoneySum } from './countMoneySum';
 export { formatPrice } from './formatPrice';
