@@ -29,7 +29,9 @@ export const ProductPage = () => {
     (priceEl) => priceEl.value.currencyCode === 'EUR'
   );
   const discount = price?.discounted?.discount as ProductDiscount | undefined;
-  const discountValue = discount?.value as CartDiscountValueRelative;
+  const discountValue = discount?.value as
+    | CartDiscountValueRelative
+    | undefined;
   return (
     <article className="productPage">
       <Spinner isLoading={loading} />
@@ -49,7 +51,7 @@ export const ProductPage = () => {
                 <PriceProduct
                   initialPrice={price.value}
                   discountPrice={price.discounted?.value}
-                  discountValue={discountValue.permyriad}
+                  discountValue={discountValue?.permyriad}
                 />
               ) : (
                 'Unavailable'
