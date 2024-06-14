@@ -80,7 +80,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
           name = '',
           quantity = 0,
           variant,
-          price: { value: price },
+          price,
         } = item;
 
         const productName = name as string;

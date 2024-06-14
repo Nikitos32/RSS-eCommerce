@@ -1,4 +1,4 @@
-import { CartDraft, TypedMoney } from '@commercetools/platform-sdk';
+import { CartDraft, Price, TypedMoney } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
@@ -34,6 +34,9 @@ const CART_DATA_TO_RECEIVE = `
           centAmount
           fractionDigits
         }
+        discount{
+          name(locale: $locale)
+        }
       }
       value {
         centAmount
@@ -52,7 +55,7 @@ export interface ProductInShoppingCart {
   quantity: number;
   imageUrl: string;
   imageLabel: string;
-  price: TypedMoney;
+  price: Price;
 }
 export interface ShoppingCartItem {
   [productId: string]: ProductInShoppingCart;
