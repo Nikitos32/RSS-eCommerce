@@ -11,6 +11,7 @@ import {
 import {
   ShoppingCartItem,
   ShoppingCart,
+  ProductInShoppingCart,
 } from '../services/shoppingCart.service';
 
 type ShoppingCartProviderProps = {
@@ -29,6 +30,7 @@ type ShoppingCartContextType = {
   setCartAfterSignIn: (data: CustomerSignInResult) => Promise<CTResponse>;
   unsetCart: () => void;
   getCTCart: () => Promise<CTResponse>;
+  getShoppingCartProducts: () => ProductInShoppingCart[];
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -48,6 +50,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   function getProductQuantity(productId: string) {
     const product = shoppingCart?.products[productId];
     return product ? product.quantity : 0;
+  }
+
+  function getShoppingCartProducts(): ProductInShoppingCart[] {
+    const products = shoppingCart?.products;
+    const empty: ProductInShoppingCart[] = [];
+    return products ? Object.values(products) : empty;
   }
 
   function updateShoppingCart(response: GraphQLResponse) {
@@ -242,6 +250,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         setCartAfterSignIn,
         unsetCart,
         getCTCart,
+        getShoppingCartProducts,
       }}
     >
       {' '}

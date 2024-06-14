@@ -15,6 +15,7 @@ export const useShoppingCart = () => {
     setCartAfterSignIn,
     unsetCart,
     getCTCart,
+    getShoppingCartProducts,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -103,5 +104,6 @@ export const useShoppingCart = () => {
     loading,
     message,
     refreshShoppingCart,
+    getShoppingCartProducts,
   };
 };
