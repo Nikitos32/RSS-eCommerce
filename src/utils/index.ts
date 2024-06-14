@@ -8,4 +8,4 @@ export {
   getAddressChange,
 } from './addressUtils';
 export type { AddressForProfile } from './addressUtils';
-
+export { countProductSum } from './countProductSum';
