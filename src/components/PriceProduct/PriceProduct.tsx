@@ -1,10 +1,10 @@
-import { ValuePrice } from '../../type/types/productPageType';
+import { TypedMoney } from '@commercetools/platform-sdk';
 import { convertPrice } from '../../utils/convertPrice';
 import './priceProduct.css';
 
 interface ProductPriceProps {
-  initialPrice: ValuePrice;
-  discountPrice?: ValuePrice | undefined;
+  initialPrice: TypedMoney;
+  discountPrice?: TypedMoney | undefined;
   discountValue?: number | undefined;
 }
 

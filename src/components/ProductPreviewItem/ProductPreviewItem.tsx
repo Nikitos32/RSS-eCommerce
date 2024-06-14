@@ -3,7 +3,11 @@ import '@smastrom/react-rating/style.css';
 import { useState } from 'react';
 import { MdOutlineViewInAr } from 'react-icons/md';
 import { PriceProduct } from '../PriceProduct/PriceProduct';
-import { ProductPrice } from '../../type/types/productPageType';
+import { Price } from '@commercetools/platform-sdk';
+import {
+  ProductDiscount,
+  CartDiscountValueRelative,
+} from '@commercetools/platform-sdk';
 import { Link } from 'react-router-dom';
 import CartControl from '../CartControl';
 
@@ -12,7 +16,7 @@ interface ProductPreviewItemProps {
   productCategory: string;
   productName: string;
   productDescription: string;
-  price: ProductPrice | undefined;
+  price: Price | undefined;
   id: string;
   productId: string;
 }
@@ -27,6 +31,8 @@ export const ProductPreviewItem = ({
   productId,
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
+  const discount = price?.discounted?.discount as ProductDiscount | undefined;
+  const discountValue = discount?.value as CartDiscountValueRelative;
 
   return (
     <div className="transition duration-700 ease-in-out bg-slate-300 max-w-72 md:max-w-none md:w-full xl:w-4/5 m-auto lg:m-0 rounded p-3 flex flex-col md:flex-row gap-4 md:gap-20 hover:shadow-[1px_1px_8px]">
@@ -53,7 +59,7 @@ export const ProductPreviewItem = ({
             <PriceProduct
               initialPrice={price.value}
               discountPrice={price.discounted?.value}
-              discountValue={price.discounted?.discount.value.permyriad}
+              discountValue={discountValue.permyriad}
             />
           ) : (
             'Unavailable'

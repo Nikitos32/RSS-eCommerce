@@ -2,7 +2,11 @@ import { ProductSwiper } from './ProductPageSwiper/ProductSwiper';
 import { PriceProduct } from '../PriceProduct/PriceProduct';
 import { useApiGetProduct } from '../../hooks';
 import { useParams } from 'react-router-dom';
-import { ProductAPI } from '../../type/types/productPageType';
+import {
+  ProductData,
+  ProductDiscount,
+  CartDiscountValueRelative,
+} from '@commercetools/platform-sdk';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -20,27 +24,32 @@ export const ProductPage = () => {
     return <NotFoundPage />;
   }
 
-  const productData = product?.data.product.masterData.current as ProductAPI;
-  const price = productData?.masterVariant.prices.find(
+  const productData = product?.data.product.masterData.current as ProductData;
+  const price = productData?.masterVariant?.prices?.find(
     (priceEl) => priceEl.value.currencyCode === 'EUR'
   );
-
+  const discount = price?.discounted?.discount as ProductDiscount | undefined;
+  const discountValue = discount?.value as CartDiscountValueRelative;
   return (
     <article className="productPage">
       <Spinner isLoading={loading} />
       {!loading && (
         <section className="product">
           <div className="product__component productImg">
-            <ProductSwiper images={productData.masterVariant.images} />
+            {productData.masterVariant.images ? (
+              <ProductSwiper images={productData.masterVariant.images} />
+            ) : (
+              ''
+            )}
           </div>
           <div className="product__component productData">
             <div className="productData__title">
-              <div className="text-2xl font-bold">{productData.name}</div>
+              <div className="text-2xl font-bold">{`${productData.name}`}</div>
               {price ? (
                 <PriceProduct
                   initialPrice={price.value}
                   discountPrice={price.discounted?.value}
-                  discountValue={price.discounted?.discount.value.permyriad}
+                  discountValue={discountValue.permyriad}
                 />
               ) : (
                 'Unavailable'
@@ -51,7 +60,7 @@ export const ProductPage = () => {
             </div>
             <div className="productinfo">
               <h3 className="productinfo__title">Details</h3>
-              {productData.description}
+              {`${productData.description}`}
             </div>
           </div>
         </section>
