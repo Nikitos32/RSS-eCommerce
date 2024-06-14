@@ -1,6 +1,13 @@
+import { useEffect } from 'react';
 import { PriceProduct } from '../components/PriceProduct/PriceProduct';
+import { useShoppingCart } from '../hooks';
 
 function Cart() {
+  const { refreshShoppingCart } = useShoppingCart();
+  useEffect(() => {
+    refreshShoppingCart();
+  }, []); //  will only run on load
+
   return (
     <section className="bg-moonNeutral-200 pt-5">
       <h1 className="mb-5 text-center text-2xl font-bold">Cart Items</h1>
