@@ -18,6 +18,7 @@ const CART_DATA_TO_RECEIVE = `
   }
   lineItems {
     id
+    productKey
     productId
     name(locale: $locale)
     quantity
@@ -45,6 +46,7 @@ const CART_DATA_TO_RECEIVE = `
 
 export interface ProductInShoppingCart {
   productId: string;
+  productKey: string;
   lineItemId: string;
   name: string;
   quantity: number;
