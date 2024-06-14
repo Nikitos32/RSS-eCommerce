@@ -9,7 +9,7 @@ import {
   LineItem,
 } from '@commercetools/platform-sdk';
 import {
-  ProductInShoppingCart,
+  ShoppingCartItem,
   ShoppingCart,
 } from '../services/shoppingCart.service';
 
@@ -61,7 +61,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     response.data.createCart ||
     response.data.cart;
 
-    const products: ProductInShoppingCart = {};
+    const products: ShoppingCartItem = {};
 
     if (lineItems) {
       lineItems.forEach((item: LineItem) => {
@@ -82,6 +82,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
           firstImage;
 
         products[productId] = {
+          productId,
           name: productName,
           lineItemId: id,
           quantity,

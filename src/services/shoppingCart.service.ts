@@ -44,14 +44,16 @@ const CART_DATA_TO_RECEIVE = `
 `;
 
 export interface ProductInShoppingCart {
-  [productId: string]: {
-    lineItemId: string;
-    name: string;
-    quantity: number;
-    imageUrl: string;
-    imageLabel: string;
-    price: Money;
-  };
+  productId: string;
+  lineItemId: string;
+  name: string;
+  quantity: number;
+  imageUrl: string;
+  imageLabel: string;
+  price: Money;
+}
+export interface ShoppingCartItem {
+  [productId: string]: ProductInShoppingCart;
 }
 
 export interface ShoppingCart {
@@ -59,7 +61,7 @@ export interface ShoppingCart {
   version: number;
   totalLineItemQuantity: number;
   totalPrice: Money;
-  products: ProductInShoppingCart;
+  products: ShoppingCartItem;
 }
 
 export class ShoppingCartService {
