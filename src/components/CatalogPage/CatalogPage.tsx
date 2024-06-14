@@ -2,13 +2,13 @@ import { FormEvent, useEffect, useState } from 'react';
 import { FilterSection } from '../FilterSection/FilterSection';
 import { SortSection } from '../SortSection/SortSection';
 import { ProductService } from '../../services';
+import { ProductPrice } from '../../type/types/productPageType';
 import { CTResponse } from '../../ct-client';
 import {
   Category,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
-import { convertPrice } from '../../utils/convertPrice';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { IoIosArrowUp } from 'react-icons/io';
 import { animateScroll as scroll } from 'react-scroll';
@@ -166,14 +166,6 @@ export const CatalogPage = () => {
               }
             >
               {products?.productProjectionSearch.results.map((element) => {
-                const basePrice = convertPrice(
-                  element?.masterVariant.prices
-                    ? element?.masterVariant.prices[0].value.centAmount
-                    : 0,
-                  element?.masterVariant.prices
-                    ? element?.masterVariant.prices[0].value.fractionDigits
-                    : 0
-                );
                 return (
                   <ProductPreviewItem
                     productId={element.id}
@@ -197,32 +189,11 @@ export const CatalogPage = () => {
                         : 'no description'
                     }
                     productName={`${element.name ? element.name : ''}`}
-                    productPrice={`${
-                      (
-                        element?.masterVariant.prices
-                          ? element?.masterVariant.prices[0].discounted
-                          : 0
-                      )
-                        ? convertPrice(
-                            element?.masterVariant.prices
-                              ? element?.masterVariant.prices[0].discounted
-                                  ?.value.centAmount
-                              : 0,
-                            element?.masterVariant.prices
-                              ? element?.masterVariant.prices[0].discounted
-                                  ?.value.fractionDigits
-                              : 0
-                          )
-                        : basePrice
-                    }`}
-                    productOldPrice={
-                      (
-                        element?.masterVariant.prices
-                          ? element?.masterVariant.prices[0]?.discounted
-                          : 0
-                      )
-                        ? basePrice
-                        : ''
+                    price={
+                      element?.masterVariant.prices
+                        ? (element?.masterVariant
+                            .prices[0] as unknown as ProductPrice)
+                        : undefined
                     }
                   />
                 );
