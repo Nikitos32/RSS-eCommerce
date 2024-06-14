@@ -14,7 +14,7 @@ export const useShoppingCart = () => {
     removeProduct,
     setCartAfterSignIn,
     unsetCart,
-    getShoppingCart,
+    getCTCart,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export const useShoppingCart = () => {
   const refreshShoppingCart = async () => {
     setLoading(true);
 
-    const answer = await getShoppingCart();
+    const answer = await getCTCart();
     setOk(answer.ok);
 
     setMessage(answer.message as string);
