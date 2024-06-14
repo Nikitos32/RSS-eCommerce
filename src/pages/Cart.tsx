@@ -36,7 +36,12 @@ function Cart() {
                 </div>
                 <div className="cartProduct__containerPrice flex items-end space-x-4">
                   <PriceProduct
-                    initialPrice={{ centAmount: 25900, fractionDigits: 2 }}
+                    initialPrice={{
+                      type: 'centPrecision',
+                      centAmount: 25900,
+                      fractionDigits: 2,
+                      currencyCode: 'EUE',
+                    }}
                   />
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +91,18 @@ function Cart() {
                 </div>
                 <div className="cartProduct__containerPrice flex items-end space-x-4">
                   <PriceProduct
-                    initialPrice={{ centAmount: 26000, fractionDigits: 2 }}
-                    discountPrice={{ centAmount: 13000, fractionDigits: 2 }}
+                    initialPrice={{
+                      type: 'centPrecision',
+                      centAmount: 26000,
+                      fractionDigits: 2,
+                      currencyCode: 'EUE',
+                    }}
+                    discountPrice={{
+                      type: 'centPrecision',
+                      centAmount: 13000,
+                      fractionDigits: 2,
+                      currencyCode: 'EUE',
+                    }}
                     discountValue={5000}
                   />
                   <svg
