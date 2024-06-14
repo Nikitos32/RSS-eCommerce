@@ -1,28 +1,31 @@
 const persons = [
   {
     name: 'Vlad',
-    role: '',
-    description: 'A few words about your contribution to the project',
+    role: 'Frontend developer',
+    description:
+      'Participated in the creation of the registration page, beautiful interfaces, the detailed product page, developed a shopping cart page, and also worked with the commercetools api',
     photo: 'https://picsum.photos/100/',
-    github: 'https://github.com/Nikitos32',
+    github: 'https://github.com/Barvinko',
     twitter: '',
     facebook: '',
     web: '',
   },
   {
     name: 'Dima Usov',
-    role: '',
-    description: 'A few words about your contribution to the project',
+    role: 'Frontend developer',
+    description:
+      "Participated in the creation of the user's page, site navigation, developed interfaces for the main page, and also developed the shopping cart page using the commercetools api",
     photo: 'https://picsum.photos/102/',
-    github: 'https://github.com/Nikitos32',
+    github: 'https://github.com/DmirtyUsov',
     twitter: '',
     facebook: '',
     web: '',
   },
   {
     name: 'Nikita',
-    role: '',
-    description: 'A few words about your contribution to the project',
+    role: 'Frontend developer',
+    description:
+      'Participated in the creation of the login page, the catalog, developed interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
     photo: 'https://picsum.photos/101/',
     github: 'https://github.com/Nikitos32',
     twitter: '',

@@ -1,10 +1,10 @@
 import { Rating } from '@smastrom/react-rating';
 import '@smastrom/react-rating/style.css';
 import { useState } from 'react';
-import { IoCartOutline } from 'react-icons/io5';
 import { MdOutlineViewInAr } from 'react-icons/md';
 import { FaEuroSign } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import CartControl from '../CartControl';
 
 interface ProductPreviewItemProps {
   imgUrl: string;
@@ -14,6 +14,7 @@ interface ProductPreviewItemProps {
   productPrice: string;
   productOldPrice: string;
   id: string;
+  productId: string;
 }
 
 export const ProductPreviewItem = ({
@@ -24,8 +25,10 @@ export const ProductPreviewItem = ({
   productPrice,
   productOldPrice,
   id,
+  productId,
 }: ProductPreviewItemProps) => {
   const [rating, setRating] = useState(3.28);
+
   return (
     <div className="transition duration-700 ease-in-out bg-slate-300 max-w-72 md:max-w-none md:w-full xl:w-4/5 m-auto lg:m-0 rounded p-3 flex flex-col md:flex-row gap-4 md:gap-20 hover:shadow-[1px_1px_8px]">
       <div>
@@ -75,10 +78,7 @@ export const ProductPreviewItem = ({
           >
             View Details <MdOutlineViewInAr />
           </Link>
-          <button className="transition duration-700 ease-in-out flex gap-2 w-2/3 min-w-44 px-1 text-nowrap justify-center items-center h-14 border-2 border-stone-950 hover:bg-orange-400 hover:text-white">
-            <IoCartOutline className="size-6" />
-            Add to Cart
-          </button>
+          <CartControl productId={productId} />
         </div>
       </div>
     </div>
