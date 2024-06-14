@@ -9,3 +9,4 @@ export {
 } from './addressUtils';
 export type { AddressForProfile } from './addressUtils';
 export { countProductSum } from './countProductSum';
+export { formatPrice } from './formatPrice';
