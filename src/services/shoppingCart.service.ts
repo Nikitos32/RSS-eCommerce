@@ -1,4 +1,4 @@
-import { CartDraft } from '@commercetools/platform-sdk';
+import { CartDraft, Money } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
@@ -7,6 +7,60 @@ const {
   VITE_CTP_CURRENCY = 'EUR',
   VITE_CTP_COUNTRY = 'DE',
 } = import.meta.env;
+
+const CART_DATA_TO_RECEIVE = `
+  id
+  version
+  totalLineItemQuantity
+  totalPrice {
+    centAmount
+    fractionDigits
+  }
+  lineItems {
+    id
+    productId
+    name(locale: $locale)
+    quantity
+    variant {
+      images {
+        url
+        label
+      }
+    }
+    price {
+      discounted {
+        value {
+          centAmount
+          fractionDigits
+        }
+      }
+      value {
+        centAmount
+        fractionDigits
+        currencyCode
+      }
+    }
+  }
+`;
+
+export interface ProductInShoppingCart {
+  [productId: string]: {
+    lineItemId: string;
+    name: string;
+    quantity: number;
+    imageUrl: string;
+    imageLabel: string;
+    price: Money;
+  };
+}
+
+export interface ShoppingCart {
+  id: string;
+  version: number;
+  totalLineItemQuantity: number;
+  totalPrice: Money;
+  products: ProductInShoppingCart;
+}
 
 export class ShoppingCartService {
   graphqlRequest = new GraphqlRequest();
@@ -59,13 +113,12 @@ export class ShoppingCartService {
     const query = `
       mutation ($cartDraft: CartDraft!) {
         createCart(draft: $cartDraft) {
-          id
-          version
+          ${CART_DATA_TO_RECEIVE}
         }
       }
     `;
 
-    const variables = { cartDraft };
+    const variables = { cartDraft, locale: VITE_CTP_LOCALE };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
@@ -87,25 +140,76 @@ export class ShoppingCartService {
     return await this.createCart(cartDraft);
   }
 
-  async increaseProductQuantity(
+  async addLineItem(
     cartId: string,
     cartVersion: number,
     productId: string
   ): Promise<CTResponse> {
     const query = `
-      mutation ($cartId: String, $cartVersion: Long!, $productId:String) {
+      mutation ($cartId: String, $cartVersion: Long!, $productId:String, $locale: Locale) {
         updateCart(id: $cartId, version: $cartVersion, actions: [{addLineItem: {productId: $productId}}]) {
-          id
-          version
-          lineItems {
-            id
-            quantity
-          }
+          ${CART_DATA_TO_RECEIVE}
         }
       }
     `;
 
-    const variables = { cartId, cartVersion, productId };
+    const variables = {
+      cartId,
+      cartVersion,
+      productId,
+      locale: VITE_CTP_LOCALE,
+    };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
+
+  async getCart(cartId: string): Promise<CTResponse> {
+    const query = `
+      query ($cartId: String!, $locale: Locale!) {
+        cart(id: $cartId) {
+         ${CART_DATA_TO_RECEIVE}
+        }
+      }
+    `;
+
+    const variables = { cartId, locale: VITE_CTP_LOCALE };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
+
+  async changeLineItemQuantity(
+    cartId: string,
+    cartVersion: number,
+    lineItemId: string,
+    quantity: number
+  ): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!, $locale: Locale, $lineItemId: String, $quantity: Long!) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{changeLineItemQuantity: {lineItemId: $lineItemId, quantity: $quantity}}]) {
+          ${CART_DATA_TO_RECEIVE}
+        }
+      }
+    `;
+
+    const variables = {
+      cartId,
+      cartVersion,
+      locale: VITE_CTP_LOCALE,
+      lineItemId,
+      quantity,
+    };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
