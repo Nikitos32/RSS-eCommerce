@@ -33,7 +33,6 @@ export const useShoppingCart = () => {
 
   const increaseProductQuantityHook = async (productId: string) => {
     setLoading(true);
-
     const answer = await increaseProductQuantity(productId);
     setOk(answer.ok);
 

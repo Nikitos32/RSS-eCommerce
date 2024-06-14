@@ -2,7 +2,6 @@ import { ProductSwiper } from './ProductPageSwiper/ProductSwiper';
 import { useApiGetProduct, useShoppingCart } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import { ProductAPI } from '../../type/types/productPageType';
-import { convertPrice } from '../../utils/convertPrice';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -42,25 +41,15 @@ export const ProductPage = () => {
           <div className="product__component productData">
             <div className="productData__title">
               <div className="text-2xl font-bold">{productData.name}</div>
-              <div className="productData__pricesContainer text-xl font-medium">
-                <span className="productData__discount">
-                  <span
-                    className={`${price?.discounted ? 'productData__valueDiscount text-base' : ''}`}
-                  >
-                    {price?.discounted
-                      ? `-${price?.discounted.discount.value.permyriad / 100}%`
-                      : ''}
-                  </span>
-                  <span className="text-moonBrown">
-                    {price?.discounted
-                      ? `${convertPrice(price?.discounted.value.centAmount, price?.discounted.value.fractionDigits)}€`
-                      : ''}
-                  </span>
-                </span>
-                <span
-                  className={`${price?.discounted ? `text-moonNeutral-500 ml-7` : ''}`}
-                >{`${convertPrice(price?.value.centAmount, price?.value.fractionDigits)}€`}</span>
-              </div>
+              {price ? (
+                <PriceProduct
+                  initialPrice={price.value}
+                  discountPrice={price.discounted?.value}
+                  discountValue={price.discounted?.discount.value.permyriad}
+                />
+              ) : (
+                'Unavailable'
+              )}
             </div>
             <div>
               <CartControl productId={product?.data.product.id || ''} />

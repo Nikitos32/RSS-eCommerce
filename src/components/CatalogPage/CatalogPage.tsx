@@ -1,26 +1,27 @@
-import { FormEvent, useContext, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { FilterSection } from '../FilterSection/FilterSection';
 import { SortSection } from '../SortSection/SortSection';
-import { IsLoadindContext } from '../../App';
 import { ProductService } from '../../services';
+import { ProductPrice } from '../../type/types/productPageType';
 import { CTResponse } from '../../ct-client';
 import {
   Category,
   ProductProjectionPagedQueryResponse,
 } from '@commercetools/platform-sdk';
 import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
-import { convertPrice } from '../../utils/convertPrice';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { IoIosArrowUp } from 'react-icons/io';
 import { animateScroll as scroll } from 'react-scroll';
+import Spinner from '../Spinner';
+import { Oval } from 'react-loader-spinner';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
 }
 
 export const CatalogPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [handleLoading] = useContext(IsLoadindContext);
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
   const [currentCategories, setCurrentCategories] = useState<string[]>([]);
@@ -80,7 +81,7 @@ export const CatalogPage = () => {
   };
 
   useEffect(() => {
-    handleLoading(true);
+    setIsLoading(true);
     const productService = new ProductService();
     if (
       currentSort ||
@@ -98,7 +99,7 @@ export const CatalogPage = () => {
         currentLimit
       );
       data.then((response) => {
-        handleLoading(false);
+        setIsLoading(false);
         setProducts(
           (response.data as CTResponse).data as ProductProjectionResponse
         );
@@ -107,7 +108,7 @@ export const CatalogPage = () => {
       const data: Promise<CTResponse> =
         productService.getProductsAll(currentLimit);
       data.then((response) => {
-        handleLoading(false);
+        setIsLoading(false);
         setProducts(
           (response.data as CTResponse).data as ProductProjectionResponse
         );
@@ -123,7 +124,7 @@ export const CatalogPage = () => {
 
   return (
     <section className="flex relative">
-      <div id="pageHead">
+      <div>
         <FilterSection
           handleCategories={handleCategories}
           currentRangeValue={currentRangeValue}
@@ -151,24 +152,23 @@ export const CatalogPage = () => {
                 products.productProjectionSearch.total
               }
               scrollThreshold={1}
-              loader={<p>Loading...</p>}
+              loader={<Spinner isLoading={true} />}
               endMessage={
-                <p style={{ textAlign: 'center' }}>
-                  <b>No more products!</b>
+                <p
+                  style={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  no more products
                 </p>
               }
             >
               {products?.productProjectionSearch.results.map((element) => {
-                const basePrice = convertPrice(
-                  element?.masterVariant.prices
-                    ? element?.masterVariant.prices[0].value.centAmount
-                    : 0,
-                  element?.masterVariant.prices
-                    ? element?.masterVariant.prices[0].value.fractionDigits
-                    : 0
-                );
                 return (
                   <ProductPreviewItem
+                    productId={element.id}
                     key={element.key}
                     id={element.key ? element.key : ''}
                     imgUrl={
@@ -189,32 +189,11 @@ export const CatalogPage = () => {
                         : 'no description'
                     }
                     productName={`${element.name ? element.name : ''}`}
-                    productPrice={`${
-                      (
-                        element?.masterVariant.prices
-                          ? element?.masterVariant.prices[0].discounted
-                          : 0
-                      )
-                        ? convertPrice(
-                            element?.masterVariant.prices
-                              ? element?.masterVariant.prices[0].discounted
-                                  ?.value.centAmount
-                              : 0,
-                            element?.masterVariant.prices
-                              ? element?.masterVariant.prices[0].discounted
-                                  ?.value.fractionDigits
-                              : 0
-                          )
-                        : basePrice
-                    }`}
-                    productOldPrice={
-                      (
-                        element?.masterVariant.prices
-                          ? element?.masterVariant.prices[0]?.discounted
-                          : 0
-                      )
-                        ? basePrice
-                        : ''
+                    price={
+                      element?.masterVariant.prices
+                        ? (element?.masterVariant
+                            .prices[0] as unknown as ProductPrice)
+                        : undefined
                     }
                   />
                 );
@@ -238,6 +217,17 @@ export const CatalogPage = () => {
             )}
           </section>
         </div>
+      </div>
+      <div className="w-full top-2/4 flex justify-center items-center fixed z-50">
+        <Oval
+          visible={isLoading}
+          height="40"
+          width="40"
+          color="black"
+          ariaLabel="oval-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+        />
       </div>
     </section>
   );
