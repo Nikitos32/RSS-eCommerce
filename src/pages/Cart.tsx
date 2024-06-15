@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useShoppingCart } from '../hooks';
 import CartItem from '../components/CartItem';
 import UserInputString from '../components/UserInputString';
+import { countMoneySum, formatPrice } from '../utils';
 
 function Cart() {
   const inputStringInitState = {
@@ -12,7 +13,8 @@ function Cart() {
     readonly: false,
   };
 
-  const { refreshShoppingCart, getShoppingCartProducts } = useShoppingCart();
+  const { refreshShoppingCart, getShoppingCartProducts, totalPrice } =
+    useShoppingCart();
 
   useEffect(() => {
     refreshShoppingCart();
@@ -37,7 +39,7 @@ function Cart() {
           </div>
         )}
         {/*-- Sub total */}
-        {!isCartEmpty && (
+        {true && (
           <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
             <div className="mb-1 flex justify-center gap-1 content-end">
               <div className="">
@@ -60,17 +62,19 @@ function Cart() {
             </div>
             <div className="mb-2 flex justify-between">
               <p className="text-moonNeutral-700">Subtotal</p>
-              <p className="text-moonNeutral-700">$129.99</p>
+              <p className="text-moonNeutral-700">TBD</p>
             </div>
             <div className="flex justify-between">
               <p className="text-moonNeutral-700">Shipping</p>
-              <p className="text-moonNeutral-700">$4.99</p>
+              <p className="text-moonNeutral-700">TBD</p>
             </div>
             <hr className="my-4" />
             <div className="flex justify-between">
               <p className="text-lg font-bold">Total</p>
               <div className="">
-                <p className="mb-1 text-lg font-bold">$134.98</p>
+                <p className="mb-1 text-lg font-bold">
+                  {formatPrice(countMoneySum(totalPrice))}
+                </p>
                 <p className="text-sm text-moonNeutral-700">including VAT</p>
               </div>
             </div>

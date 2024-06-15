@@ -7,6 +7,7 @@ import {
   GraphQLResponse,
   Image,
   LineItem,
+  TypedMoney,
 } from '@commercetools/platform-sdk';
 import {
   ShoppingCartItem,
@@ -24,6 +25,7 @@ type ShoppingCartContextType = {
   decreaseProductQuantity: (productId: string) => Promise<CTResponse>;
   removeProduct: (productId: string) => Promise<CTResponse>;
   total: number;
+  totalPrice: TypedMoney;
   setCartId: (activeCartId: string) => void;
   cartId: string;
   cartVersion: number;
@@ -55,6 +57,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   const cartId = activeCartId;
   const cartVersion = shoppingCart?.version || 0;
+  const totalPrice = shoppingCart?.totalPrice || ({} as TypedMoney);
 
   function getProductQuantity(productId: string) {
     const product = shoppingCart?.products[productId];
@@ -259,6 +262,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         decreaseProductQuantity,
         removeProduct,
         total,
+        totalPrice,
         cartId,
         setCartId,
         cartVersion,
