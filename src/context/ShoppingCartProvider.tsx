@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from 'react';
 import { useLocalStorage } from '../hooks';
 import { ShoppingCartService } from '../services';
-import { CTResponse } from '../ct-client';
+import { CTResponse, HttpStatusCode } from '../ct-client';
 import {
   CustomerSignInResult,
   GraphQLResponse,
@@ -43,6 +43,15 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const [shoppingCart, setShoppingCart] = useState<ShoppingCart>();
 
   const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
+
+  const [updateInProgress, setUpdateInProgress] = useState(false);
+  const answerUpdateInProgress = new Promise<CTResponse>((resolve) =>
+    resolve({
+      ok: false,
+      status: HttpStatusCode.IM_USED_226,
+      message: 'Concurrent request. Please try again.',
+    })
+  );
 
   const cartId = activeCartId;
   const cartVersion = shoppingCart?.version || 0;
@@ -116,12 +125,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     lineItemId: string,
     quantity: number
   ): Promise<CTResponse> {
+    if (updateInProgress) {
+      return answerUpdateInProgress;
+    }
+
+    setUpdateInProgress(true);
     const answer = await shoppingCartService.changeLineItemQuantity(
       cartId,
       cartVersion,
       lineItemId,
       quantity > 0 ? quantity : 0
     );
+    setUpdateInProgress(false);
 
     if (!answer.ok) {
       return answer;
@@ -223,7 +238,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setShoppingCart(undefined);
   };
   const getCTCart = async (): Promise<CTResponse> => {
-
     if (!cartId) {
       return new Promise((resolve) =>
         resolve({ ok: false, status: 404, message: 'No Cart ID' })
