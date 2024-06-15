@@ -3,6 +3,7 @@ import { useShoppingCart } from '../hooks';
 import CartItem from '../components/CartItem';
 import UserInputString from '../components/UserInputString';
 import { countMoneySum, formatPrice } from '../utils';
+import Spinner from '../components/Spinner';
 
 function Cart() {
   const inputStringInitState = {
@@ -13,7 +14,7 @@ function Cart() {
     readonly: false,
   };
 
-  const { refreshShoppingCart, getShoppingCartProducts, totalPrice } =
+  const { refreshShoppingCart, getShoppingCartProducts, totalPrice, loading } =
     useShoppingCart();
 
   useEffect(() => {
@@ -30,7 +31,9 @@ function Cart() {
     <section className="bg-moonNeutral-200 pt-5">
       <h1 className="mb-5 text-center text-2xl font-bold">Cart Items</h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
-        {isCartEmpty && <div className="rounded-lg"> TODO Add Link</div>}
+        {!loading && isCartEmpty && (
+          <div className="rounded-lg"> TODO Add Link</div>
+        )}
         {!isCartEmpty && (
           <div className="rounded-lg md:w-2/3">
             {products.map((product) => (
@@ -39,7 +42,7 @@ function Cart() {
           </div>
         )}
         {/*-- Sub total */}
-        {true && (
+        {!isCartEmpty && (
           <div className="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
             <div className="mb-1 flex justify-center gap-1 content-end">
               <div className="">
@@ -84,6 +87,7 @@ function Cart() {
           </div>
         )}
       </div>
+      <Spinner isLoading={loading} />
     </section>
   );
 }
