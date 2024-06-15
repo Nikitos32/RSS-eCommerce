@@ -2,11 +2,7 @@ import { ProductSwiper } from './ProductPageSwiper/ProductSwiper';
 import { PriceProduct } from '../PriceProduct/PriceProduct';
 import { useApiGetProduct } from '../../hooks';
 import { useParams } from 'react-router-dom';
-import {
-  ProductData,
-  ProductDiscount,
-  CartDiscountValueRelative,
-} from '@commercetools/platform-sdk';
+import { ProductData } from '@commercetools/platform-sdk';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
@@ -28,10 +24,7 @@ export const ProductPage = () => {
   const price = productData?.masterVariant?.prices?.find(
     (priceEl) => priceEl.value.currencyCode === 'EUR'
   );
-  const discount = price?.discounted?.discount as ProductDiscount | undefined;
-  const discountValue = discount?.value as
-    | CartDiscountValueRelative
-    | undefined;
+
   return (
     <article className="productPage">
       <Spinner isLoading={loading} />
@@ -47,15 +40,7 @@ export const ProductPage = () => {
           <div className="product__component productData">
             <div className="productData__title">
               <div className="text-2xl font-bold">{`${productData.name}`}</div>
-              {price ? (
-                <PriceProduct
-                  initialPrice={price.value}
-                  discountPrice={price.discounted?.value}
-                  discountValue={discountValue?.permyriad}
-                />
-              ) : (
-                'Unavailable'
-              )}
+              {price ? <PriceProduct {...price} /> : 'Unavailable'}
             </div>
             <div>
               <CartControl productId={product?.data.product.id || ''} />
