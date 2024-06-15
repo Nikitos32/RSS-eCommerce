@@ -9,8 +9,9 @@ import {
   LineItem,
 } from '@commercetools/platform-sdk';
 import {
-  ProductInShoppingCart,
+  ShoppingCartItem,
   ShoppingCart,
+  ProductInShoppingCart,
 } from '../services/shoppingCart.service';
 
 type ShoppingCartProviderProps = {
@@ -28,7 +29,8 @@ type ShoppingCartContextType = {
   cartVersion: number;
   setCartAfterSignIn: (data: CustomerSignInResult) => Promise<CTResponse>;
   unsetCart: () => void;
-  getShoppingCart: () => Promise<CTResponse>;
+  getCTCart: () => Promise<CTResponse>;
+  getShoppingCartProducts: () => ProductInShoppingCart[];
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -50,6 +52,11 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     return product ? product.quantity : 0;
   }
 
+  function getShoppingCartProducts(): ProductInShoppingCart[] {
+    const products = shoppingCart?.products;
+    const empty: ProductInShoppingCart[] = [];
+    return products ? Object.values(products) : empty;
+  }
   function updateShoppingCart(response: GraphQLResponse) {
     const {
       id = '',
@@ -61,17 +68,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     response.data.createCart ||
     response.data.cart;
 
-    const products: ProductInShoppingCart = {};
+    const products: ShoppingCartItem = {};
 
     if (lineItems) {
       lineItems.forEach((item: LineItem) => {
         const {
+          productKey = '',
           productId = '',
           id = '',
           name = '',
           quantity = 0,
           variant,
-          price: { value: price },
+          price,
         } = item;
 
         const productName = name as string;
@@ -82,6 +90,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
           firstImage;
 
         products[productId] = {
+          productId,
+          productKey,
           name: productName,
           lineItemId: id,
           quantity,
@@ -212,8 +222,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setCartId('');
     setShoppingCart(undefined);
   };
+  const getCTCart = async (): Promise<CTResponse> => {
 
-  const getShoppingCart = async (): Promise<CTResponse> => {
     if (!cartId) {
       return new Promise((resolve) =>
         resolve({ ok: false, status: 404, message: 'No Cart ID' })
@@ -240,7 +250,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         cartVersion,
         setCartAfterSignIn,
         unsetCart,
-        getShoppingCart,
+        getCTCart,
+        getShoppingCartProducts,
       }}
     >
       {' '}

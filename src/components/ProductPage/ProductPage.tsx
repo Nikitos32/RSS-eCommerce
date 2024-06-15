@@ -1,4 +1,5 @@
 import { ProductSwiper } from './ProductPageSwiper/ProductSwiper';
+import { PriceProduct } from '../PriceProduct/PriceProduct';
 import { useApiGetProduct, useShoppingCart } from '../../hooks';
 import { useParams } from 'react-router-dom';
 import { ProductAPI } from '../../type/types/productPageType';
