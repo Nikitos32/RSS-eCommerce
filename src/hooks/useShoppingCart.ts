@@ -14,6 +14,8 @@ export const useShoppingCart = () => {
     removeProduct,
     setCartAfterSignIn,
     unsetCart,
+    getCTCart,
+    getShoppingCartProducts,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -34,18 +36,65 @@ export const useShoppingCart = () => {
     setLoading(true);
     const answer = await increaseProductQuantity(productId);
     setOk(answer.ok);
+
     setMessage(answer.message);
+
     if (!answer.ok) {
       toast.error(answer.message);
     }
+
+    setLoading(false);
+  };
+
+  const decreaseProductQuantityHook = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await decreaseProductQuantity(productId);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+  const removeProductHook = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await removeProduct(productId);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+
+  const refreshShoppingCart = async () => {
+    setLoading(true);
+
+    const answer = await getCTCart();
+    setOk(answer.ok);
+
+    setMessage(answer.message as string);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
     setLoading(false);
   };
 
   return {
     getProductQuantity,
     increaseProductQuantity: increaseProductQuantityHook,
-    decreaseProductQuantity,
-    removeProduct,
+    decreaseProductQuantity: decreaseProductQuantityHook,
+    removeProduct: removeProductHook,
     total,
     setCartAfterSignIn: setCartAfterSignInHook,
     unsetCart,
@@ -54,5 +103,7 @@ export const useShoppingCart = () => {
     ok,
     loading,
     message,
+    refreshShoppingCart,
+    getShoppingCartProducts,
   };
 };
