@@ -57,7 +57,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     const empty: ProductInShoppingCart[] = [];
     return products ? Object.values(products) : empty;
   }
-
   function updateShoppingCart(response: GraphQLResponse) {
     const {
       id = '',
@@ -223,8 +222,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setCartId('');
     setShoppingCart(undefined);
   };
-
   const getCTCart = async (): Promise<CTResponse> => {
+
     if (!cartId) {
       return new Promise((resolve) =>
         resolve({ ok: false, status: 404, message: 'No Cart ID' })

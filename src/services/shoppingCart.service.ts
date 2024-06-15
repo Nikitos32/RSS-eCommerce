@@ -1,4 +1,5 @@
 import { CartDraft, Price, TypedMoney } from '@commercetools/platform-sdk';
+
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
@@ -67,6 +68,7 @@ export interface ShoppingCart {
   totalLineItemQuantity: number;
   totalPrice: TypedMoney;
   products: ShoppingCartItem;
+
 }
 
 export class ShoppingCartService {
