@@ -5,7 +5,12 @@ import UserInputString from '../components/UserInputString';
 import { countMoneySum, formatPrice } from '../utils';
 import Spinner from '../components/Spinner';
 import { CartEmpty } from '../components/CartEmpty/CartEmpty';
-import { DiscountOnTotalPrice, TypedMoney } from '@commercetools/platform-sdk';
+import {
+  CartDiscount,
+  DiscountOnTotalPrice,
+  TypedMoney,
+} from '@commercetools/platform-sdk';
+import CartTotalDiscountName from '../components/CartTotalDiscountName';
 
 function Cart() {
   const inputStringInitState = {
@@ -38,9 +43,8 @@ function Cart() {
 
   const [confirmClear, setConfirmClear] = useState(false);
 
-  const { discountedAmount = {} as TypedMoney } = discountOnTotalPrice
-    ? (discountOnTotalPrice as DiscountOnTotalPrice)
-    : {};
+  const { discountedAmount = {} as TypedMoney, includedDiscounts = [] } =
+    discountOnTotalPrice ? (discountOnTotalPrice as DiscountOnTotalPrice) : {};
 
   function ConfirmClear() {
     return (
@@ -108,17 +112,23 @@ function Cart() {
                 disabled={!promoCode.value}
                 onClick={() => {
                   addPromoCode(promoCode.value);
+                  setPromoCode(inputStringInitState);
                 }}
               >
                 Redeem
               </button>
             </div>
-            <div className="mb-2 flex justify-between">
-              <p className="text-moonNeutral-700">Subtotal</p>
-              <p className="text-moonNeutral-700">TBD</p>
-            </div>
+            {includedDiscounts.map((discount) => (
+              <CartTotalDiscountName
+                key={
+                  (discount.discount as unknown as CartDiscount)
+                    .name as unknown as string
+                }
+                discountedTotalPricePortion={discount}
+              />
+            ))}
             <div className="flex justify-between">
-              <p className="text-moonNeutral-700">Sum Discounts</p>
+              <p className="text-moonNeutral-700">Sum Cart Discounts</p>
               <p className="text-moonNeutral-700">
                 - {formatPrice(countMoneySum(discountedAmount))}
               </p>
