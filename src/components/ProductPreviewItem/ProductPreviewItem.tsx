@@ -3,7 +3,7 @@ import '@smastrom/react-rating/style.css';
 import { useState } from 'react';
 import { MdOutlineViewInAr } from 'react-icons/md';
 import { PriceProduct } from '../PriceProduct/PriceProduct';
-import { ProductPrice } from '../../type/types/productPageType';
+import { Price } from '@commercetools/platform-sdk';
 import { Link } from 'react-router-dom';
 import CartControl from '../CartControl';
 
@@ -12,7 +12,7 @@ interface ProductPreviewItemProps {
   productCategory: string;
   productName: string;
   productDescription: string;
-  price: ProductPrice | undefined;
+  price: Price | undefined;
   id: string;
   productId: string;
 }
@@ -49,15 +49,7 @@ export const ProductPreviewItem = ({
       </div>
       <div className="flex w-auto md:w-2/5 flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
-          {price ? (
-            <PriceProduct
-              initialPrice={price.value}
-              discountPrice={price.discounted?.value}
-              discountValue={price.discounted?.discount.value.permyriad}
-            />
-          ) : (
-            'Unavailable'
-          )}
+          {price ? <PriceProduct {...price} /> : 'Unavailable'}
           <Rating
             readOnly
             style={{ maxWidth: 100 }}

@@ -3,7 +3,7 @@ import { EnlargedImageModal } from './EnlargedImageModal/EnlargedImageModal';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Thumbs, Controller, Navigation } from 'swiper/modules';
 import { Swiper as SwiperType } from 'swiper/types';
-import { ImagesProduct } from '../../../type/types/productPageType';
+import { Image } from '@commercetools/platform-sdk';
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/zoom';
@@ -12,7 +12,7 @@ import 'swiper/css/thumbs';
 import './productSwiper.css';
 
 type ProductSwiperProps = {
-  images: ImagesProduct[];
+  images: Image[];
 };
 
 export const ProductSwiper = ({ images }: ProductSwiperProps) => {
