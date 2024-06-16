@@ -77,12 +77,14 @@ export class ShoppingCartService {
     const query = `
       mutation ($cartDraft: CartDraft!) {
         createCart(draft: $cartDraft) {
-          ${CART_DATA_TO_RECEIVE}
+          id
+          version
+          totalLineItemQuantity
         }
       }
     `;
 
-    const variables = { cartDraft, locale: VITE_CTP_LOCALE };
+    const variables = { cartDraft };
 
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
@@ -175,6 +177,27 @@ export class ShoppingCartService {
       quantity,
     };
 
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
+
+  async deleteCart(cartId: string, cartVersion: number): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!) {
+        deleteCart(id: $cartId, version: $cartVersion) {
+          id
+        }
+      }
+    `;
+    const variables = {
+      cartId,
+      cartVersion,
+    };
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
 
