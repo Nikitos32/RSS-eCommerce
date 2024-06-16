@@ -14,11 +14,11 @@ function MainCardsSprint2() {
             <>
               <h2 className="text-2xl font-bold">Promo Code</h2>
               <div className="bg-gradient-to-br from-moonPeach to-moonGreen text-moonBlack text-center rounded-lg shadow-md relative">
-                <div className="flex items-center space-x-2 mb-6">
+                <div className="flex space-x-2 mb-2 px-1 py-1 flex-wrap justify-center items-center">
                   <span className=" mx-1 border-dashed border border-moonBlack text-moonBlack px-4 py-2 rounded-l">
                     {promo}
                   </span>
-                  <p className="mt-2 mb-4">17% flat off on all items in cart</p>
+                  <p className="">17% flat off on all items in cart</p>
                 </div>
               </div>
               <span
