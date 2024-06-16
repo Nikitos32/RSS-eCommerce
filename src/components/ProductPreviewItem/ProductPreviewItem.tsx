@@ -37,13 +37,13 @@ export const ProductPreviewItem = ({
           alt="photo"
           className="size-64 m-auto max-w-none rounded"
         />
-      </div>
-      <div className="flex flex-col w-auto gap-5 pt-3">
-        <p className="text-gray-500">{productCategory}</p>
-        <p className="font-semibold">{productName}</p>
-        <p className="w-full text-gray-500 line-clamp-3">
-          {productDescription}
-        </p>
+        <div className="flex flex-col w-auto gap-5 pt-3">
+          <p className="text-gray-500 h-[72px]">{productCategory}</p>
+          <p className="font-semibold">{productName}</p>
+          <p className="w-full text-gray-500 line-clamp-3">
+            {productDescription}
+          </p>
+        </div>
       </div>
       <div className="flex w-auto flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
