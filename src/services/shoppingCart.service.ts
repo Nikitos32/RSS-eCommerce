@@ -206,4 +206,33 @@ export class ShoppingCartService {
       return CTResponseHandler.handleCatch(error);
     }
   }
+
+  async addDiscountCode(
+    cartId: string,
+    cartVersion: number,
+    promoCode: string
+  ): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!, $locale: Locale, $promoCode: String!, $validateDuplicates:Boolean) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{addDiscountCode: {code: $promoCode, validateDuplicates:$validateDuplicates}}]) {
+          ${CART_DATA_TO_RECEIVE}
+        }
+      }
+    `;
+    const variables = {
+      cartId,
+      cartVersion,
+      promoCode,
+      validateDuplicates: true,
+      locale: VITE_CTP_LOCALE,
+    };
+
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
 }
