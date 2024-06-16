@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useState } from 'react';
 import { FilterSection } from '../FilterSection/FilterSection';
 import { SortSection } from '../SortSection/SortSection';
 import { ProductService } from '../../services';
-import { ProductPrice } from '../../type/types/productPageType';
 import { CTResponse } from '../../ct-client';
 import {
   Category,
@@ -191,8 +190,7 @@ export const CatalogPage = () => {
                     productName={`${element.name ? element.name : ''}`}
                     price={
                       element?.masterVariant.prices
-                        ? (element?.masterVariant
-                            .prices[0] as unknown as ProductPrice)
+                        ? element?.masterVariant.prices[0]
                         : undefined
                     }
                   />

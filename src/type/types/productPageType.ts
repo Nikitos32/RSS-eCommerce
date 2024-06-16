@@ -1,3 +1,5 @@
+import { TypedMoney } from '@commercetools/platform-sdk';
+
 export type ImagesProduct = {
   url: string;
 };
@@ -9,7 +11,7 @@ export type ValuePrice = {
 };
 
 export type ProductPrice = {
-  value: ValuePrice;
+  value: TypedMoney;
   discounted: {
     discount: {
       id: string;
@@ -19,7 +21,7 @@ export type ProductPrice = {
         permyriad: number;
       };
     };
-    value: ValuePrice;
+    value: TypedMoney;
   } | null;
 };
 
