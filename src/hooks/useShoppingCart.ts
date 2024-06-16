@@ -20,6 +20,7 @@ export const useShoppingCart = () => {
     getShoppingCartProducts,
     clearShoppingCart,
     addPromoCode,
+    discountOnTotalPrice,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -151,5 +152,6 @@ export const useShoppingCart = () => {
     getShoppingCartProducts,
     clearShoppingCart: clearShoppingCartHook,
     addPromoCode: addPromoCodeHook,
+    discountOnTotalPrice,
   };
 };

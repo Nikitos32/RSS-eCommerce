@@ -4,6 +4,7 @@ import { ShoppingCartService } from '../services';
 import { CTResponse, HttpStatusCode } from '../ct-client';
 import {
   CustomerSignInResult,
+  DiscountOnTotalPrice,
   GraphQLResponse,
   Image,
   LineItem,
@@ -35,6 +36,7 @@ type ShoppingCartContextType = {
   getShoppingCartProducts: () => ProductInShoppingCart[];
   clearShoppingCart: () => Promise<CTResponse>;
   addPromoCode: (promoCode: string) => Promise<CTResponse>;
+  discountOnTotalPrice: DiscountOnTotalPrice | undefined;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -62,6 +64,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const cartId = activeCartId;
   const cartVersion = shoppingCart?.version || 0;
   const totalPrice = shoppingCart?.totalPrice || ({} as TypedMoney);
+  const discountOnTotalPrice = shoppingCart?.discountOnTotalPrice;
 
   function getProductQuantity(productId: string) {
     const product = shoppingCart?.products[productId];
@@ -80,6 +83,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       totalLineItemQuantity = 0,
       totalPrice = null,
       lineItems = [],
+      discountOnTotalPrice,
     } = response.data.updateCart ||
     response.data.createCart ||
     response.data.cart;
@@ -122,6 +126,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       version,
       totalPrice,
       totalLineItemQuantity,
+      discountOnTotalPrice,
       products,
     };
 
@@ -325,6 +330,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         getShoppingCartProducts,
         clearShoppingCart,
         addPromoCode,
+        discountOnTotalPrice,
       }}
     >
       {' '}
