@@ -5,6 +5,7 @@ import UserInputString from '../components/UserInputString';
 import { countMoneySum, formatPrice } from '../utils';
 import Spinner from '../components/Spinner';
 import { CartEmpty } from '../components/CartEmpty/CartEmpty';
+import { DiscountOnTotalPrice, TypedMoney } from '@commercetools/platform-sdk';
 
 function Cart() {
   const inputStringInitState = {
@@ -22,6 +23,7 @@ function Cart() {
     loading,
     clearShoppingCart,
     addPromoCode,
+    discountOnTotalPrice,
   } = useShoppingCart();
 
   useEffect(() => {
@@ -35,6 +37,10 @@ function Cart() {
   const [promoCode, setPromoCode] = useState(inputStringInitState);
 
   const [confirmClear, setConfirmClear] = useState(false);
+
+  const { discountedAmount = {} as TypedMoney } = discountOnTotalPrice
+    ? (discountOnTotalPrice as DiscountOnTotalPrice)
+    : {};
 
   function ConfirmClear() {
     return (
@@ -112,8 +118,10 @@ function Cart() {
               <p className="text-moonNeutral-700">TBD</p>
             </div>
             <div className="flex justify-between">
-              <p className="text-moonNeutral-700">Shipping</p>
-              <p className="text-moonNeutral-700">TBD</p>
+              <p className="text-moonNeutral-700">Sum Discounts</p>
+              <p className="text-moonNeutral-700">
+                - {formatPrice(countMoneySum(discountedAmount))}
+              </p>
             </div>
             <hr className="my-4" />
             <div className="flex justify-between">
