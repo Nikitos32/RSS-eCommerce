@@ -183,4 +183,25 @@ export class ShoppingCartService {
       return CTResponseHandler.handleCatch(error);
     }
   }
+
+  async deleteCart(cartId: string, cartVersion: number): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!) {
+        deleteCart(id: $cartId, version: $cartVersion) {
+          id
+        }
+      }
+    `;
+    const variables = {
+      cartId,
+      cartVersion,
+    };
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
 }
