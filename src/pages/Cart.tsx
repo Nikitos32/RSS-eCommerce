@@ -4,6 +4,7 @@ import CartItem from '../components/CartItem';
 import UserInputString from '../components/UserInputString';
 import { countMoneySum, formatPrice } from '../utils';
 import Spinner from '../components/Spinner';
+import { CartEmpty } from '../components/CartEmpty/CartEmpty';
 
 function Cart() {
   const inputStringInitState = {
@@ -31,9 +32,7 @@ function Cart() {
     <section className="bg-moonNeutral-200 pt-5">
       <h1 className="mb-5 text-center text-2xl font-bold">Cart Items</h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
-        {!loading && isCartEmpty && (
-          <div className="rounded-lg"> TODO Add Link</div>
-        )}
+        {!loading && isCartEmpty && <CartEmpty />}
         {!isCartEmpty && (
           <div className="rounded-lg md:w-2/3">
             {products.map((product) => (
