@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useState } from 'react';
-import { useLocalStorage } from '../hooks';
+import { useAuth, useLocalStorage } from '../hooks';
 import { ShoppingCartService } from '../services';
 import { CTResponse, HttpStatusCode } from '../ct-client';
 import {
@@ -33,6 +33,7 @@ type ShoppingCartContextType = {
   unsetCart: () => void;
   getCTCart: () => Promise<CTResponse>;
   getShoppingCartProducts: () => ProductInShoppingCart[];
+  clearShoppingCart: () => Promise<CTResponse>;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -54,6 +55,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       message: 'Concurrent request. Please try again.',
     })
   );
+
+  const { authenticated, customerId } = useAuth();
 
   const cartId = activeCartId;
   const cartVersion = shoppingCart?.version || 0;
@@ -254,6 +257,39 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     return cartResponse;
   };
 
+  const clearShoppingCart = async (): Promise<CTResponse> => {
+    const answerDelete = await shoppingCartService.deleteCart(
+      cartId,
+      cartVersion
+    );
+
+    if (!answerDelete.ok) {
+      return answerDelete;
+    }
+
+    unsetCart();
+
+    if (authenticated) {
+      const newCartResponse =
+        await shoppingCartService.createCartForCustomer(customerId);
+      if (newCartResponse.ok) {
+        const newCart = newCartResponse.data as GraphQLResponse;
+        updateShoppingCart(newCart);
+        setCartId(newCart.data.createCart.id);
+      }
+
+      return newCartResponse;
+    }
+
+    return new Promise<CTResponse>((resolve) =>
+      resolve({
+        ok: false,
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Todo cart for anonymous.',
+      })
+    );
+  };
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -270,6 +306,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         unsetCart,
         getCTCart,
         getShoppingCartProducts,
+        clearShoppingCart,
       }}
     >
       {' '}

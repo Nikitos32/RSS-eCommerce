@@ -18,6 +18,7 @@ export const useShoppingCart = () => {
     unsetCart,
     getCTCart,
     getShoppingCartProducts,
+    clearShoppingCart,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -99,6 +100,18 @@ export const useShoppingCart = () => {
 
     setLoading(false);
   };
+  const clearShoppingCartHook = async () => {
+    setLoading(true);
+    const answer = await clearShoppingCart();
+    setOk(answer.ok);
+
+    setMessage(answer.message as string);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+    setLoading(false);
+  };
 
   return {
     getProductQuantity,
@@ -116,5 +129,6 @@ export const useShoppingCart = () => {
     message,
     refreshShoppingCart,
     getShoppingCartProducts,
+    clearShoppingCart: clearShoppingCartHook,
   };
 };
