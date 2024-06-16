@@ -1,0 +1,23 @@
+.catalogShowcase__product{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 550px) {
+  .catalogShowcase__product{
+    width: calc(50% - 0.5rem);
+  }
+}
+
+@media (min-width: 768px) {
+  .catalogShowcase__product{
+    width: calc(33% - 0.5rem);
+  }
+}
+
+@media (min-width: 1800px) {
+  .catalogShowcase__product{
+    width: calc(25% - 0.5rem);
+  }
+}
