@@ -8,6 +8,18 @@ function MainCardsSprint2() {
     <section className="py-4">
       <div className="container-xl lg:container m-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-lg">
+          <Card bg="bg-moonNeutral-300">
+            <>
+              <h2 className="text-2xl font-bold">Shopping Cart</h2>
+              <p className="mt-2 mb-4">Make the final purchase decision</p>
+              <Link
+                to="./cart"
+                className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700"
+              >
+                To Checkout
+              </Link>
+            </>
+          </Card>
           <Card>
             <>
               <h2 className="text-2xl font-bold">Catalog</h2>
