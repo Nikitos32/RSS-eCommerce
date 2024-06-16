@@ -1,12 +1,13 @@
 import { ReactNode, createContext, useState } from 'react';
 import { useLocalStorage } from '../hooks';
 import { ShoppingCartService } from '../services';
-import { CTResponse } from '../ct-client';
+import { CTResponse, HttpStatusCode } from '../ct-client';
 import {
   CustomerSignInResult,
   GraphQLResponse,
   Image,
   LineItem,
+  TypedMoney,
 } from '@commercetools/platform-sdk';
 import {
   ShoppingCartItem,
@@ -24,6 +25,7 @@ type ShoppingCartContextType = {
   decreaseProductQuantity: (productId: string) => Promise<CTResponse>;
   removeProduct: (productId: string) => Promise<CTResponse>;
   total: number;
+  totalPrice: TypedMoney;
   setCartId: (activeCartId: string) => void;
   cartId: string;
   cartVersion: number;
@@ -44,8 +46,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
 
   const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
 
+  const [updateInProgress, setUpdateInProgress] = useState(false);
+  const answerUpdateInProgress = new Promise<CTResponse>((resolve) =>
+    resolve({
+      ok: false,
+      status: HttpStatusCode.IM_USED_226,
+      message: 'Concurrent request. Please try again.',
+    })
+  );
+
   const cartId = activeCartId;
   const cartVersion = shoppingCart?.version || 0;
+  const totalPrice = shoppingCart?.totalPrice || ({} as TypedMoney);
 
   function getProductQuantity(productId: string) {
     const product = shoppingCart?.products[productId];
@@ -116,12 +128,18 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     lineItemId: string,
     quantity: number
   ): Promise<CTResponse> {
+    if (updateInProgress) {
+      return answerUpdateInProgress;
+    }
+
+    setUpdateInProgress(true);
     const answer = await shoppingCartService.changeLineItemQuantity(
       cartId,
       cartVersion,
       lineItemId,
       quantity > 0 ? quantity : 0
     );
+    setUpdateInProgress(false);
 
     if (!answer.ok) {
       return answer;
@@ -223,7 +241,6 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setShoppingCart(undefined);
   };
   const getCTCart = async (): Promise<CTResponse> => {
-
     if (!cartId) {
       return new Promise((resolve) =>
         resolve({ ok: false, status: 404, message: 'No Cart ID' })
@@ -245,6 +262,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         decreaseProductQuantity,
         removeProduct,
         total,
+        totalPrice,
         cartId,
         setCartId,
         cartVersion,

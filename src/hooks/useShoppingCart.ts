@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { ShoppingCartContext } from '../context/ShoppingCartProvider';
 import { CustomerSignInResult } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
+import { HttpStatusCode } from '../ct-client';
 
 export const useShoppingCart = () => {
   const {
@@ -11,6 +12,7 @@ export const useShoppingCart = () => {
     increaseProductQuantity,
     decreaseProductQuantity,
     total,
+    totalPrice,
     removeProduct,
     setCartAfterSignIn,
     unsetCart,
@@ -40,7 +42,11 @@ export const useShoppingCart = () => {
     setMessage(answer.message);
 
     if (!answer.ok) {
-      toast.error(answer.message);
+      if (answer.status === HttpStatusCode.IM_USED_226) {
+        toast.warning(answer.message);
+      } else {
+        toast.error(answer.message);
+      }
     }
 
     setLoading(false);
@@ -55,7 +61,11 @@ export const useShoppingCart = () => {
     setMessage(answer.message);
 
     if (!answer.ok) {
-      toast.error(answer.message);
+      if (answer.status === HttpStatusCode.IM_USED_226) {
+        toast.warning(answer.message);
+      } else {
+        toast.error(answer.message);
+      }
     }
 
     setLoading(false);
@@ -96,6 +106,7 @@ export const useShoppingCart = () => {
     decreaseProductQuantity: decreaseProductQuantityHook,
     removeProduct: removeProductHook,
     total,
+    totalPrice,
     setCartAfterSignIn: setCartAfterSignInHook,
     unsetCart,
     cartVersion,

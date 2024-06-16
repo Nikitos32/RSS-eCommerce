@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useShoppingCart } from '../hooks';
 import CartItem from '../components/CartItem';
 import UserInputString from '../components/UserInputString';
+import { countMoneySum, formatPrice } from '../utils';
+import Spinner from '../components/Spinner';
 
 function Cart() {
   const inputStringInitState = {
@@ -12,7 +14,8 @@ function Cart() {
     readonly: false,
   };
 
-  const { refreshShoppingCart, getShoppingCartProducts } = useShoppingCart();
+  const { refreshShoppingCart, getShoppingCartProducts, totalPrice, loading } =
+    useShoppingCart();
 
   useEffect(() => {
     refreshShoppingCart();
@@ -28,7 +31,9 @@ function Cart() {
     <section className="bg-moonNeutral-200 pt-5">
       <h1 className="mb-5 text-center text-2xl font-bold">Cart Items</h1>
       <div className="mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0">
-        {isCartEmpty && <div className="rounded-lg"> TODO Add Link</div>}
+        {!loading && isCartEmpty && (
+          <div className="rounded-lg"> TODO Add Link</div>
+        )}
         {!isCartEmpty && (
           <div className="rounded-lg md:w-2/3">
             {products.map((product) => (
@@ -60,17 +65,19 @@ function Cart() {
             </div>
             <div className="mb-2 flex justify-between">
               <p className="text-moonNeutral-700">Subtotal</p>
-              <p className="text-moonNeutral-700">$129.99</p>
+              <p className="text-moonNeutral-700">TBD</p>
             </div>
             <div className="flex justify-between">
               <p className="text-moonNeutral-700">Shipping</p>
-              <p className="text-moonNeutral-700">$4.99</p>
+              <p className="text-moonNeutral-700">TBD</p>
             </div>
             <hr className="my-4" />
             <div className="flex justify-between">
               <p className="text-lg font-bold">Total</p>
               <div className="">
-                <p className="mb-1 text-lg font-bold">$134.98</p>
+                <p className="mb-1 text-lg font-bold">
+                  {formatPrice(countMoneySum(totalPrice))}
+                </p>
                 <p className="text-sm text-moonNeutral-700">including VAT</p>
               </div>
             </div>
@@ -80,6 +87,7 @@ function Cart() {
           </div>
         )}
       </div>
+      <Spinner isLoading={loading} />
     </section>
   );
 }
