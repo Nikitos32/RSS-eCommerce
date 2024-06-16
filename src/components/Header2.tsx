@@ -92,7 +92,7 @@ function Header2() {
 
   return (
     <article style={{ height: '58px' }} className="w-full">
-      <header className="flex fixed w-screen z-50 flex-row items-center justify-between sm:justify-around p-2 border-b-2 bg-moonNeutral-100 text-moonNeutral-800">
+      <header className="flex fixed w-screen z-40 flex-row items-center justify-between sm:justify-around p-2 border-b-2 bg-moonNeutral-100 text-moonNeutral-800">
         <Logo />
         <nav className="text-lg hidden sm:flex justify-between items-center gap-4 font-semibold">
           <Links />
