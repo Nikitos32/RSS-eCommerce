@@ -19,6 +19,7 @@ export const useShoppingCart = () => {
     getCTCart,
     getShoppingCartProducts,
     clearShoppingCart,
+    addPromoCode,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -100,6 +101,7 @@ export const useShoppingCart = () => {
 
     setLoading(false);
   };
+
   const clearShoppingCartHook = async () => {
     setLoading(true);
     const answer = await clearShoppingCart();
@@ -110,6 +112,24 @@ export const useShoppingCart = () => {
     if (!answer.ok) {
       toast.error(answer.message);
     }
+    setLoading(false);
+  };
+
+  const addPromoCodeHook = async (promoCode: string) => {
+    setLoading(true);
+
+    const answer = await addPromoCode(promoCode);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+    if (answer.ok) {
+      toast.success(`Promo Code ${promoCode} applied!`);
+    }
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
     setLoading(false);
   };
 
@@ -130,5 +150,6 @@ export const useShoppingCart = () => {
     refreshShoppingCart,
     getShoppingCartProducts,
     clearShoppingCart: clearShoppingCartHook,
+    addPromoCode: addPromoCodeHook,
   };
 };

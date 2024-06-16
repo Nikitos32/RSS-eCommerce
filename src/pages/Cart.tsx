@@ -21,6 +21,7 @@ function Cart() {
     totalPrice,
     loading,
     clearShoppingCart,
+    addPromoCode,
   } = useShoppingCart();
 
   useEffect(() => {
@@ -99,6 +100,9 @@ function Cart() {
                 className="bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500 disabled:cursor-not-allowed self-end"
                 type="button"
                 disabled={!promoCode.value}
+                onClick={() => {
+                  addPromoCode(promoCode.value);
+                }}
               >
                 Redeem
               </button>
