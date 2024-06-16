@@ -118,6 +118,14 @@ function Cart() {
                 Redeem
               </button>
             </div>
+            <div className="flex justify-between text-lg">
+              <p className="text-moonNeutral-700">Sub Total</p>
+              <p className="text-moonNeutral-700">
+                {formatPrice(
+                  countMoneySum(discountedAmount) + countMoneySum(totalPrice)
+                )}
+              </p>
+            </div>
             {includedDiscounts.map((discount) => (
               <CartTotalDiscountName
                 key={
@@ -127,10 +135,10 @@ function Cart() {
                 discountedTotalPricePortion={discount}
               />
             ))}
-            <div className="flex justify-between">
+            <div className="flex justify-between text-lg">
               <p className="text-moonNeutral-700">Sum Cart Discounts</p>
               <p className="text-moonNeutral-700">
-                - {formatPrice(countMoneySum(discountedAmount))}
+                -{formatPrice(countMoneySum(discountedAmount))}
               </p>
             </div>
             <hr className="my-4" />
