@@ -164,38 +164,40 @@ export const CatalogPage = () => {
                 </p>
               }
             >
-              {products?.productProjectionSearch.results.map((element) => {
-                return (
-                  <ProductPreviewItem
-                    productId={element.id}
-                    key={element.key}
-                    id={element.key ? element.key : ''}
-                    imgUrl={
-                      element.masterVariant.images
-                        ? element.masterVariant.images[0].url
-                        : ''
-                    }
-                    productCategory={`${
-                      element.categories[0]
-                        ? element.categories.map((element) => {
-                            return ` ${(element as unknown as Category).name}`;
-                          })
-                        : 'no category'
-                    }`}
-                    productDescription={
-                      element.description
-                        ? `${element.description}`
-                        : 'no description'
-                    }
-                    productName={`${element.name ? element.name : ''}`}
-                    price={
-                      element?.masterVariant.prices
-                        ? element?.masterVariant.prices[0]
-                        : undefined
-                    }
-                  />
-                );
-              })}
+              <div className="flex flex-wrap gap-2">
+                {products?.productProjectionSearch.results.map((element) => {
+                  return (
+                    <ProductPreviewItem
+                      productId={element.id}
+                      key={element.key}
+                      id={element.key ? element.key : ''}
+                      imgUrl={
+                        element.masterVariant.images
+                          ? element.masterVariant.images[0].url
+                          : ''
+                      }
+                      productCategory={`${
+                        element.categories[0]
+                          ? element.categories.map((element) => {
+                              return ` ${(element as unknown as Category).name}`;
+                            })
+                          : 'no category'
+                      }`}
+                      productDescription={
+                        element.description
+                          ? `${element.description}`
+                          : 'no description'
+                      }
+                      productName={`${element.name ? element.name : ''}`}
+                      price={
+                        element?.masterVariant.prices
+                          ? element?.masterVariant.prices[0]
+                          : undefined
+                      }
+                    />
+                  );
+                })}
+              </div>
             </InfiniteScroll>
             {currentScroll > 1000 ? (
               <button
