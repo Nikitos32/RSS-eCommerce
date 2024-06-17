@@ -2,13 +2,19 @@ import rsLogo from '/svg/RSlogo.svg';
 
 const persons = [
   {
-    name: 'Borvinko Vlad',
-    role: 'Frontend Developer',
+    name: 'Barvinko Vlad',
+    role: 'Software Engineer',
+    biography: (
+      <>
+        <p>Master`s Degree</p>
+        <p>&rdquo;Software Engineering&rdquo;</p>
+      </>
+    ),
     description: [
-      `color palette`,
       `Registration Page`,
       `Product Page`,
-      `price component`,
+      `Price component`,
+      `adaptive design`,
       `commercetools`,
       `discounts`,
       'GraphQL requests',
@@ -21,7 +27,13 @@ const persons = [
   },
   {
     name: 'Dundzer Nikita',
-    role: 'I am 21 years old, studying at BSUIR in the 4th year',
+    role: 'Software Engineer',
+    biography: (
+      <>
+        <p>I am 21 years old</p>
+        <p>studying at BSUIR in the 4th year</p>
+      </>
+    ),
     description: [
       'Login Page',
       'site deployment',
@@ -38,9 +50,9 @@ const persons = [
   },
   {
     name: 'Usov Dima',
-    role: 'Career Shift',
+    role: 'Team Lead',
+    biography: 'Career Shift',
     description: [
-      `Team Lead`,
       `navigation`,
       `Main Page`,
       `Profile Page`,
@@ -108,13 +120,18 @@ function About() {
                       alt={person.name}
                     />
                   </p>
-                  <div className="p-5 sm:w-1/2 xl:w-auto">
+                  <div className="flex flex-col p-5 sm:w-1/2 xl:w-auto">
                     <h3 className="text-xl font-bold tracking-tight text-moonBlack dark:text-white">
                       {person.name}
                     </h3>
                     {person.role && (
                       <span className="text-moonNeutral-600 dark:text-gray-400">
                         {person.role}
+                      </span>
+                    )}
+                    {person.biography && (
+                      <span className="text-moonNeutral-600 dark:text-gray-400">
+                        {person.biography}
                       </span>
                     )}
                     <ul className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
