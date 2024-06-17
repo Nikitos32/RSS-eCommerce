@@ -11,7 +11,6 @@ import { ProductPreviewItem } from '../ProductPreviewItem/ProductPreviewItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { IoIosArrowUp } from 'react-icons/io';
 import { animateScroll as scroll } from 'react-scroll';
-import Spinner from '../Spinner';
 import { Oval } from 'react-loader-spinner';
 import './catalogPage.css';
 
@@ -25,7 +24,7 @@ export const CatalogPage = () => {
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
   const [currentCategories, setCurrentCategories] = useState<string[]>([]);
-  const [currentLimit, setCurrentLimit] = useState<number>(13);
+  const [currentLimit, setCurrentLimit] = useState<number>(9);
   const [currentScroll, setCurrentScroll] = useState<number>(0);
 
   const [products, setProducts] = useState<ProductProjectionResponse>({
@@ -47,7 +46,7 @@ export const CatalogPage = () => {
   ]);
 
   const handleCurrentLimit = () => {
-    setCurrentLimit((prevState) => prevState + 13);
+    setCurrentLimit((prevState) => prevState + 9);
   };
 
   const handleRangeSlider = (event: number | number[]) => {
@@ -152,7 +151,7 @@ export const CatalogPage = () => {
                 products.productProjectionSearch.total
               }
               scrollThreshold={1}
-              loader={<Spinner isLoading={true} />}
+              loader={<p></p>}
               endMessage={
                 <p
                   style={{
