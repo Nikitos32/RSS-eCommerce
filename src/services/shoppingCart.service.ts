@@ -1,4 +1,9 @@
-import { CartDraft, Price, TypedMoney } from '@commercetools/platform-sdk';
+import {
+  CartDraft,
+  DiscountOnTotalPrice,
+  Price,
+  TypedMoney,
+} from '@commercetools/platform-sdk';
 
 import { CTResponse, CTResponseHandler } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
@@ -46,6 +51,23 @@ const CART_DATA_TO_RECEIVE = `
       }
     }
   }
+  discountOnTotalPrice {
+    discountedAmount {
+      centAmount
+      fractionDigits
+      currencyCode
+    }
+    includedDiscounts {
+      discount {
+        name(locale: $locale)
+      }
+      discountedAmount {
+        fractionDigits
+        centAmount
+        currencyCode
+      }
+    }
+  }
 `;
 
 export interface ProductInShoppingCart {
@@ -67,6 +89,7 @@ export interface ShoppingCart {
   version: number;
   totalLineItemQuantity: number;
   totalPrice: TypedMoney;
+  discountOnTotalPrice: DiscountOnTotalPrice;
   products: ShoppingCartItem;
 }
 
@@ -198,6 +221,35 @@ export class ShoppingCartService {
       cartId,
       cartVersion,
     };
+    try {
+      const answer = await this.graphqlRequest.make({ query, variables });
+
+      return CTResponseHandler.handleGraphql(answer);
+    } catch (error) {
+      return CTResponseHandler.handleCatch(error);
+    }
+  }
+
+  async addDiscountCode(
+    cartId: string,
+    cartVersion: number,
+    promoCode: string
+  ): Promise<CTResponse> {
+    const query = `
+      mutation ($cartId: String, $cartVersion: Long!, $locale: Locale, $promoCode: String!, $validateDuplicates:Boolean) {
+        updateCart(id: $cartId, version: $cartVersion, actions: [{addDiscountCode: {code: $promoCode, validateDuplicates:$validateDuplicates}}]) {
+          ${CART_DATA_TO_RECEIVE}
+        }
+      }
+    `;
+    const variables = {
+      cartId,
+      cartVersion,
+      promoCode,
+      validateDuplicates: true,
+      locale: VITE_CTP_LOCALE,
+    };
+
     try {
       const answer = await this.graphqlRequest.make({ query, variables });
 

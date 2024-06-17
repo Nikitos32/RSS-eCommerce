@@ -4,6 +4,7 @@ import { ShoppingCartService } from '../services';
 import { CTResponse, HttpStatusCode } from '../ct-client';
 import {
   CustomerSignInResult,
+  DiscountOnTotalPrice,
   GraphQLResponse,
   Image,
   LineItem,
@@ -34,6 +35,8 @@ type ShoppingCartContextType = {
   getCTCart: () => Promise<CTResponse>;
   getShoppingCartProducts: () => ProductInShoppingCart[];
   clearShoppingCart: () => Promise<CTResponse>;
+  addPromoCode: (promoCode: string) => Promise<CTResponse>;
+  discountOnTotalPrice: DiscountOnTotalPrice | undefined;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -61,6 +64,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
   const cartId = activeCartId;
   const cartVersion = shoppingCart?.version || 0;
   const totalPrice = shoppingCart?.totalPrice || ({} as TypedMoney);
+  const discountOnTotalPrice = shoppingCart?.discountOnTotalPrice;
 
   function getProductQuantity(productId: string) {
     const product = shoppingCart?.products[productId];
@@ -79,6 +83,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       totalLineItemQuantity = 0,
       totalPrice = null,
       lineItems = [],
+      discountOnTotalPrice,
     } = response.data.updateCart ||
     response.data.createCart ||
     response.data.cart;
@@ -121,6 +126,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       version,
       totalPrice,
       totalLineItemQuantity,
+      discountOnTotalPrice,
       products,
     };
 
@@ -290,6 +296,22 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     );
   };
 
+  const addPromoCode = async (promoCode: string): Promise<CTResponse> => {
+    const answer = await shoppingCartService.addDiscountCode(
+      cartId,
+      cartVersion,
+      promoCode
+    );
+
+    if (!answer.ok) {
+      return answer;
+    }
+    const response = answer.data as GraphQLResponse;
+    updateShoppingCart(response);
+
+    return answer;
+  };
+
   return (
     <ShoppingCartContext.Provider
       value={{
@@ -307,6 +329,8 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         getCTCart,
         getShoppingCartProducts,
         clearShoppingCart,
+        addPromoCode,
+        discountOnTotalPrice,
       }}
     >
       {' '}
