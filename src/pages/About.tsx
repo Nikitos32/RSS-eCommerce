@@ -1,3 +1,5 @@
+import rsLogo from '/svg/RSlogo.svg';
+
 const persons = [
   {
     name: 'Borvinko Vlad',
@@ -19,7 +21,7 @@ const persons = [
   },
   {
     name: 'Dundzer Nikita',
-    role: 'Frontend Developer',
+    role: 'I am 21 years old, studying at BSUIR in the 4th year',
     description: [
       'Login Page',
       'site deployment',
@@ -28,7 +30,7 @@ const persons = [
       `search & filter`,
       'GraphQL requests',
     ],
-    photo: 'https://picsum.photos/105/',
+    photo: '/img/nikita.jpg',
     github: 'https://github.com/Nikitos32',
     twitter: '',
     facebook: '',
@@ -47,7 +49,7 @@ const persons = [
       'Shopping Cart',
       `About Page`,
     ],
-    photo: 'https://picsum.photos/104/',
+    photo: '/img/dima.jpg',
     github: 'https://github.com/DmirtyUsov',
     twitter: '',
     facebook: '',
@@ -64,16 +66,38 @@ function About() {
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-moonBlack dark:text-white">
               Our Team
             </h2>
-            <p className="font-light text-moonNeutral-600 lg:mb-16 sm:text-xl dark:text-gray-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque iaculis ultricies augue non eleifend. In hac
-              habitasse platea dictumst. Aliquam dui nibh, porta et maximus et,
-              consequat sed dui. Pellentesque consequat aliquet varius.
-              Curabitur commodo pulvinar purus, nec pretium nisl tincidunt sit
-              amet.
-            </p>
+            <article className="font-light text-moonNeutral-600 lg:mb-16 sm:text-xl dark:text-gray-400">
+              <p>
+                Welcome to eCommerce Application by
+                <span className="font-bold"> Random Twenty Team</span>
+                <br /> final project for{' '}
+                <a href="https://rs.school/" className="underline">
+                  <img
+                    src={rsLogo}
+                    alt="RS School Logo"
+                    className="w-6 inline"
+                  />{' '}
+                  RS School{' '}
+                </a>
+                JavaScript/Front-end 2023Q4 course.
+              </p>
+              <p className="text-justify py-2">
+                Our team was randomly formed. Nikita suggested using React.
+                Other members were hesitant because they had little or no
+                experience with the framework. But in the end it was a wise
+                decision. It really simplifies our development if we understand
+                and follow the React way.
+              </p>
+              <p className="text-justify py-2">
+                Vlad has found examples of website design and products.
+              </p>
+              <p className="text-justify py-2">
+                During his studies, Dima learned about the utility-first CSS
+                approach and became a Tailwind ambassador for our project.{' '}
+              </p>
+            </article>
           </div>
-          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-3">
+          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-2">
             {persons.map((person) => (
               <li key={person.name}>
                 <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
