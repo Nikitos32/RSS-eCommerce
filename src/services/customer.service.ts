@@ -348,6 +348,7 @@ export class CustomerService {
       return CTResponseHandler.makeError(
         HttpStatusCode.NO_CONTENT_204,
         'No address to delete',
+        undefined
       );
     }
 
