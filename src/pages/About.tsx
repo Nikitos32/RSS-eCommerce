@@ -1,9 +1,18 @@
+import rsLogo from '/svg/RSlogo.svg';
+
 const persons = [
   {
-    name: 'Vlad',
-    role: 'Frontend developer',
-    description:
-      'Participated in the creation of the registration page, beautiful interfaces, the detailed product page, developed a shopping cart page, and also worked with the commercetools api',
+    name: 'Borvinko Vlad',
+    role: 'Frontend Developer',
+    description: [
+      `color palette`,
+      `Registration Page`,
+      `Product Page`,
+      `price component`,
+      `commercetools`,
+      `discounts`,
+      'GraphQL requests',
+    ],
     photo: 'https://picsum.photos/100/',
     github: 'https://github.com/Barvinko',
     twitter: '',
@@ -11,23 +20,37 @@ const persons = [
     web: '',
   },
   {
-    name: 'Dima Usov',
-    role: 'Frontend developer',
-    description:
-      "Participated in the creation of the user's page, site navigation, developed interfaces for the main page, and also developed the shopping cart page using the commercetools api",
-    photo: 'https://picsum.photos/102/',
-    github: 'https://github.com/DmirtyUsov',
+    name: 'Dundzer Nikita',
+    role: 'I am 21 years old, studying at BSUIR in the 4th year',
+    description: [
+      'Login Page',
+      'site deployment',
+      `Catalog Page`,
+      `commercetools`,
+      `search & filter`,
+      'GraphQL requests',
+    ],
+    photo: '/img/nikita.jpg',
+    github: 'https://github.com/Nikitos32',
     twitter: '',
     facebook: '',
     web: '',
   },
   {
-    name: 'Nikita',
-    role: 'I am 21 years old, studying at BSUIR in the 4th year',
-    description:
-      'Created the login page, catalog, participated in development of interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
-    photo: '/img/nikita.jpg',
-    github: 'https://github.com/Nikitos32',
+    name: 'Usov Dima',
+    role: 'Career Shift',
+    description: [
+      `Team Lead`,
+      `navigation`,
+      `Main Page`,
+      `Profile Page`,
+      `cоmmercetools`,
+      `integration`,
+      'Shopping Cart',
+      `About Page`,
+    ],
+    photo: '/img/dima.jpg',
+    github: 'https://github.com/DmirtyUsov',
     twitter: '',
     facebook: '',
     web: '',
@@ -43,16 +66,38 @@ function About() {
             <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-moonBlack dark:text-white">
               Our Team
             </h2>
-            <p className="font-light text-moonNeutral-600 lg:mb-16 sm:text-xl dark:text-gray-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque iaculis ultricies augue non eleifend. In hac
-              habitasse platea dictumst. Aliquam dui nibh, porta et maximus et,
-              consequat sed dui. Pellentesque consequat aliquet varius.
-              Curabitur commodo pulvinar purus, nec pretium nisl tincidunt sit
-              amet.
-            </p>
+            <article className="font-light text-moonNeutral-600 lg:mb-16 sm:text-xl dark:text-gray-400">
+              <p>
+                Welcome to eCommerce Application by
+                <span className="font-bold"> Random Twenty Team</span>
+                <br /> final project for{' '}
+                <a href="https://rs.school/" className="underline">
+                  <img
+                    src={rsLogo}
+                    alt="RS School Logo"
+                    className="w-6 inline"
+                  />{' '}
+                  RS School{' '}
+                </a>
+                JavaScript/Front-end 2023Q4 course.
+              </p>
+              <p className="text-justify py-2">
+                Our team was randomly formed. Nikita suggested using React.
+                Other members were hesitant because they had little or no
+                experience with the framework. But in the end it was a wise
+                decision. It really simplifies our development if we understand
+                and follow the React way.
+              </p>
+              <p className="text-justify py-2">
+                Vlad has found examples of website design and products.
+              </p>
+              <p className="text-justify py-2">
+                During his studies, Dima learned about the utility-first CSS
+                approach and became a Tailwind ambassador for our project.{' '}
+              </p>
+            </article>
           </div>
-          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-3">
+          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-2">
             {persons.map((person) => (
               <li key={person.name}>
                 <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
@@ -72,9 +117,16 @@ function About() {
                         {person.role}
                       </span>
                     )}
-                    <p className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
-                      {person.description}
-                    </p>
+                    <ul className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
+                      {person.description.map((item) => (
+                        <li
+                          key={item}
+                          className=" font-light text-moonNeutral-600 dark:text-gray-400"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                     <ul className="flex space-x-4 sm:mt-0">
                       {person.github && (
                         <li>
