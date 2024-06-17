@@ -57,7 +57,7 @@ function Cart() {
             setConfirmClear(false);
           }}
         >
-          Confirm Clear All
+          Confirm Clear Cart
         </button>
         <button
           className="mx-1 my-2 bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500"
@@ -79,7 +79,7 @@ function Cart() {
           type="button"
           onClick={() => setConfirmClear(true)}
         >
-          Clear All
+          Clear Cart
         </button>
       )}
       {confirmClear && <ConfirmClear />}
