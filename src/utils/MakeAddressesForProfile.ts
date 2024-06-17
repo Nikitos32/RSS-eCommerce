@@ -4,7 +4,7 @@ export type AddressForProfile = {
   id: string;
   isShipping: boolean;
   isBilling: boolean;
-  isDefault: boolean; // if isDefault=true then only one must be true! isBilling or isShipping
+  isDefault: boolean;
   strAddress: string;
 };
 

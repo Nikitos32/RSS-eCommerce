@@ -28,20 +28,17 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
-        {/* public routes */}
         <Route index element={<MainPage />} />
         <Route path="/product/:key" element={<ProductPage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/about" element={<About />} />
 
-        {/*Only Not Authorized */}
         <Route element={<NotRequireAuth />}>
           <Route path="/signin" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
         </Route>
 
-        {/* Only Authorized */}
         <Route element={<RequireAuth />}>
           <Route path="/profile" element={<Profile />} />
           <Route

@@ -1,7 +1,6 @@
 import { ProductData } from '@commercetools/platform-sdk';
 export const ProductsSet: ProductData[] = [
   {
-    //https://www.wayfair.com/furniture/pdp/gracie-oaks-inelda-mid-century-upholstered-side-chair-farmhouse-dining-chairs-with-wood-legs-w008098064.html
     name: {
       'en-US': 'Upholstered chair with wooden legs',
     },
@@ -84,7 +83,6 @@ export const ProductsSet: ProductData[] = [
     searchKeywords: {},
   },
   {
-    // https://virtualmuebles.com/products/kit-por-4-sillas-eames-patas-en-madera-para-comedor-sala-restaurante-amarillas
     name: {
       'en-US': 'Chair with wooden legs',
     },
@@ -167,7 +165,6 @@ export const ProductsSet: ProductData[] = [
     searchKeywords: {},
   },
   {
-    // https://virtualmuebles.com/products/kit-por-4-sillas-eames-patas-en-madera-para-comedor-sala-restaurante-amarillas
     name: {
       'en-US': 'Bar Chair',
     },
@@ -253,7 +250,6 @@ export const ProductsSet: ProductData[] = [
 
 [
   {
-    // https://akshome.by/catalog/stol-dolce-new-d-120-750-belyy-dub-natural-nyy/
     name: {
       'en-US': 'Table DOLCE NEW',
     },
@@ -336,7 +332,6 @@ export const ProductsSet: ProductData[] = [
     searchKeywords: {},
   },
   {
-    // https://akshome.by/catalog/stol-korsika-fotopechat-1200-1515-800-mramor-chernyy-9-chernyy-matovyy/
     name: {
       'en-US': 'CORSICA Table',
     },
@@ -419,7 +414,6 @@ export const ProductsSet: ProductData[] = [
     searchKeywords: {},
   },
   {
-    // https://akshome.by/catalog/stol-razdvizhnoy-promo-tip-3-900-1698-670-dub-sonoma-svetlyy-belyy/
     name: {
       'en-US': 'Sliding table PROMO Type 3',
     },
