@@ -1,33 +1,42 @@
 import { ReactNode, createContext, useState } from 'react';
-import { useLocalStorage } from '../hooks';
+import { useAuth, useLocalStorage } from '../hooks';
 import { ShoppingCartService } from '../services';
-import { CTResponse } from '../ct-client';
+import { CTResponse, HttpStatusCode } from '../ct-client';
 import {
   CustomerSignInResult,
+  DiscountOnTotalPrice,
   GraphQLResponse,
+  Image,
+  LineItem,
+  TypedMoney,
 } from '@commercetools/platform-sdk';
+import {
+  ShoppingCartItem,
+  ShoppingCart,
+  ProductInShoppingCart,
+} from '../services/shoppingCart.service';
 
 type ShoppingCartProviderProps = {
   children?: ReactNode;
 };
 
-type CartItem = {
-  productId: string;
-  quantity: number;
-};
-
 type ShoppingCartContextType = {
   getProductQuantity: (productId: string) => number;
   increaseProductQuantity: (productId: string) => Promise<CTResponse>;
-  decreaseProductQuantity: (productId: string) => void;
-  removeProduct: (productId: string) => void;
+  decreaseProductQuantity: (productId: string) => Promise<CTResponse>;
+  removeProduct: (productId: string) => Promise<CTResponse>;
   total: number;
+  totalPrice: TypedMoney;
   setCartId: (activeCartId: string) => void;
   cartId: string;
   cartVersion: number;
-  setCartVersion: (cartVersion: number) => void;
   setCartAfterSignIn: (data: CustomerSignInResult) => Promise<CTResponse>;
   unsetCart: () => void;
+  getCTCart: () => Promise<CTResponse>;
+  getShoppingCartProducts: () => ProductInShoppingCart[];
+  clearShoppingCart: () => Promise<CTResponse>;
+  addPromoCode: (promoCode: string) => Promise<CTResponse>;
+  discountOnTotalPrice: DiscountOnTotalPrice | undefined;
 };
 
 export const ShoppingCartContext = createContext<ShoppingCartContextType>(
@@ -35,121 +44,272 @@ export const ShoppingCartContext = createContext<ShoppingCartContextType>(
 );
 
 export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
-  const [cartItems, setCartItems] = useLocalStorage<CartItem[]>(
-    'mockCartItems',
-    []
-  );
   const shoppingCartService = new ShoppingCartService();
 
+  const [shoppingCart, setShoppingCart] = useState<ShoppingCart>();
+
   const [activeCartId, setActiveCartId] = useLocalStorage('apiCartId', '');
-  const [activeCartVersion, setActiveCartVersion] = useState(0);
+
+  const [updateInProgress, setUpdateInProgress] = useState(false);
+  const answerUpdateInProgress = new Promise<CTResponse>((resolve) =>
+    resolve({
+      ok: false,
+      status: HttpStatusCode.IM_USED_226,
+      message: 'Concurrent request. Please try again.',
+    })
+  );
+
+  const { authenticated, customerId } = useAuth();
 
   const cartId = activeCartId;
-  const cartVersion = activeCartVersion;
+  const cartVersion = shoppingCart?.version || 0;
+  const totalPrice = shoppingCart?.totalPrice || ({} as TypedMoney);
+  const discountOnTotalPrice = shoppingCart?.discountOnTotalPrice;
 
   function getProductQuantity(productId: string) {
-    return (
-      cartItems.find((item) => item.productId === productId)?.quantity || 0
-    );
+    const product = shoppingCart?.products[productId];
+    return product ? product.quantity : 0;
   }
-  async function increaseProductQuantity(
-    productId: string
+
+  function getShoppingCartProducts(): ProductInShoppingCart[] {
+    const products = shoppingCart?.products;
+    const empty: ProductInShoppingCart[] = [];
+    return products ? Object.values(products) : empty;
+  }
+  function updateShoppingCart(response: GraphQLResponse) {
+    const {
+      id = '',
+      version = 0,
+      totalLineItemQuantity = 0,
+      totalPrice = null,
+      lineItems = [],
+      discountOnTotalPrice,
+    } = response.data.updateCart ||
+    response.data.createCart ||
+    response.data.cart;
+
+    const products: ShoppingCartItem = {};
+
+    if (lineItems) {
+      lineItems.forEach((item: LineItem) => {
+        const {
+          productKey = '',
+          productId = '',
+          id = '',
+          name = '',
+          quantity = 0,
+          variant,
+          price,
+        } = item;
+
+        const productName = name as string;
+
+        const firstImage = variant?.images ? variant?.images[0] : ({} as Image);
+
+        const { url: imageUrl = '', label: imageLabel = productName } =
+          firstImage;
+
+        products[productId] = {
+          productId,
+          productKey,
+          name: productName,
+          lineItemId: id,
+          quantity,
+          price,
+          imageUrl,
+          imageLabel,
+        };
+      });
+    }
+    const shoppingCartUpdate: ShoppingCart = {
+      id,
+      version,
+      totalPrice,
+      totalLineItemQuantity,
+      discountOnTotalPrice,
+      products,
+    };
+
+    setShoppingCart(shoppingCartUpdate);
+  }
+
+  async function changeLineItemQuantity(
+    lineItemId: string,
+    quantity: number
   ): Promise<CTResponse> {
-    const answer = await shoppingCartService.increaseProductQuantity(
+    if (updateInProgress) {
+      return answerUpdateInProgress;
+    }
+
+    setUpdateInProgress(true);
+    const answer = await shoppingCartService.changeLineItemQuantity(
       cartId,
       cartVersion,
-      productId
+      lineItemId,
+      quantity > 0 ? quantity : 0
     );
+    setUpdateInProgress(false);
 
     if (!answer.ok) {
       return answer;
     }
     const response = answer.data as GraphQLResponse;
-    setCartVersion(response.data.updateCart.version);
-
-    setCartItems((currentItems) => {
-      if (
-        currentItems.find((item) => item.productId === productId) === undefined
-      ) {
-        return [...currentItems, { productId: productId, quantity: 1 }];
-      } else {
-        return currentItems.map((item) => {
-          if (item.productId === productId) {
-            return { ...item, quantity: item.quantity + 1 };
-          } else {
-            return item;
-          }
-        });
-      }
-    });
+    updateShoppingCart(response);
 
     return answer;
   }
 
-  function decreaseProductQuantity(productId: string) {
-    setCartItems((currentItems) => {
-      if (
-        currentItems.find((item) => item.productId === productId)?.quantity ===
-        1
-      ) {
-        return currentItems.filter((item) => item.productId !== productId);
-      } else {
-        return currentItems.map((item) => {
-          if (item.productId === productId) {
-            return { ...item, quantity: item.quantity - 1 };
-          } else {
-            return item;
-          }
-        });
+  async function increaseProductQuantity(
+    productId: string
+  ): Promise<CTResponse> {
+    const productInCart = shoppingCart?.products[productId];
+    if (!productInCart) {
+      const answer = await shoppingCartService.addLineItem(
+        cartId,
+        cartVersion,
+        productId
+      );
+
+      if (!answer.ok) {
+        return answer;
       }
-    });
+      const response = answer.data as GraphQLResponse;
+      updateShoppingCart(response);
+      return answer;
+    }
+
+    const { lineItemId, quantity } = productInCart;
+    const answer = changeLineItemQuantity(lineItemId, quantity + 1);
+
+    return answer;
   }
 
-  function removeProduct(productId: string) {
-    setCartItems((currentItems) => {
-      return currentItems.filter((item) => item.productId !== productId);
-    });
+  async function decreaseProductQuantity(
+    productId: string
+  ): Promise<CTResponse> {
+    const productInCart = shoppingCart?.products[productId];
+    if (!productInCart) {
+      return new Promise((resolve) =>
+        resolve({ ok: false, status: 404, message: 'Wrong productID' })
+      );
+    }
+
+    const { lineItemId, quantity } = productInCart;
+    const answer = changeLineItemQuantity(lineItemId, quantity - 1);
+
+    return answer;
   }
 
-  const total = cartItems.reduce(
-    (quantity, item) => item.quantity + quantity,
-    0
-  );
+  async function removeProduct(productId: string): Promise<CTResponse> {
+    const productInCart = shoppingCart?.products[productId];
+    if (!productInCart) {
+      return new Promise((resolve) =>
+        resolve({ ok: false, status: 404, message: 'Wrong productID' })
+      );
+    }
+
+    const { lineItemId } = productInCart;
+    const answer = changeLineItemQuantity(lineItemId, 0);
+
+    return answer;
+  }
+
+  const total = shoppingCart?.totalLineItemQuantity || 0;
 
   function setCartId(activeCartId: string) {
     setActiveCartId(activeCartId);
-  }
-
-  function setCartVersion(cartVersion: number) {
-    setActiveCartVersion(cartVersion);
   }
 
   const setCartAfterSignIn = async (
     data: CustomerSignInResult
   ): Promise<CTResponse> => {
     if (data.cart) {
+      const cartResponse = await shoppingCartService.getCart(data.cart.id);
+      if (cartResponse.ok) {
+        const response = cartResponse.data as GraphQLResponse;
+        updateShoppingCart(response);
+      }
       setCartId(data.cart.id);
-      setCartVersion(data.cart.version);
-      return new Promise((resolve) =>
-        resolve({ ok: true, message: '', data, status: 200 })
-      );
+      return cartResponse;
     }
 
-    const responseNewCart = await shoppingCartService.createCartForCustomer(
+    const newCartResponse = await shoppingCartService.createCartForCustomer(
       data.customer.id
     );
-    if (responseNewCart.ok) {
-      const newCart = responseNewCart.data as GraphQLResponse;
+    if (newCartResponse.ok) {
+      const newCart = newCartResponse.data as GraphQLResponse;
+      updateShoppingCart(newCart);
       setCartId(newCart.data.createCart.id);
-      setCartVersion(newCart.data.cart.version);
     }
 
-    return responseNewCart;
+    return newCartResponse;
   };
 
   const unsetCart = () => {
     setCartId('');
-    setCartVersion(0);
+    setShoppingCart(undefined);
+  };
+  const getCTCart = async (): Promise<CTResponse> => {
+    if (!cartId) {
+      return new Promise((resolve) =>
+        resolve({ ok: false, status: 404, message: 'No Cart ID' })
+      );
+    }
+    const cartResponse = await shoppingCartService.getCart(cartId);
+    if (cartResponse.ok) {
+      const response = cartResponse.data as GraphQLResponse;
+      updateShoppingCart(response);
+    }
+    return cartResponse;
+  };
+
+  const clearShoppingCart = async (): Promise<CTResponse> => {
+    const answerDelete = await shoppingCartService.deleteCart(
+      cartId,
+      cartVersion
+    );
+
+    if (!answerDelete.ok) {
+      return answerDelete;
+    }
+
+    unsetCart();
+
+    if (authenticated) {
+      const newCartResponse =
+        await shoppingCartService.createCartForCustomer(customerId);
+      if (newCartResponse.ok) {
+        const newCart = newCartResponse.data as GraphQLResponse;
+        updateShoppingCart(newCart);
+        setCartId(newCart.data.createCart.id);
+      }
+
+      return newCartResponse;
+    }
+
+    return new Promise<CTResponse>((resolve) =>
+      resolve({
+        ok: false,
+        status: HttpStatusCode.BAD_REQUEST_400,
+        message: 'Todo cart for anonymous.',
+      })
+    );
+  };
+
+  const addPromoCode = async (promoCode: string): Promise<CTResponse> => {
+    const answer = await shoppingCartService.addDiscountCode(
+      cartId,
+      cartVersion,
+      promoCode
+    );
+
+    if (!answer.ok) {
+      return answer;
+    }
+    const response = answer.data as GraphQLResponse;
+    updateShoppingCart(response);
+
+    return answer;
   };
 
   return (
@@ -160,12 +320,17 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
         decreaseProductQuantity,
         removeProduct,
         total,
+        totalPrice,
         cartId,
         setCartId,
         cartVersion,
-        setCartVersion,
         setCartAfterSignIn,
         unsetCart,
+        getCTCart,
+        getShoppingCartProducts,
+        clearShoppingCart,
+        addPromoCode,
+        discountOnTotalPrice,
       }}
     >
       {' '}

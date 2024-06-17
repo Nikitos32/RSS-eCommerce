@@ -3,7 +3,7 @@ import '@smastrom/react-rating/style.css';
 import { useState } from 'react';
 import { MdOutlineViewInAr } from 'react-icons/md';
 import { PriceProduct } from '../PriceProduct/PriceProduct';
-import { ProductPrice } from '../../type/types/productPageType';
+import { Price } from '@commercetools/platform-sdk';
 import { Link } from 'react-router-dom';
 import CartControl from '../CartControl';
 
@@ -12,7 +12,7 @@ interface ProductPreviewItemProps {
   productCategory: string;
   productName: string;
   productDescription: string;
-  price: ProductPrice | undefined;
+  price: Price | undefined;
   id: string;
   productId: string;
 }
@@ -29,35 +29,25 @@ export const ProductPreviewItem = ({
   const [rating, setRating] = useState(3.28);
 
   return (
-    <div className="transition duration-700 ease-in-out bg-slate-300 max-w-72 md:max-w-none md:w-full xl:w-4/5 m-auto lg:m-0 rounded p-3 flex flex-col md:flex-row gap-4 md:gap-20 hover:shadow-[1px_1px_8px]">
+    <div className=" h-[700px] transition duration-700 ease-in-out bg-slate-300 max-w-72 m-auto rounded p-3 flex flex-col justify-between hover:shadow-[1px_1px_8px]">
       <div>
         <img
           loading="lazy"
           src={imgUrl}
           alt="photo"
-          className="size-64 md:size-44 m-auto max-w-none rounded"
+          className="size-64 m-auto max-w-none rounded"
         />
-      </div>
-      <div className="flex flex-col w-auto md:w-2/5 gap-5 pt-3">
-        <div className="flex flex-col gap-1">
-          <p className="text-gray-500">{productCategory}</p>
+        <div className="flex flex-col w-auto gap-5 pt-3">
+          <p className="text-gray-500 h-[72px]">{productCategory}</p>
           <p className="font-semibold">{productName}</p>
+          <p className="w-full text-gray-500 line-clamp-3">
+            {productDescription}
+          </p>
         </div>
-        <p className="w-full text-gray-500 line-clamp-3">
-          {productDescription}
-        </p>
       </div>
-      <div className="flex w-auto md:w-2/5 flex-col gap-5 pt-3">
+      <div className="flex w-auto flex-col gap-5 pt-3">
         <div className="flex items-center flex-col gap-2">
-          {price ? (
-            <PriceProduct
-              initialPrice={price.value}
-              discountPrice={price.discounted?.value}
-              discountValue={price.discounted?.discount.value.permyriad}
-            />
-          ) : (
-            'Unavailable'
-          )}
+          {price ? <PriceProduct {...price} /> : 'Unavailable'}
           <Rating
             readOnly
             style={{ maxWidth: 100 }}

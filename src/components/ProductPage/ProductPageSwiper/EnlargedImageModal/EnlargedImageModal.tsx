@@ -33,7 +33,7 @@ export const EnlargedImageModal = ({
 }: ProductSwiperProps) => {
   return (
     <dialog
-      className={`productDialog ${flagDialog ? 'productDialog_active' : ''}`}
+      className={`productDialog ${flagDialog ? 'productDialog_active z-50' : ''}`}
       onClick={onclick}
     >
       <div

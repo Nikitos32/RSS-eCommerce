@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useState } from 'react';
 import { FilterSection } from '../FilterSection/FilterSection';
 import { SortSection } from '../SortSection/SortSection';
 import { ProductService } from '../../services';
-import { ProductPrice } from '../../type/types/productPageType';
 import { CTResponse } from '../../ct-client';
 import {
   Category,
@@ -14,6 +13,7 @@ import { IoIosArrowUp } from 'react-icons/io';
 import { animateScroll as scroll } from 'react-scroll';
 import Spinner from '../Spinner';
 import { Oval } from 'react-loader-spinner';
+import './catalogPage.css';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
@@ -165,39 +165,41 @@ export const CatalogPage = () => {
                 </p>
               }
             >
-              {products?.productProjectionSearch.results.map((element) => {
-                return (
-                  <ProductPreviewItem
-                    productId={element.id}
-                    key={element.key}
-                    id={element.key ? element.key : ''}
-                    imgUrl={
-                      element.masterVariant.images
-                        ? element.masterVariant.images[0].url
-                        : ''
-                    }
-                    productCategory={`${
-                      element.categories[0]
-                        ? element.categories.map((element) => {
-                            return ` ${(element as unknown as Category).name}`;
-                          })
-                        : 'no category'
-                    }`}
-                    productDescription={
-                      element.description
-                        ? `${element.description}`
-                        : 'no description'
-                    }
-                    productName={`${element.name ? element.name : ''}`}
-                    price={
-                      element?.masterVariant.prices
-                        ? (element?.masterVariant
-                            .prices[0] as unknown as ProductPrice)
-                        : undefined
-                    }
-                  />
-                );
-              })}
+              <div className="catalogShowcase flex flex-wrap gap-2 2xl:w-4/5">
+                {products?.productProjectionSearch.results.map((element) => {
+                  return (
+                    <div key={element.key} className="catalogShowcase__product">
+                      <ProductPreviewItem
+                        productId={element.id}
+                        id={element.key ? element.key : ''}
+                        imgUrl={
+                          element.masterVariant.images
+                            ? element.masterVariant.images[0].url
+                            : ''
+                        }
+                        productCategory={`${
+                          element.categories[0]
+                            ? element.categories.map((element) => {
+                                return ` ${(element as unknown as Category).name}`;
+                              })
+                            : 'no category'
+                        }`}
+                        productDescription={
+                          element.description
+                            ? `${element.description}`
+                            : 'no description'
+                        }
+                        productName={`${element.name ? element.name : ''}`}
+                        price={
+                          element?.masterVariant.prices
+                            ? element?.masterVariant.prices[0]
+                            : undefined
+                        }
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </InfiniteScroll>
             {currentScroll > 1000 ? (
               <button

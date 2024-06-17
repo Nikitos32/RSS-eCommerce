@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { ShoppingCartContext } from '../context/ShoppingCartProvider';
 import { CustomerSignInResult } from '@commercetools/platform-sdk';
 import { toast } from 'react-toastify';
+import { HttpStatusCode } from '../ct-client';
 
 export const useShoppingCart = () => {
   const {
@@ -11,9 +12,15 @@ export const useShoppingCart = () => {
     increaseProductQuantity,
     decreaseProductQuantity,
     total,
+    totalPrice,
     removeProduct,
     setCartAfterSignIn,
     unsetCart,
+    getCTCart,
+    getShoppingCartProducts,
+    clearShoppingCart,
+    addPromoCode,
+    discountOnTotalPrice,
   } = useContext(ShoppingCartContext);
 
   const [loading, setLoading] = useState(false);
@@ -34,19 +41,106 @@ export const useShoppingCart = () => {
     setLoading(true);
     const answer = await increaseProductQuantity(productId);
     setOk(answer.ok);
+
     setMessage(answer.message);
+
+    if (!answer.ok) {
+      if (answer.status === HttpStatusCode.IM_USED_226) {
+        toast.warning(answer.message);
+      } else {
+        toast.error(answer.message);
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const decreaseProductQuantityHook = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await decreaseProductQuantity(productId);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+
+    if (!answer.ok) {
+      if (answer.status === HttpStatusCode.IM_USED_226) {
+        toast.warning(answer.message);
+      } else {
+        toast.error(answer.message);
+      }
+    }
+
+    setLoading(false);
+  };
+  const removeProductHook = async (productId: string) => {
+    setLoading(true);
+
+    const answer = await removeProduct(productId);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+
+  const refreshShoppingCart = async () => {
+    setLoading(true);
+
+    const answer = await getCTCart();
+    setOk(answer.ok);
+
+    setMessage(answer.message as string);
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+
+  const clearShoppingCartHook = async () => {
+    setLoading(true);
+    const answer = await clearShoppingCart();
+    setOk(answer.ok);
+
+    setMessage(answer.message as string);
+
     if (!answer.ok) {
       toast.error(answer.message);
     }
     setLoading(false);
   };
 
+  const addPromoCodeHook = async (promoCode: string) => {
+    setLoading(true);
+
+    const answer = await addPromoCode(promoCode);
+    setOk(answer.ok);
+
+    setMessage(answer.message);
+    if (answer.ok) {
+      toast.success(`Promo Code ${promoCode} applied!`);
+    }
+
+    if (!answer.ok) {
+      toast.error(answer.message);
+    }
+
+    setLoading(false);
+  };
+
   return {
     getProductQuantity,
     increaseProductQuantity: increaseProductQuantityHook,
-    decreaseProductQuantity,
-    removeProduct,
+    decreaseProductQuantity: decreaseProductQuantityHook,
+    removeProduct: removeProductHook,
     total,
+    totalPrice,
     setCartAfterSignIn: setCartAfterSignInHook,
     unsetCart,
     cartVersion,
@@ -54,5 +148,10 @@ export const useShoppingCart = () => {
     ok,
     loading,
     message,
+    refreshShoppingCart,
+    getShoppingCartProducts,
+    clearShoppingCart: clearShoppingCartHook,
+    addPromoCode: addPromoCodeHook,
+    discountOnTotalPrice,
   };
 };
