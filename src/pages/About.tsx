@@ -1,9 +1,16 @@
 const persons = [
   {
-    name: 'Vlad',
-    role: 'Frontend developer',
-    description:
-      'Participated in the creation of the registration page, beautiful interfaces, the detailed product page, developed a shopping cart page, and also worked with the commercetools api',
+    name: 'Borvinko Vlad',
+    role: 'Frontend Developer',
+    description: [
+      `color palette`,
+      `Registration Page`,
+      `Product Page`,
+      `price component`,
+      `commercetools`,
+      `discounts`,
+      'GraphQL requests',
+    ],
     photo: 'https://picsum.photos/100/',
     github: 'https://github.com/Barvinko',
     twitter: '',
@@ -11,23 +18,37 @@ const persons = [
     web: '',
   },
   {
-    name: 'Dima Usov',
-    role: 'Frontend developer',
-    description:
-      "Participated in the creation of the user's page, site navigation, developed interfaces for the main page, and also developed the shopping cart page using the commercetools api",
-    photo: 'https://picsum.photos/102/',
-    github: 'https://github.com/DmirtyUsov',
+    name: 'Dundzer Nikita',
+    role: 'Frontend Developer',
+    description: [
+      'Login Page',
+      'site deployment',
+      `Catalog Page`,
+      `commercetools`,
+      `search & filter`,
+      'GraphQL requests',
+    ],
+    photo: 'https://picsum.photos/105/',
+    github: 'https://github.com/Nikitos32',
     twitter: '',
     facebook: '',
     web: '',
   },
   {
-    name: 'Nikita',
-    role: 'Frontend developer',
-    description:
-      'Participated in the creation of the login page, the catalog, developed interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
-    photo: 'https://picsum.photos/101/',
-    github: 'https://github.com/Nikitos32',
+    name: 'Usov Dima',
+    role: 'Career Shift',
+    description: [
+      `Team Lead`,
+      `navigation`,
+      `Main Page`,
+      `Profile Page`,
+      `cоmmercetools`,
+      `integration`,
+      'Shopping Cart',
+      `About Page`,
+    ],
+    photo: 'https://picsum.photos/104/',
+    github: 'https://github.com/DmirtyUsov',
     twitter: '',
     facebook: '',
     web: '',
@@ -72,9 +93,16 @@ function About() {
                         {person.role}
                       </span>
                     )}
-                    <p className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
-                      {person.description}
-                    </p>
+                    <ul className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
+                      {person.description.map((item) => (
+                        <li
+                          key={item}
+                          className=" font-light text-moonNeutral-600 dark:text-gray-400"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                     <ul className="flex space-x-4 sm:mt-0">
                       {person.github && (
                         <li>
