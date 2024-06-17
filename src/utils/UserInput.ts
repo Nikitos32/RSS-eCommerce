@@ -69,7 +69,7 @@ export class UserInput {
     if (regex) {
       return regex.test(input);
     }
-    return true;
+    return true; // no rules found
   }
 
   private static checkStringEmpty(input: string): boolean {
@@ -81,7 +81,7 @@ export class UserInput {
     if (clue) {
       return clue;
     }
-    return '';
+    return ''; // no clue found
   }
 
   private static addRequiredClueBefore(clue: string): string {
@@ -208,7 +208,7 @@ export class UserInput {
   static checkPostcodeValid(countryCode: string, input: string): boolean {
     if (!input) return true;
     if (!postcodeValidatorExistsForCountry(countryCode as CountryCode))
-      return true;
+      return true; // we can't check let's believe
     return postcodeValidator(input, countryCode as CountryCode);
   }
   /**
