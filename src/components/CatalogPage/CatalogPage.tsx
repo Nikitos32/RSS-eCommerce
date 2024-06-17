@@ -14,6 +14,7 @@ import { animateScroll as scroll } from 'react-scroll';
 import { Oval } from 'react-loader-spinner';
 import './catalogPage.css';
 import { useShoppingCart } from '../../hooks';
+import Spinner from '../Spinner';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
