@@ -13,7 +13,7 @@ const persons = [
       `discounts`,
       'GraphQL requests',
     ],
-    photo: 'https://picsum.photos/100/',
+    photo: '/img/vlad.jpg',
     github: 'https://github.com/Barvinko',
     twitter: '',
     facebook: '',
