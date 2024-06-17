@@ -5,12 +5,6 @@ import UserInputString from '../components/UserInputString';
 import { countMoneySum, formatPrice } from '../utils';
 import Spinner from '../components/Spinner';
 import { CartEmpty } from '../components/CartEmpty/CartEmpty';
-import {
-  CartDiscount,
-  DiscountOnTotalPrice,
-  TypedMoney,
-} from '@commercetools/platform-sdk';
-import CartTotalDiscountName from '../components/CartTotalDiscountName';
 
 function Cart() {
   const inputStringInitState = {
@@ -27,8 +21,6 @@ function Cart() {
     totalPrice,
     loading,
     clearShoppingCart,
-    addPromoCode,
-    discountOnTotalPrice,
   } = useShoppingCart();
 
   useEffect(() => {
@@ -42,9 +34,6 @@ function Cart() {
   const [promoCode, setPromoCode] = useState(inputStringInitState);
 
   const [confirmClear, setConfirmClear] = useState(false);
-
-  const { discountedAmount = {} as TypedMoney, includedDiscounts = [] } =
-    discountOnTotalPrice ? (discountOnTotalPrice as DiscountOnTotalPrice) : {};
 
   function ConfirmClear() {
     return (
@@ -110,36 +99,17 @@ function Cart() {
                 className="bg-moonBlack text-moonNeutral-100 rounded-lg px-4 py-2 hover:bg-moonNeutral-600 focus:outline-none focus:shadow-outline disabled:bg-moonNeutral-500 disabled:cursor-not-allowed self-end"
                 type="button"
                 disabled={!promoCode.value}
-                onClick={() => {
-                  addPromoCode(promoCode.value);
-                  setPromoCode(inputStringInitState);
-                }}
               >
                 Redeem
               </button>
             </div>
-            <div className="flex justify-between text-lg">
-              <p className="text-moonNeutral-700">Sub Total</p>
-              <p className="text-moonNeutral-700">
-                {formatPrice(
-                  countMoneySum(discountedAmount) + countMoneySum(totalPrice)
-                )}
-              </p>
+            <div className="mb-2 flex justify-between">
+              <p className="text-moonNeutral-700">Subtotal</p>
+              <p className="text-moonNeutral-700">TBD</p>
             </div>
-            {includedDiscounts.map((discount) => (
-              <CartTotalDiscountName
-                key={
-                  (discount.discount as unknown as CartDiscount)
-                    .name as unknown as string
-                }
-                discountedTotalPricePortion={discount}
-              />
-            ))}
-            <div className="flex justify-between text-lg">
-              <p className="text-moonNeutral-700">Sum Cart Discounts</p>
-              <p className="text-moonNeutral-700">
-                -{formatPrice(countMoneySum(discountedAmount))}
-              </p>
+            <div className="flex justify-between">
+              <p className="text-moonNeutral-700">Shipping</p>
+              <p className="text-moonNeutral-700">TBD</p>
             </div>
             <hr className="my-4" />
             <div className="flex justify-between">
