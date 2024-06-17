@@ -23,9 +23,9 @@ const persons = [
   },
   {
     name: 'Nikita',
-    role: 'Frontend developer',
+    role: 'I am 21 years old, studying at BSUIR in the 4th year',
     description:
-      'Participated in the creation of the login page, the catalog, developed interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
+      'Created the login page, catalog, participated in development of interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
     photo: '/img/nikita.jpg',
     github: 'https://github.com/Nikitos32',
     twitter: '',
