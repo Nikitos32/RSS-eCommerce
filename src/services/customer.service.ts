@@ -49,10 +49,15 @@ export class CustomerService {
     }
   }
 
-  async signIn(email: string, password: string): Promise<CTResponse> {
+  async signIn(
+    email: string,
+    password: string,
+    anonymousCartId: string | undefined = undefined
+  ): Promise<CTResponse> {
     const customerSign: CustomerSignin = {
       email: email.toLowerCase(),
       password,
+      anonymousCartId,
     };
 
     const userExists = await this.checkUserExists(customerSign.email);
