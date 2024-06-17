@@ -14,6 +14,7 @@ import { animateScroll as scroll } from 'react-scroll';
 import { Oval } from 'react-loader-spinner';
 import './catalogPage.css';
 import { useShoppingCart } from '../../hooks';
+import Spinner from '../Spinner';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
@@ -25,7 +26,7 @@ export const CatalogPage = () => {
   const [currentSort, setCurrentSort] = useState<string>();
   const [currentSearch, setcurrentSearch] = useState<string>();
   const [currentCategories, setCurrentCategories] = useState<string[]>([]);
-  const [currentLimit, setCurrentLimit] = useState<number>(9);
+  const [currentLimit, setCurrentLimit] = useState<number>(13);
   const [currentScroll, setCurrentScroll] = useState<number>(0);
 
   const [products, setProducts] = useState<ProductProjectionResponse>({
@@ -47,7 +48,7 @@ export const CatalogPage = () => {
   ]);
 
   const handleCurrentLimit = () => {
-    setCurrentLimit((prevState) => prevState + 9);
+    setCurrentLimit((prevState) => prevState + 13);
   };
 
   const handleRangeSlider = (event: number | number[]) => {
@@ -155,7 +156,7 @@ export const CatalogPage = () => {
                 products.productProjectionSearch.total
               }
               scrollThreshold={1}
-              loader={<p></p>}
+              loader={<Spinner isLoading={true} />}
               endMessage={
                 <p
                   style={{
