@@ -13,6 +13,7 @@ import { IoIosArrowUp } from 'react-icons/io';
 import { animateScroll as scroll } from 'react-scroll';
 import { Oval } from 'react-loader-spinner';
 import './catalogPage.css';
+import { useShoppingCart } from '../../hooks';
 
 interface ProductProjectionResponse {
   productProjectionSearch: ProductProjectionPagedQueryResponse;
@@ -79,7 +80,10 @@ export const CatalogPage = () => {
     setCurrentLimit(13);
   };
 
+  const { refreshShoppingCart } = useShoppingCart();
+
   useEffect(() => {
+    refreshShoppingCart();
     setIsLoading(true);
     const productService = new ProductService();
     if (
