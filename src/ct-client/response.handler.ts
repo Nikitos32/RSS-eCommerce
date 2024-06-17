@@ -143,7 +143,7 @@ export class CTResponseHandler {
     if (errors?.length) {
       return CTResponseHandler.makeError(
         answer.statusCode,
-        errors[0].message, // first error
+        errors[0].message,
         answer.body as GraphQLResponse
       );
     }

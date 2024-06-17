@@ -4,7 +4,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import './App.css';
 import { LoginPage } from './components/LoginPage/LoginPage';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -12,7 +11,6 @@ import MainLayout from './layouts/MainLayout';
 import { SignUpPage } from './components/SignUpPage/SignUpPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './App.css';
 import { CatalogPage } from './components/CatalogPage/CatalogPage';
 import ProfileChangePassword from './pages/ProfileChangePassword';
 import Profile from './pages/Profile';

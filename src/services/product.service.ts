@@ -324,6 +324,3 @@ export class ProductService {
     }
   }
 }
-/*   266af93b-136f-456e-97c0-5d5ec9a922c6 - Home Decor*/
-/* 7bc4d2e8-a12a-44dc-92c7-a027ba7a6088 - Furniture*/
-/* 6ee0d40d-61c5-42ec-a33a-0baaf760330f - Kitchen */
