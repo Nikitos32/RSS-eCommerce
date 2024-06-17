@@ -27,9 +27,6 @@ function Links() {
       <Link to="./about" className="hover:text-moonNeutral-600">
         About
       </Link>
-      <Link to="./contact" className="hover:text-moonNeutral-600">
-        Contact
-      </Link>
       <Link to="./cart" title="Shopping Cart" className="relative mx-2">
         <CgShoppingCart className="text-2xl hover:text-moonNeutral-600" />
         {total > 0 && (
