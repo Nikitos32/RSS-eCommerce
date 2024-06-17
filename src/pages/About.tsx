@@ -100,15 +100,15 @@ function About() {
           <ul role="list" className="grid gap-8 mb-2 md:grid-cols-2">
             {persons.map((person) => (
               <li key={person.name}>
-                <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-                  <p>
+                <div className="xl:h-[350px] items-center bg-gray-50 rounded-lg shadow sm:flex sm:items-start dark:bg-gray-800 dark:border-gray-700">
+                  <p className="flex sm:w-1/2 xl:w-auto md:items-start xl:h-[350px]">
                     <img
-                      className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
+                      className="object-contain w-full md:h-full lg:w-auto rounded-lg sm:rounded-none sm:rounded-l-lg"
                       src={person.photo}
                       alt={person.name}
                     />
                   </p>
-                  <div className="p-5">
+                  <div className="p-5 sm:w-1/2 xl:w-auto">
                     <h3 className="text-xl font-bold tracking-tight text-moonBlack dark:text-white">
                       {person.name}
                     </h3>
