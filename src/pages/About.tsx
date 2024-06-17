@@ -26,7 +26,7 @@ const persons = [
     role: 'Frontend developer',
     description:
       'Participated in the creation of the login page, the catalog, developed interfaces for the catalog page and the login page, and also optimized the catalog page using the commercetools api',
-    photo: 'https://picsum.photos/101/',
+    photo: '/img/nikita.jpg',
     github: 'https://github.com/Nikitos32',
     twitter: '',
     facebook: '',
