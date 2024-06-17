@@ -5,9 +5,11 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import { LoginPage } from './components/LoginPage/LoginPage';
+import './App.css';
 import MainPage from './pages/MainPage';
 import NotFoundPage from './pages/NotFoundPage';
 import MainLayout from './layouts/MainLayout';
+import './App.css';
 import { SignUpPage } from './components/SignUpPage/SignUpPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
