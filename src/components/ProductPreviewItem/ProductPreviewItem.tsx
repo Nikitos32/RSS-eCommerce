@@ -29,7 +29,7 @@ export const ProductPreviewItem = ({
   const [rating, setRating] = useState(3.28);
 
   return (
-    <div className=" h-[700px] transition duration-700 ease-in-out bg-slate-300 max-w-72 m-auto rounded p-3 flex flex-col justify-between hover:shadow-[1px_1px_8px]">
+    <div className=" h-[43.75rem] transition duration-700 ease-in-out bg-slate-300 max-w-72 m-auto rounded p-3 flex flex-col justify-between hover:shadow-[1px_1px_8px]">
       <div>
         <img
           loading="lazy"
@@ -38,7 +38,7 @@ export const ProductPreviewItem = ({
           className="size-64 m-auto max-w-none rounded"
         />
         <div className="flex flex-col w-auto gap-5 pt-3">
-          <p className="text-gray-500 h-[72px]">{productCategory}</p>
+          <p className="text-gray-500 h-[4.5rem]">{productCategory}</p>
           <p className="font-semibold">{productName}</p>
           <p className="w-full text-gray-500 line-clamp-3">
             {productDescription}
