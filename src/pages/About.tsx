@@ -2,18 +2,18 @@ import rsLogo from '/svg/RSlogo.svg';
 
 const persons = [
   {
-    name: 'Borvinko Vlad',
-    role: 'Frontend Developer',
+    name: 'Barvinko Vlad',
+    role: [`Software Engineer`, `Master's Degree`, `Software Engineering`],
     description: [
-      `color palette`,
       `Registration Page`,
       `Product Page`,
-      `price component`,
+      `adaptive design`,
+      `Price component`,
       `commercetools`,
       `discounts`,
       'GraphQL requests',
     ],
-    photo: 'https://picsum.photos/100/',
+    photo: 'img/vlad.jpg',
     github: 'https://github.com/Barvinko',
     twitter: '',
     facebook: '',
@@ -21,7 +21,12 @@ const persons = [
   },
   {
     name: 'Dundzer Nikita',
-    role: 'I am 21 years old, studying at BSUIR in the 4th year',
+    role: [
+      'Software Engineer',
+      'I am 21 years old',
+      'studying at BSUIR',
+      'in the 4th year',
+    ],
     description: [
       'Login Page',
       'site deployment',
@@ -38,7 +43,7 @@ const persons = [
   },
   {
     name: 'Usov Dima',
-    role: 'Career Shift',
+    role: ['Career Shift'],
     description: [
       `Team Lead`,
       `navigation`,
@@ -97,24 +102,28 @@ function About() {
               </p>
             </article>
           </div>
-          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-2">
+          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-3">
             {persons.map((person) => (
               <li key={person.name}>
                 <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-                  <p>
+                  <div className="basis-1/3">
                     <img
                       className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
                       src={person.photo}
                       alt={person.name}
                     />
-                  </p>
+                  </div>
                   <div className="p-5">
                     <h3 className="text-xl font-bold tracking-tight text-moonBlack dark:text-white">
                       {person.name}
                     </h3>
                     {person.role && (
-                      <span className="text-moonNeutral-600 dark:text-gray-400">
-                        {person.role}
+                      <span className="text-moonNeutral-600 dark:text-gray-400 max-w-prose">
+                        {person.role.map((item) => (
+                          <span key="item" className="block">
+                            {item}
+                          </span>
+                        ))}
                       </span>
                     )}
                     <ul className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
