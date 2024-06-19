@@ -129,6 +129,16 @@ export class ShoppingCartService {
     return await this.createCart(cartDraft);
   }
 
+  async createCartForAnonymous(): Promise<CTResponse> {
+    const cartDraft: CartDraft = {
+      currency: VITE_CTP_CURRENCY,
+      country: VITE_CTP_COUNTRY,
+      locale: VITE_CTP_LOCALE,
+    };
+
+    return await this.createCart(cartDraft);
+  }
+
   async addLineItem(
     cartId: string,
     cartVersion: number,

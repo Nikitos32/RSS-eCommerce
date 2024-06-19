@@ -6,7 +6,7 @@ import { useShoppingCart } from './useShoppingCart';
 
 export function useApiSignIn() {
   const { setLoggedIn, setLoggedOut } = useAuth();
-  const { setCartAfterSignIn } = useShoppingCart();
+  const { setCartAfterSignIn, cartId } = useShoppingCart();
 
   const customerService = new CustomerService();
 
@@ -14,7 +14,12 @@ export function useApiSignIn() {
     email: string,
     password: string
   ): Promise<CTResponse> => {
-    const response: CTResponse = await customerService.signIn(email, password);
+    const anonymousCartId = cartId ? cartId : undefined;
+    const response: CTResponse = await customerService.signIn(
+      email,
+      password,
+      anonymousCartId
+    );
 
     const data = response.data as CustomerSignInResult;
 

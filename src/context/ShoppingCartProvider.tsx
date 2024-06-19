@@ -250,10 +250,15 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
     setShoppingCart(undefined);
   };
   const getCTCart = async (): Promise<CTResponse> => {
-    if (!cartId) {
-      return new Promise((resolve) =>
-        resolve({ ok: false, status: 404, message: 'No Cart ID' })
-      );
+    if (!cartId && !authenticated) {
+      const newCartResponse =
+        await shoppingCartService.createCartForAnonymous();
+      if (newCartResponse.ok) {
+        const newCart = newCartResponse.data as GraphQLResponse;
+        setCartId(newCart.data.createCart.id);
+        updateShoppingCart(newCart);
+      }
+      return newCartResponse;
     }
     const cartResponse = await shoppingCartService.getCart(cartId);
     if (cartResponse.ok) {
@@ -287,13 +292,14 @@ export function ShoppingCartProvider({ children }: ShoppingCartProviderProps) {
       return newCartResponse;
     }
 
-    return new Promise<CTResponse>((resolve) =>
-      resolve({
-        ok: false,
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: 'Todo cart for anonymous.',
-      })
-    );
+    const newCartResponse = await shoppingCartService.createCartForAnonymous();
+    if (newCartResponse.ok) {
+      const newCart = newCartResponse.data as GraphQLResponse;
+      updateShoppingCart(newCart);
+      setCartId(newCart.data.createCart.id);
+    }
+
+    return newCartResponse;
   };
 
   const addPromoCode = async (promoCode: string): Promise<CTResponse> => {
