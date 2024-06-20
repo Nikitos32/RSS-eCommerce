@@ -3,7 +3,13 @@ import rsLogo from '/svg/RSlogo.svg';
 const persons = [
   {
     name: 'Barvinko Vlad',
-    role: [`Software Engineer`, `Master's Degree`, `Software Engineering`],
+    role: [`Software Engineer`],
+    biography: (
+      <>
+        <p>Master`s Degree</p>
+        <p>&rdquo;Software Engineering&rdquo;</p>
+      </>
+    ),
     description: [
       `Registration Page`,
       `Product Page`,
@@ -21,12 +27,13 @@ const persons = [
   },
   {
     name: 'Dundzer Nikita',
-    role: [
-      'Software Engineer',
-      'I am 21 years old',
-      'studying at BSUIR',
-      'in the 4th year',
-    ],
+    role: ['Software Engineer'],
+    biography: (
+      <>
+        <p>I am 21 years old</p>
+        <p>studying at BSUIR in the 4th year</p>
+      </>
+    ),
     description: [
       'Login Page',
       'site deployment',
@@ -43,9 +50,9 @@ const persons = [
   },
   {
     name: 'Usov Dima',
-    role: ['Career Shift'],
+    role: ['Team Lead'],
+    biography: 'Career Shift',
     description: [
-      `Team Lead`,
       `navigation`,
       `Main Page`,
       `Profile Page`,
@@ -124,6 +131,11 @@ function About() {
                             {item}
                           </span>
                         ))}
+                      </span>
+                    )}
+                    {person.biography && (
+                      <span className="text-moonNeutral-600 dark:text-gray-400">
+                        {person.biography}
                       </span>
                     )}
                     <ul className="mt-3 mb-4 font-light text-moonNeutral-600 dark:text-gray-400">
