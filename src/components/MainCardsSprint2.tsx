@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 function MainCardsSprint2() {
   const { authenticated: isLoggedIn } = useAuth();
   const promo = 'Sprint_4';
+  const promo2 = 'DUSHNILA';
   return (
     <section className="py-4">
       <div className="container-xl lg:container m-auto">
@@ -24,6 +25,28 @@ function MainCardsSprint2() {
               <span
                 onClick={() => {
                   navigator.clipboard.writeText(promo);
+                  toast.success('Code copied to Clipboard');
+                }}
+                className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700 cursor-pointer"
+              >
+                Copy Code
+              </span>
+            </>
+          </Card>
+          <Card>
+            <>
+              <h2 className="text-2xl font-bold">Promo Code</h2>
+              <div className="bg-gradient-to-br from-moonPeach to-moonGreen text-moonBlack text-center rounded-lg shadow-md relative">
+                <div className="flex space-x-2 mb-2 px-1 py-1 flex-wrap justify-center items-center">
+                  <span className=" mx-1 border-dashed border border-moonBlack text-moonBlack px-4 py-2 rounded-l">
+                    {promo2}
+                  </span>
+                  <p className="">Save 100EUR on Total 2000EUR or more</p>
+                </div>
+              </div>
+              <span
+                onClick={() => {
+                  navigator.clipboard.writeText(promo2);
                   toast.success('Code copied to Clipboard');
                 }}
                 className="inline-block bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-700 cursor-pointer"
