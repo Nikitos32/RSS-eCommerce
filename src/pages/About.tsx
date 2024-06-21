@@ -109,18 +109,21 @@ function About() {
               </p>
             </article>
           </div>
-          <ul role="list" className="grid gap-8 mb-2 md:grid-cols-3">
+          <ul
+            role="list"
+            className="grid auto-rows-max gap-8 mb-2 grid-rows-1 md:grid-cols-3"
+          >
             {persons.map((person) => (
               <li key={person.name}>
-                <div className="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
+                <div className="h-full bg-gray-50 rounded-lg overflow-hidden shadow sm:flex md:flex-col dark:bg-gray-800 dark:border-gray-700">
                   <div className="basis-1/3">
                     <img
-                      className="w-full rounded-lg sm:rounded-none sm:rounded-l-lg"
+                      className="w-full"
                       src={person.photo}
                       alt={person.name}
                     />
                   </div>
-                  <div className="p-5">
+                  <div className="p-5 flex-1">
                     <h3 className="text-xl font-bold tracking-tight text-moonBlack dark:text-white">
                       {person.name}
                     </h3>
@@ -148,6 +151,8 @@ function About() {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                  <div className="px-5 pb-5">
                     <ul className="flex space-x-4 sm:mt-0">
                       {person.github && (
                         <li>
