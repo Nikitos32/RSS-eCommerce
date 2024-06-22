@@ -50,9 +50,10 @@ const persons = [
   },
   {
     name: 'Usov Dima',
-    role: ['Team Lead'],
+    role: ['Software Engineer'],
     biography: 'Career Shift',
     description: [
+      'Team Lead',
       `navigation`,
       `Main Page`,
       `Profile Page`,
