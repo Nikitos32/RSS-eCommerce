@@ -1,0 +1,12 @@
+.input {
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.resetAllStyle {
+  outline: none;
+  background: none;
+  border: none;
+}

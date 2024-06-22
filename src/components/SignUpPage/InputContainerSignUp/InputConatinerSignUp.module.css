@@ -1,0 +1,23 @@
+.signUp__inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+
+  width: 100%;
+
+  text-align: left;
+}
+.signUp__label {
+  font-size: 1rem;
+}
+
+.signUp__dataBirthday {
+  text-align: center;
+}
+
+.signUp__dataBirthday input {
+  width: min-content;
+  margin: auto;
+
+  font-size: 1.2rem;
+}
