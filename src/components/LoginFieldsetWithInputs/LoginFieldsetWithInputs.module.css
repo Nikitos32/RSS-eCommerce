@@ -1,0 +1,8 @@
+.loginFormFieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: none;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,6 @@
+.headerWrapper {
+  display: flex;
+  width: 1100px;
+  justify-content: space-between;
+  margin: 0 auto;
+}
