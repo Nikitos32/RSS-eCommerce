@@ -4,16 +4,16 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { Link } from 'react-router-dom';
 import { HiOutlineUserAdd } from 'react-icons/hi';
 import { IoIosLogIn, IoIosLogOut } from 'react-icons/io';
-import { CgProfile } from 'react-icons/cg';
-import { useAuth } from '../hooks';
+import { CgProfile, CgShoppingCart } from 'react-icons/cg';
+import { useAuth, useShoppingCart } from '../hooks';
 import { toast } from 'react-toastify';
 
 function Links() {
-  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
-    useAuth();
+  const { authenticated: isLoggedIn, setLoggedOut } = useAuth();
+  const { total } = useShoppingCart();
 
   const handleSignOut = () => {
-    setIsLoggedIn(false);
+    setLoggedOut();
   };
 
   return (
@@ -27,8 +27,13 @@ function Links() {
       <Link to="./about" className="hover:text-moonNeutral-600">
         About
       </Link>
-      <Link to="./contact" className="hover:text-moonNeutral-600">
-        Contact
+      <Link to="./cart" title="Shopping Cart" className="relative mx-2">
+        <CgShoppingCart className="text-2xl hover:text-moonNeutral-600" />
+        {total > 0 && (
+          <span className="absolute -top-2 left-3 rounded-full bg-moonBrown p-0.5 px-2 text-sm text-moonNeutral-200">
+            {total > 9 ? '∞' : total}
+          </span>
+        )}
       </Link>
       {!isLoggedIn && (
         <Link to="./signup" title="Registration">
@@ -83,21 +88,23 @@ function Header2() {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <header className="flex flex-row items-center justify-between sm:justify-around p-2 border-b-2 bg-moonNeutral-100 text-moonNeutral-800">
-      <Logo />
-      <nav className="text-lg hidden sm:flex justify-between items-center gap-4 font-semibold">
-        <Links />
-      </nav>
-      <nav className="sm:hidden flex flex-col items-end gap-1 font-semibold">
-        <button
-          onClick={() => setShowMenu(!showMenu)}
-          className="sm:hidden font-bold text-xl hover:text-gray-500"
-        >
-          {showMenu ? <GrClose /> : <GiHamburgerMenu />}
-        </button>
-        {showMenu && <Links />}
-      </nav>
-    </header>
+    <article style={{ height: '58px' }} className="w-full">
+      <header className="flex fixed w-screen z-40 flex-row items-center justify-between sm:justify-around p-2 border-b-2 bg-moonNeutral-100 text-moonNeutral-800">
+        <Logo />
+        <nav className="text-lg hidden sm:flex justify-between items-center gap-4 font-semibold">
+          <Links />
+        </nav>
+        <nav className="sm:hidden flex flex-col items-end gap-1 font-semibold">
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="sm:hidden font-bold text-xl hover:text-gray-500"
+          >
+            {showMenu ? <GrClose /> : <GiHamburgerMenu />}
+          </button>
+          {showMenu && <Links />}
+        </nav>
+      </header>
+    </article>
   );
 }
 

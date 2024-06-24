@@ -2,12 +2,14 @@ import { ClientResponse } from '@commercetools/platform-sdk';
 import { CTResponse, CTResponseHandler, HttpStatusCode } from '../ct-client';
 import { GraphqlRequest } from '../ct-client/graphql.request';
 
+const { VITE_CTP_LOCALE = 'en-GB' } = import.meta.env;
+
 export class ProductService {
   graphqlRequest = new GraphqlRequest();
 
   async getProductById(
     id: string,
-    locale: string = 'en-US'
+    locale: string = VITE_CTP_LOCALE
   ): Promise<CTResponse> {
     const query = `
     query($id: String, $locale: Locale) {
@@ -62,11 +64,13 @@ export class ProductService {
     priceFilter: number[],
     sortParam?: string,
     searchValue?: string,
-    categoryFilter?: string[]
+    categoryFilter?: string[],
+    limit: number = 10
   ): Promise<CTResponse> {
     const query = `
     query ($locale: Locale) {
   productProjectionSearch (
+  limit: ${limit},
     ${sortParam ? `sorts: ["name.${locale} ${sortParam}"],` : ''},
     ${searchValue ? `text: "${searchValue}", locale: $locale,` : ''}
     filters: [
@@ -109,19 +113,30 @@ export class ProductService {
       masterVariant {
         price(currency: "EUR" country:"DE") {
           value {
-          fractionDigits
+            fractionDigits
             centAmount
           }
         }
         prices {
-        discounted {
+          discounted {
             value {
               centAmount
               fractionDigits
+              currencyCode
+            }
+            discount {
+              id
+              name(locale: $locale)
+              value {
+                type
+                ... on RelativeDiscountValue {
+                  permyriad
+                }
+              }
             }
           }
           value {
-          fractionDigits
+            fractionDigits
             centAmount
           }
         }
@@ -153,46 +168,61 @@ export class ProductService {
     }
   }
 
-  async getProductsAll(locale: string = 'EN-GB'): Promise<CTResponse> {
+  async getProductsAll(
+    limit: number = 10,
+    locale: string = 'EN-GB'
+  ): Promise<CTResponse> {
     const query = `
-    query ($locale: Locale) {
-  productProjectionSearch {
-    count
-    total
-    results {
-      id
-      key
-      description(locale: $locale)
-      name(locale: $locale)
-      categories {
+  query ($locale: Locale) {
+    productProjectionSearch (limit: ${limit}) {
+      count
+      total
+      results {
+        id
+        key
+        description(locale: $locale)
         name(locale: $locale)
-      }
-      masterVariant {
-        price(currency: "EUR" country:"DE") {
-          value {
-            centAmount
-          }
+        categories {
+          name(locale: $locale)
         }
-        prices {
-        discounted {
+        masterVariant {
+          price(currency: "EUR", country: "DE") {
             value {
-              centAmount
               fractionDigits
+              centAmount
             }
           }
-          value {
-          fractionDigits
-            centAmount
+          prices {
+            discounted {
+              value {
+                centAmount
+                fractionDigits
+                currencyCode
+              }
+              discount {
+                id
+                name(locale: $locale)
+                value {
+                  type
+                  ... on RelativeDiscountValue {
+                    permyriad
+                  }
+                }
+              }
+            }
+            value {
+              fractionDigits
+              centAmount
+            }
           }
+          images {
+            url
+          }
+          key
         }
-        images {
-          url
-        }
-        key
       }
     }
   }
-}
     `;
 
     const variables = { locale };
@@ -215,19 +245,19 @@ export class ProductService {
 
   async getProductByKey(
     key: string,
-    locale: string = 'en-US'
+    locale: string = VITE_CTP_LOCALE
   ): Promise<CTResponse> {
     const query = `
     query ($key: String, $locale: Locale) {
       product(key: $key) {
         key
+        id
         masterData {
           current {
             skus
             name(locale: $locale)
             description(locale: $locale)
             categories {
-              id
               name(locale: $locale)
             }
             masterVariant {
@@ -294,6 +324,3 @@ export class ProductService {
     }
   }
 }
-/*   266af93b-136f-456e-97c0-5d5ec9a922c6 - Home Decor*/
-/* 7bc4d2e8-a12a-44dc-92c7-a027ba7a6088 - Furniture*/
-/* 6ee0d40d-61c5-42ec-a33a-0baaf760330f - Kitchen */

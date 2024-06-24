@@ -17,15 +17,15 @@ import classes from './signUpPage.module.css';
 import { CustomerService } from '../../services/customer.service';
 import { CTResponse } from '../../ct-client';
 
-import { useAuth } from '../../hooks';
+import { useApiSignIn, useAuth } from '../../hooks';
 import Spinner from '../Spinner';
 import { toast } from 'react-toastify';
 
 export const SignUpPage = () => {
   const [loading, setLoading] = useState(false);
 
-  const { authenticated: isLoggedIn, setAuthenticated: setIsLoggedIn } =
-    useAuth();
+  const { authenticated: isLoggedIn } = useAuth();
+  const { signIn } = useApiSignIn();
 
   async function SignUp() {
     const customerService = new CustomerService();
@@ -81,7 +81,7 @@ export const SignUpPage = () => {
       setLoading(false);
       return;
     }
-    const response: CTResponse = await customerService.signIn(
+    const response: CTResponse = await signIn(
       inputData.Email.value,
       inputData.Password.value
     );
@@ -89,8 +89,6 @@ export const SignUpPage = () => {
     if (response.ok) {
       setLoading(false);
       toast.success('Success Authorization!');
-
-      setIsLoggedIn(true);
     } else {
       setLoading(false);
       toast.error(response.message || 'Authorization Error');

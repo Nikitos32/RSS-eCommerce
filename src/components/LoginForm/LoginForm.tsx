@@ -25,7 +25,7 @@ export const LoginForm = () => {
 
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
 
-  const { signIn } = useApiSignIn(emailInputValue, passwordInputValue);
+  const { signIn } = useApiSignIn();
 
   const handleValue = (event: React.ChangeEvent) => {
     const target = event.target as HTMLInputElement;
@@ -52,7 +52,10 @@ export const LoginForm = () => {
   async function LogIn() {
     setIsLoading(true);
 
-    const response: CTResponse = await signIn();
+    const response: CTResponse = await signIn(
+      emailInputValue,
+      passwordInputValue
+    );
     if (response.ok) {
       setIsLoading(false);
       toast.success('Success Authorization!');

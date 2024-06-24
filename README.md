@@ -34,3 +34,10 @@ Implementation of the [RSSchool eCommerce Application task](https://github.com/r
 - `npm run lint` find problems in code
 - `npm run preview` locally preview the production build
 - `npm run test` perform the Vitest unit tests
+
+## How to contribute
+1. Request access to our [Jira board](https://usov.atlassian.net/jira/software/projects/R20/boards/9)
+2. Choose issue, and assign it to yourself
+3. Make new branch from latest release `release/...` with self explanatory  name in format `(chore|docs|feat|fix|refactor)/R20-{issue #}_description`
+4. Contribute and push what you've changed to the remote.
+5. Create a pull request to the repository on GitHub.

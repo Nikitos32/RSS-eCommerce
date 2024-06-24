@@ -2,22 +2,32 @@ import { CustomerSignInResult } from '@commercetools/platform-sdk';
 import { CTResponse } from '../ct-client';
 import { CustomerService } from '../services/customer.service';
 import { useAuth } from './useAuth';
+import { useShoppingCart } from './useShoppingCart';
 
-export function useApiSignIn(email: string, password: string) {
-  const { setCustomerId, setAuthenticated } = useAuth();
+export function useApiSignIn() {
+  const { setLoggedIn, setLoggedOut } = useAuth();
+  const { setCartAfterSignIn, cartId } = useShoppingCart();
 
   const customerService = new CustomerService();
 
-  const signIn = async (): Promise<CTResponse> => {
-    const response: CTResponse = await customerService.signIn(email, password);
+  const signIn = async (
+    email: string,
+    password: string
+  ): Promise<CTResponse> => {
+    const anonymousCartId = cartId ? cartId : undefined;
+    const response: CTResponse = await customerService.signIn(
+      email,
+      password,
+      anonymousCartId
+    );
 
     const data = response.data as CustomerSignInResult;
 
-    setAuthenticated(response.ok);
     if (response.ok) {
-      setCustomerId(data.customer.id);
+      setLoggedIn(data.customer.id);
+      setCartAfterSignIn(data);
     } else {
-      setCustomerId('');
+      setLoggedOut();
     }
 
     return response;
